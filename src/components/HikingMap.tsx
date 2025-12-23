@@ -4,6 +4,7 @@ import { TileLayer } from "react-leaflet/TileLayer";
 import { Marker } from "react-leaflet/Marker";
 import { Popup } from "react-leaflet/Popup";
 import { useMap } from "react-leaflet/hooks";
+import { Tooltip } from "react-leaflet/Tooltip";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import type { Hike, Waypoint } from "@/lib/types";
@@ -76,12 +77,9 @@ interface HikingMapProps {
 // Component to handle map view updates
 function MapController({ selectedHike, hikes }: { selectedHike?: Hike; hikes: Hike[] }) {
   const map = useMap();
-  const previousSelectedRef = useRef<string | undefined>(undefined);
   const initialFitDone = useRef(false);
 
   useEffect(() => {
-    // Leaflet can render a blank map when mounted inside dynamically-sized containers;
-    // forcing a size recalculation after paint fixes it.
     const t = window.setTimeout(() => {
       map.invalidateSize();
     }, 0);
@@ -89,57 +87,31 @@ function MapController({ selectedHike, hikes }: { selectedHike?: Hike; hikes: Hi
     return () => window.clearTimeout(t);
   }, [map]);
 
-  useEffect(() => {
-    const getValidCoords = (lat: unknown, lng: unknown): [number, number] | null => {
-      const latNum = Number(lat);
-      const lngNum = Number(lng);
-      if (Number.isFinite(latNum) && Number.isFinite(lngNum)) {
-        return [latNum, lngNum];
-      }
+    useEffect(() => {
+        const getValidCoords = (lat: unknown, lng: unknown): [number, number] | null => {
+          const latNum = Number(lat);
+          const lngNum = Number(lng);
+          if (Number.isFinite(latNum) && Number.isFinite(lngNum)) {
+            return [latNum, lngNum];
+          }
+          return null;
+        };
+
+        if (hikes.length > 0 && !initialFitDone.current) {
+          const validHikes = hikes.map((h) => getValidCoords(h.location_lat, h.location_lng)).filter(Boolean) as [
+            number,
+            number,
+          ][];
+          if (validHikes.length > 0) {
+            map.fitBounds(L.latLngBounds(validHikes), { padding: [50, 50] });
+            map.invalidateSize();
+          }
+          initialFitDone.current = true;
+        }
+      }, [hikes, map]);
+
       return null;
-    };
-
-    if (selectedHike) {
-      const coords = getValidCoords(selectedHike.location_lat, selectedHike.location_lng);
-      if (!coords) return;
-
-      const bounds = L.latLngBounds([coords]);
-
-      if (selectedHike.waypoints) {
-        selectedHike.waypoints.forEach((wp) => {
-          const wpCoords = getValidCoords(wp.latitude, wp.longitude);
-          if (wpCoords) bounds.extend(wpCoords);
-        });
-      }
-
-      map.fitBounds(bounds, { padding: [50, 50], maxZoom: 11 });
-      map.invalidateSize();
-      previousSelectedRef.current = selectedHike.id;
-    } else if (previousSelectedRef.current && hikes.length > 0) {
-      const validHikes = hikes.map((h) => getValidCoords(h.location_lat, h.location_lng)).filter(Boolean) as [
-        number,
-        number,
-      ][];
-      if (validHikes.length > 0) {
-        map.fitBounds(L.latLngBounds(validHikes), { padding: [50, 50] });
-        map.invalidateSize();
-      }
-      previousSelectedRef.current = undefined;
-    } else if (hikes.length > 0 && !initialFitDone.current) {
-      const validHikes = hikes.map((h) => getValidCoords(h.location_lat, h.location_lng)).filter(Boolean) as [
-        number,
-        number,
-      ][];
-      if (validHikes.length > 0) {
-        map.fitBounds(L.latLngBounds(validHikes), { padding: [50, 50] });
-        map.invalidateSize();
-      }
-      initialFitDone.current = true;
     }
-  }, [selectedHike, hikes, map]);
-
-  return null;
-}
 
 function HikingMap({ hikes, waypoints = [], selectedHikeId = null, onHikeSelect, className = "" }: HikingMapProps) {
   const selectedHike = hikes.find((h) => h.id === selectedHikeId);
@@ -191,24 +163,32 @@ function HikingMap({ hikes, waypoints = [], selectedHikeId = null, onHikeSelect,
                 click: () => onHikeSelect?.(hike),
               }}
             >
-              <Popup>
-                <div className="min-w-[180px] p-1">
-                  <h3 className="font-heading font-semibold text-foreground">{hike.name}</h3>
-                  <p className="text-sm text-muted-foreground">{hike.location_name}</p>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    {new Date(hike.date).toLocaleDateString("en-DE", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                    })}
-                    {hike.end_date &&
-                      ` - ${new Date(hike.end_date).toLocaleDateString("en-DE", {
-                        month: "short",
-                        day: "numeric",
-                      })}`}
-                  </p>
+              <Tooltip 
+                direction="top" 
+                offset={[0, -35]} 
+                opacity={1}
+                className="hidden md:block !bg-transparent !border-0 !shadow-none !p-0"
+              >
+                <div className="flex flex-col overflow-hidden rounded-lg border border-border bg-card shadow-xl">
+                  {hike.image_url ? (
+                    <img
+                      src={hike.image_url}
+                      alt={hike.name}
+                      // The image sets the width constraint (w-40)
+                      className="h-24 w-40 object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-24 w-40 items-center justify-center bg-muted">
+                      <span className="text-xs text-muted-foreground">No Image</span>
+                    </div>
+                  )}
+                  <div className="bg-card px-3 py-2 text-center w-40 whitespace-normal">
+                    <span className="text-sm font-semibold text-card-foreground break-words leading-tight">
+                      {hike.name}
+                    </span>
+                  </div>
                 </div>
-              </Popup>
+              </Tooltip>
             </Marker>
           );
         })}
@@ -230,7 +210,7 @@ function HikingMap({ hikes, waypoints = [], selectedHikeId = null, onHikeSelect,
         })}
       </MapContainer>
 
-      <div className="absolute bottom-4 right-4 z-[1000] rounded-lg bg-card/95 p-3 shadow-lg backdrop-blur-sm">
+      <div className="absolute bottom-4 right-4 z-10 rounded-lg bg-card/95 p-3 shadow-lg backdrop-blur-sm">
         <h4 className="mb-2 font-heading text-sm font-semibold">Legend</h4>
         <div className="flex flex-col gap-1.5 text-sm">
           <div className="flex items-center gap-2">
@@ -248,7 +228,7 @@ function HikingMap({ hikes, waypoints = [], selectedHikeId = null, onHikeSelect,
         </div>
       </div>
 
-      <div className="absolute left-4 top-4 z-[1000] rounded-lg bg-card/95 p-3 shadow-lg backdrop-blur-sm">
+      <div className="absolute left-4 top-4 z-10 rounded-lg bg-card/95 p-3 shadow-lg backdrop-blur-sm">
         <h4 className="font-heading font-semibold">Hiking Map</h4>
         <p className="text-sm text-muted-foreground">{hikes.length} hikes available</p>
       </div>

@@ -5,6 +5,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { format } from 'date-fns';
+import { cn } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Select,
@@ -24,6 +28,7 @@ import {
   Plus,
   Trash2,
   X,
+  Calendar as CalendarIcon,
 } from 'lucide-react';
 
 interface WaypointInput {
@@ -354,27 +359,76 @@ export default function AddHike() {
                   </div>
                   
                   <div className="grid gap-4 md:grid-cols-3">
-                    <div>
+                    <div className="flex flex-col gap-2">
                       <Label htmlFor="date">Start Date *</Label>
-                      <Input
-                        id="date"
-                        name="date"
-                        type="date"
-                        value={formData.date}
-                        onChange={handleInputChange}
-                        required
-                      />
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant={"outline"}
+                            className={cn(
+                              "w-full justify-start text-left font-normal",
+                              !formData.date && "text-muted-foreground"
+                            )}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {formData.date ? (
+                              format(new Date(formData.date), "dd/MM/yyyy")
+                            ) : (
+                              <span>dd/mm/yyyy</span>
+                            )}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={formData.date ? new Date(formData.date) : undefined}
+                            onSelect={(date) => 
+                              setFormData(prev => ({ 
+                                ...prev, 
+                                date: date ? format(date, "yyyy-MM-dd") : "" 
+                              }))
+                            }
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
                     </div>
-                    <div>
+
+                    <div className="flex flex-col gap-2">
                       <Label htmlFor="end_date">End Date (multi-day)</Label>
-                      <Input
-                        id="end_date"
-                        name="end_date"
-                        type="date"
-                        value={formData.end_date}
-                        onChange={handleInputChange}
-                      />
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant={"outline"}
+                            className={cn(
+                              "w-full justify-start text-left font-normal",
+                              !formData.end_date && "text-muted-foreground"
+                            )}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {formData.end_date ? (
+                              format(new Date(formData.end_date), "dd/MM/yyyy")
+                            ) : (
+                              <span>dd/mm/yyyy</span>
+                            )}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={formData.end_date ? new Date(formData.end_date) : undefined}
+                            onSelect={(date) => 
+                              setFormData(prev => ({ 
+                                ...prev, 
+                                end_date: date ? format(date, "yyyy-MM-dd") : "" 
+                              }))
+                            }
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
                     </div>
+
                     <div>
                       <Label htmlFor="duration">Duration *</Label>
                       <Input

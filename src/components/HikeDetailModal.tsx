@@ -21,7 +21,7 @@ import {
 import { format } from 'date-fns';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, TouchEvent } from 'react';
 import { useEnrollment, useHike } from '@/hooks/useHikes';
 
 interface HikeDetailModalProps {
@@ -50,6 +50,71 @@ export function HikeDetailModal({ hike: initialHike, isOpen, onClose, onEnrollme
   const [activeImageUrl, setActiveImageUrl] = useState<string | null>(
     hike?.image_url ?? hike?.images?.[0]?.image_url ?? null
   );
+
+  const sortedImages = (hike?.images ?? [])
+    .slice()
+    .sort((a, b) => a.display_order - b.display_order);
+
+  const isSingleImage = sortedImages.length <= 1;
+
+  const handleNext = useCallback(() => {
+    if (!sortedImages.length) return;
+    
+    const currentIndex = sortedImages.findIndex(img => img.image_url === activeImageUrl);
+    
+    const nextIndex = currentIndex === -1 ? 0 : (currentIndex + 1) % sortedImages.length;
+    
+    setActiveImageUrl(sortedImages[nextIndex].image_url);
+  }, [activeImageUrl, sortedImages]);
+
+  const handlePrev = useCallback(() => {
+    if (!sortedImages.length) return;
+    
+    const currentIndex = sortedImages.findIndex(img => img.image_url === activeImageUrl);
+    
+    const prevIndex = currentIndex <= 0 
+      ? sortedImages.length - 1 
+      : currentIndex - 1;
+      
+    setActiveImageUrl(sortedImages[prevIndex].image_url);
+  }, [activeImageUrl, sortedImages]);
+
+  // keyboard support
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight') handleNext();
+      if (e.key === 'ArrowLeft') handlePrev();
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, handleNext, handlePrev]);
+
+  // touch swipe support on phone
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e: TouchEvent<HTMLDivElement>) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: TouchEvent<HTMLDivElement>) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe) handleNext();
+    if (isRightSwipe) handlePrev();
+  };
 
   useEffect(() => {
     if (!hike) {
@@ -103,21 +168,27 @@ export function HikeDetailModal({ hike: initialHike, isOpen, onClose, onEnrollme
         </DialogHeader>
         
         {/* Main Image */}
-        <div className="relative aspect-video overflow-hidden rounded-lg bg-muted">
+        <div className={`relative w-full rounded-lg overflow-hidden focus:outline-none ${
+            isSingleImage ? "h-64 sm:h-80 md:h-[400px]" : "aspect-video"
+          }`}
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+          >
           {activeImageUrl ? (
             <img
               src={activeImageUrl}
               alt={`${hike.name} photo`}
-              className="h-full w-full object-cover"
+              className="w-full h-full object-contain bg-muted/20"
               loading="lazy"
             />
           ) : (
-            <div className="flex h-full items-center justify-center">
+            <div className="flex h-64 items-center justify-center rounded-[inherit] bg-muted/30">
               <ImageIcon className="h-16 w-16 text-muted-foreground/50" />
             </div>
           )}
           
-          <div className="absolute left-3 top-3 flex gap-2">
+          <div className="absolute left-3.5 top-3.5 flex gap-2">
             <Badge variant={difficultyVariant[hike.difficulty]}>
               {hike.difficulty}
             </Badge>
@@ -128,34 +199,27 @@ export function HikeDetailModal({ hike: initialHike, isOpen, onClose, onEnrollme
         </div>
 
         {/* Additional Images - Scrollable Gallery */}
-        {hike.images && hike.images.length > 0 && (
-          <div>
-            <h4 className="mb-2 font-heading text-sm font-semibold">More Photos</h4>
-            <div className="overflow-x-auto pb-2">
-              <div className="flex gap-2" style={{ minWidth: 'max-content' }}>
-                {(hike.images ?? [])
-                  .slice()
-                  .sort((a, b) => a.display_order - b.display_order)
-                  .map((image) => (
-                    <button
-                      key={image.id}
-                      type="button"
-                      onClick={() => setActiveImageUrl(image.image_url)}
-                      className={
-                        "relative h-24 w-32 flex-shrink-0 overflow-hidden rounded-lg bg-muted transition-shadow focus:outline-none focus:ring-2 focus:ring-primary/40 " +
-                        (activeImageUrl === image.image_url ? "ring-2 ring-primary/50" : "")
-                      }
-                      aria-label={`Open photo for ${hike.name}`}
-                    >
-                      <img
-                        src={image.image_url}
-                        alt={`${hike.name} photo thumbnail`}
-                        className="h-full w-full object-cover transition-transform hover:scale-105"
-                        loading="lazy"
-                      />
-                    </button>
-                  ))}
-              </div>
+        {!isSingleImage && (
+          <div className="mt-6">
+            <h3 className="mb-2 font-semibold">More photos</h3>
+            <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-secondary/20">
+              {sortedImages.map((img) => (
+                <button
+                  key={img.id}
+                  onClick={() => setActiveImageUrl(img.image_url)}
+                  className={`relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg transition-all ${
+                    activeImageUrl === img.image_url
+                      ? "ring-2 ring-primary ring-offset-2"
+                      : "opacity-70 hover:opacity-100"
+                  }`}
+                >
+                  <img
+                    src={img.image_url}
+                    alt={`Gallery image ${img.display_order}`}
+                    className="h-full w-full object-cover"
+                  />
+                </button>
+              ))}
             </div>
           </div>
         )}
@@ -207,12 +271,18 @@ export function HikeDetailModal({ hike: initialHike, isOpen, onClose, onEnrollme
             <div className="flex items-center gap-2">
               <Users className="h-5 w-5 text-primary" />
               <div>
+                {hike.status === 'upcoming' ? (
+                  <>
                 <p className="text-sm font-medium">
                   {enrollmentCount} / {hike.max_participants} enrolled
                 </p>
                 <p className="text-xs text-muted-foreground">
                   {spotsLeft} spots remaining
                 </p>
+              </>
+              ) : (
+                <p className="text-sm font-medium">Registration Closed</p>
+                )}
               </div>
             </div>
           </div>

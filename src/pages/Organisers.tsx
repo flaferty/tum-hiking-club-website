@@ -12,8 +12,12 @@ export default function Organisers() {
 
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-b from-primary/90 via-primary/70 to-background py-20">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDM0djItSDI0di0yaDEyek0zNiAyNHYySDI0di0yaDEyeiIvPjwvZz48L2c+PC9zdmc+')] opacity-50" />
+        <img
+          src="src/assets/mountains_2.jpg"
+          alt="Mountainous landscape fading out"
+          className="absolute inset-0 h-full w-full object-cover opacity-60 mix-blend-overlay [mask-image:linear-gradient(to_bottom,black_50%,transparent_100%)]"
 
+        />
         <div className="container relative mx-auto px-4 text-center">
           <Badge variant="secondary" className="mb-4 bg-card/20 text-card backdrop-blur-sm border-card/30">
             Meet Our Hike Leaders
@@ -30,13 +34,10 @@ export default function Organisers() {
 
       {/* Team Grid */}
       <section className="container mx-auto px-4 py-16">
-        {/* CHANGE 2: Changed from 'grid' to 'flex flex-wrap justify-center' to center incomplete rows */}
         <div className="flex flex-wrap justify-center gap-8">
           {mockOrganizers.map((organizer, index) => (
             <Card
               key={organizer.id}
-              // CHANGE 2 (continued): Added explicit widths (w-full md:w-[48%] lg:w-[23%]) so flex mimics the previous grid layout.
-              // CHANGE 1: Removed style={{ animationDelay... }} so they appear all at once.
               className="group w-full md:w-[48%] lg:w-[23%] overflow-hidden transition-all duration-300 hover:shadow-elevated animate-slide-up"
             >
               <div className="relative aspect-square overflow-hidden">
@@ -44,7 +45,6 @@ export default function Organisers() {
                   src={organizer.image}
                   alt={organizer.name}
                   className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  // Optional: Add loading="eager" to prioritize loading these images immediately
                   loading="eager"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-mountain/80 via-transparent to-transparent" />

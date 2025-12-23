@@ -54,9 +54,17 @@ export default function Index() {
         <div className="absolute inset-0 bg-gradient-to-b from-mountain/60 via-mountain/40 to-background" />
 
         <div className="container relative mx-auto flex h-full flex-col items-center justify-center px-4 text-center">
-          <Badge variant="secondary" className="mb-4 bg-card/20 text-card backdrop-blur-sm border-card/30">
-            🏔️ TUM Hiking Community
-          </Badge>
+          <Badge
+          variant="secondary"
+          className="mb-4 bg-card/20 text-card backdrop-blur-sm border-card/30 pl-2 pr-4 py-1 flex items-center gap-2"
+        >
+          <img
+            src="/logo.jpg"
+            alt="TUM Hiking Club Logo"
+            className="h-6 w-6 object-contain rounded-md"
+          />
+          TUM Hiking Community
+        </Badge>
 
           <h1 className="mb-4 font-heading text-4xl font-bold text-snow md:text-6xl lg:text-7xl animate-fade-in">
             Explore Germany's

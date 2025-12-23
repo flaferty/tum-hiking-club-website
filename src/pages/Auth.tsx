@@ -117,9 +117,11 @@ export default function Auth() {
         
         <Card className="animate-scale-in">
           <CardHeader className="text-center">
-            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-primary">
-              <Mountain className="h-7 w-7 text-primary-foreground" />
-            </div>
+            <img
+              src="/logo-no-bg.png"
+              alt="TUM Hiking Club Logo"
+              className="mx-auto mb-4 h-16 w-16 object-contain rounded-xl"
+            />
             <CardTitle className="font-heading text-2xl">
               {mode === 'signin' && 'Welcome Back'}
               {mode === 'signup' && 'Create Account'}

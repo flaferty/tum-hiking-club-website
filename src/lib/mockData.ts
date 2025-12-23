@@ -137,6 +137,20 @@ export const mockOrganizers: Organizer[] = [
     image: "src/assets/georgi.jpg",
     bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ex dui, sodales non rutrum ac.",
   },
+  {
+    id: "7",
+    name: "Hoda",
+    role: "",
+    image: "src/assets/hoda.jpg",
+    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ex dui, sodales non rutrum ac.",
+  },
+  {
+    id: "8",
+    name: "Alex",
+    role: "",
+    image: "src/assets/alex.jpg",
+    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ex dui, sodales non rutrum ac.",
+  },
 ];
 
 export const davHuts: DAVHut[] = [

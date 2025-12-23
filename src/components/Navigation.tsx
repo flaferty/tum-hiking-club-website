@@ -29,10 +29,12 @@ export function Navigation() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-            <Mountain className="h-5 w-5 text-primary-foreground" />
-          </div>
-          <span className="font-heading text-lg font-bold text-foreground">TUM Hiking Club</span>
+          <img 
+            src="/logo-no-bg.png" 
+            alt="TUM Hiking Club Logo" 
+            className="h-9 w-9 object-contain rounded-md" 
+          />
+          <span className="font-heading text-lg font-bold text-foreground">Hiking Club</span>
         </Link>
 
         {/* Desktop Navigation */}

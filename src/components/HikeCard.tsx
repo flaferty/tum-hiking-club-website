@@ -30,7 +30,7 @@ export function HikeCard({ hike, onClick }: HikeCardProps) {
           <img
             src={hike.image_url}
             alt={hike.name}
-            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            className="h-full w-full object-contain bg-muted/20 transition-transform duration-300 group-hover:scale-105"
             onError={(e) => {
               (e.target as HTMLImageElement).style.display = 'none';
               (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
@@ -69,7 +69,7 @@ export function HikeCard({ hike, onClick }: HikeCardProps) {
             </Badge>
           </div>
           <span className="text-sm text-muted-foreground">
-            {spotsLeft} spots left
+            {hike.status === 'upcoming' ? `${spotsLeft} spots left` : 'Event ended'}
           </span>
         </div>
       </CardContent>
