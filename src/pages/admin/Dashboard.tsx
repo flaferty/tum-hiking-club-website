@@ -1,0 +1,380 @@
+import { useEffect, useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { Navigation } from '@/components/Navigation';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from '@/hooks/use-toast';
+import { useHikes, useDeleteHike } from '@/hooks/useHikes';
+import { useUsers, useAssignRole, useRemoveRole } from '@/hooks/useUsers';
+import { Difficulty } from '@/lib/types';
+import { Database } from '@/integrations/supabase/types';
+import { 
+  Plus, 
+  Pencil, 
+  Trash2, 
+  Mountain,
+  Users,
+  Calendar,
+  MapPin,
+  Image as ImageIcon,
+  Shield,
+  ShieldCheck,
+  ShieldAlert,
+  X
+} from 'lucide-react';
+import { format } from 'date-fns';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+
+type AppRole = Database['public']['Enums']['app_role'];
+
+const difficultyVariant: Record<Difficulty, 'easy' | 'moderate' | 'hard' | 'expert'> = {
+  easy: 'easy',
+  moderate: 'moderate',
+  hard: 'hard',
+  expert: 'expert',
+};
+
+const roleIcons: Record<AppRole, typeof Shield> = {
+  admin: ShieldAlert,
+  moderator: ShieldCheck,
+  user: Shield,
+};
+
+const roleColors: Record<AppRole, string> = {
+  admin: 'bg-destructive/10 text-destructive border-destructive/20',
+  moderator: 'bg-primary/10 text-primary border-primary/20',
+  user: 'bg-muted text-muted-foreground border-border',
+};
+
+export default function AdminDashboard() {
+  const { user, isAdmin, isLoading } = useAuth();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const { data: hikes = [], isLoading: hikesLoading } = useHikes();
+  const { data: users = [], isLoading: usersLoading } = useUsers();
+  const deleteHikeMutation = useDeleteHike();
+  const assignRoleMutation = useAssignRole();
+  const removeRoleMutation = useRemoveRole();
+
+  useEffect(() => {
+    if (!isLoading && (!user || !isAdmin)) {
+      navigate('/');
+    }
+  }, [user, isAdmin, isLoading, navigate]);
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-muted-foreground">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!user || !isAdmin) return null;
+
+  const handleDelete = async (hikeId: string) => {
+    try {
+      await deleteHikeMutation.mutateAsync(hikeId);
+      toast({
+        title: 'Hike deleted',
+        description: 'The hike has been removed.',
+      });
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to delete hike.',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const handleAssignRole = async (userId: string, role: AppRole) => {
+    try {
+      await assignRoleMutation.mutateAsync({ userId, role });
+      toast({
+        title: 'Role assigned',
+        description: `Successfully assigned ${role} role.`,
+      });
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to assign role.',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const handleRemoveRole = async (userId: string, role: AppRole) => {
+    try {
+      await removeRoleMutation.mutateAsync({ userId, role });
+      toast({
+        title: 'Role removed',
+        description: `Successfully removed ${role} role.`,
+      });
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to remove role.',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const getInitials = (name: string | null, email: string | null) => {
+    if (name) {
+      return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+    }
+    if (email) {
+      return email[0].toUpperCase();
+    }
+    return 'U';
+  };
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Navigation />
+      
+      <div className="container mx-auto px-4 py-8">
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h1 className="font-heading text-3xl font-bold">Admin Dashboard</h1>
+            <p className="text-muted-foreground">Manage hikes and users</p>
+          </div>
+          
+          <Link to="/profile">
+            <Card className="cursor-pointer transition-shadow hover:shadow-md">
+              <CardContent className="flex items-center gap-3 p-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                  <Users className="h-5 w-5 text-primary" />
+                </div>
+                <div className="text-right">
+                  <p className="text-sm font-medium">{user.email}</p>
+                  <p className="text-xs text-muted-foreground">View Profile</p>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+        </div>
+        
+        <Tabs defaultValue="hikes">
+          <TabsList className="mb-6">
+            <TabsTrigger value="hikes" className="gap-2">
+              <Mountain className="h-4 w-4" />
+              Hikes
+            </TabsTrigger>
+            <TabsTrigger value="users" className="gap-2">
+              <Users className="h-4 w-4" />
+              Users
+            </TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="hikes">
+            <div className="mb-4 flex justify-end">
+              <Link to="/admin/add-hike">
+                <Button className="gap-2">
+                  <Plus className="h-4 w-4" />
+                  Add New Hike
+                </Button>
+              </Link>
+            </div>
+            
+            <div className="space-y-4">
+              {hikes.map((hike) => (
+                <Card key={hike.id} className="overflow-hidden">
+                  <CardContent className="flex items-center gap-4 p-0">
+                    <div className="relative h-24 w-32 shrink-0 overflow-hidden bg-muted">
+                      {hike.image_url ? (
+                        <img
+                          src={hike.image_url}
+                          alt={hike.name}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-full items-center justify-center">
+                          <ImageIcon className="h-8 w-8 text-muted-foreground/50" />
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="flex flex-1 items-center justify-between py-4 pr-4">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h3 className="font-heading font-semibold">{hike.name}</h3>
+                          <Badge variant={difficultyVariant[hike.difficulty]} className="text-xs">
+                            {hike.difficulty}
+                          </Badge>
+                          <Badge variant={hike.status === 'upcoming' ? 'upcoming' : 'completed'} className="text-xs">
+                            {hike.status}
+                          </Badge>
+                        </div>
+                        <div className="mt-1 flex items-center gap-4 text-sm text-muted-foreground">
+                          <span className="flex items-center gap-1">
+                            <Calendar className="h-3.5 w-3.5" />
+                            {format(new Date(hike.date), 'dd/MM/yyyy')}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <MapPin className="h-3.5 w-3.5" />
+                            {hike.location_name}
+                          </span>
+                          <span>{hike.distance} km</span>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center gap-2">
+                        <Link to={`/admin/edit-hike/${hike.id}`}>
+                          <Button variant="outline" size="sm" className="gap-1">
+                            <Pencil className="h-3.5 w-3.5" />
+                            Edit
+                          </Button>
+                        </Link>
+                        
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button variant="destructive" size="sm" className="gap-1">
+                              <Trash2 className="h-3.5 w-3.5" />
+                              Delete
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Delete Hike</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Are you sure you want to delete "{hike.name}"? This action cannot be undone.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction onClick={() => handleDelete(hike.id)}>
+                                Delete
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+              
+              {hikes.length === 0 && (
+                <div className="rounded-xl border border-dashed border-border bg-muted/30 p-12 text-center">
+                  <Mountain className="mx-auto mb-4 h-12 w-12 text-muted-foreground/50" />
+                  <p className="text-muted-foreground">No hikes yet. Add your first hike!</p>
+                </div>
+              )}
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="users">
+            {usersLoading ? (
+              <div className="flex items-center justify-center py-12">
+                <div className="text-muted-foreground">Loading users...</div>
+              </div>
+            ) : users.length === 0 ? (
+              <div className="rounded-xl border border-dashed border-border bg-muted/30 p-12 text-center">
+                <Users className="mx-auto mb-4 h-12 w-12 text-muted-foreground/50" />
+                <p className="text-muted-foreground">No users found.</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {users.map((u) => (
+                  <Card key={u.id} className="overflow-hidden">
+                    <CardContent className="flex items-center gap-4 p-4">
+                      <Avatar className="h-12 w-12">
+                        <AvatarImage src={u.avatar_url || undefined} />
+                        <AvatarFallback className="bg-primary/10 text-primary">
+                          {getInitials(u.full_name, u.email)}
+                        </AvatarFallback>
+                      </Avatar>
+                      
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <h3 className="font-heading font-semibold">
+                            {u.full_name || 'No name'}
+                          </h3>
+                          {u.user_id === user?.id && (
+                            <Badge variant="outline" className="text-xs">You</Badge>
+                          )}
+                        </div>
+                        <p className="text-sm text-muted-foreground">{u.email}</p>
+                        <p className="text-xs text-muted-foreground">
+                          Joined {format(new Date(u.created_at), 'MMM d, yyyy')}
+                        </p>
+                      </div>
+                      
+                      <div className="flex items-center gap-2">
+                        {u.roles.map((role) => {
+                          const RoleIcon = roleIcons[role];
+                          return (
+                            <Badge
+                              key={role}
+                              variant="outline"
+                              className={`gap-1 ${roleColors[role]}`}
+                            >
+                              <RoleIcon className="h-3 w-3" />
+                              {role}
+                              {u.user_id !== user?.id && (
+                                <button
+                                  onClick={() => handleRemoveRole(u.user_id, role)}
+                                  className="ml-1 hover:text-destructive"
+                                  disabled={removeRoleMutation.isPending}
+                                >
+                                  <X className="h-3 w-3" />
+                                </button>
+                              )}
+                            </Badge>
+                          );
+                        })}
+                      </div>
+                      
+                      {u.user_id !== user?.id && (
+                        <Select
+                          onValueChange={(value) => handleAssignRole(u.user_id, value as AppRole)}
+                          disabled={assignRoleMutation.isPending}
+                        >
+                          <SelectTrigger className="w-[140px]">
+                            <SelectValue placeholder="Add role..." />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {(['admin', 'moderator', 'user'] as AppRole[])
+                              .filter((role) => !u.roles.includes(role))
+                              .map((role) => (
+                                <SelectItem key={role} value={role}>
+                                  {role.charAt(0).toUpperCase() + role.slice(1)}
+                                </SelectItem>
+                              ))}
+                          </SelectContent>
+                        </Select>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,84 @@
+import { Navigation } from "@/components/Navigation";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Mountain, Award } from "lucide-react";
+import { mockOrganizers } from "@/lib/mockData";
+
+export default function Organisers() {
+  return (
+    <div className="min-h-screen bg-background">
+      <Navigation />
+
+      {/* Hero Section */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-primary/90 via-primary/70 to-background py-20">
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDM0djItSDI0di0yaDEyek0zNiAyNHYySDI0di0yaDEyeiIvPjwvZz48L2c+PC9zdmc+')] opacity-50" />
+
+        <div className="container relative mx-auto px-4 text-center">
+          <Badge variant="secondary" className="mb-4 bg-card/20 text-card backdrop-blur-sm border-card/30">
+            Meet Our Hike Leaders
+          </Badge>
+
+          <h1 className="mb-4 font-heading text-4xl font-bold text-snow md:text-5xl">Our Hike Leaders</h1>
+
+          <p className="mx-auto max-w-2xl text-lg text-snow/80">
+            Every club member can organize and lead hikes. Our leaders take responsibility for everyone on the trail —
+            waiting at every intersection and ensuring no one is left behind.
+          </p>
+        </div>
+      </section>
+
+      {/* Team Grid */}
+      <section className="container mx-auto px-4 py-16">
+        {/* CHANGE 2: Changed from 'grid' to 'flex flex-wrap justify-center' to center incomplete rows */}
+        <div className="flex flex-wrap justify-center gap-8">
+          {mockOrganizers.map((organizer, index) => (
+            <Card
+              key={organizer.id}
+              // CHANGE 2 (continued): Added explicit widths (w-full md:w-[48%] lg:w-[23%]) so flex mimics the previous grid layout.
+              // CHANGE 1: Removed style={{ animationDelay... }} so they appear all at once.
+              className="group w-full md:w-[48%] lg:w-[23%] overflow-hidden transition-all duration-300 hover:shadow-elevated animate-slide-up"
+            >
+              <div className="relative aspect-square overflow-hidden">
+                <img
+                  src={organizer.image}
+                  alt={organizer.name}
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  // Optional: Add loading="eager" to prioritize loading these images immediately
+                  loading="eager"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-mountain/80 via-transparent to-transparent" />
+              </div>
+
+              <CardContent className="p-4">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h3 className="font-heading text-lg font-semibold">{organizer.name}</h3>
+                    <p className="text-sm text-primary">{organizer.role}</p>
+                  </div>
+                  {organizer.role === "Club President" && <Award className="h-5 w-5 text-trail" />}
+                </div>
+
+                <p className="mt-3 text-sm text-muted-foreground line-clamp-3">{organizer.bio}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      {/* Become a Leader CTA */}
+      <section className="bg-muted/50 py-16">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="mb-4 font-heading text-2xl font-bold md:text-3xl">Want to Lead a Hike?</h2>
+          <p className="mx-auto mb-8 max-w-2xl text-muted-foreground">
+            Every member of our hiking club can organize and lead hikes! Once you've joined a hike and become a member,
+            you can plan your own adventure and guide fellow hikers across Germany.
+          </p>
+          <Button asChild size="lg">
+            <a href="mailto:hiking@tum.de">Contact us to get started</a>
+          </Button>
+        </div>
+      </section>
+    </div>
+  );
+}
