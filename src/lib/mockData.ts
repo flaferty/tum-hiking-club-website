@@ -1,7 +1,4 @@
 import { Hike, Organizer, DAVHut, Badge } from "./types";
-
-
-
 export const mockHikes: Hike[] = [
   {
     id: "1",
@@ -17,7 +14,7 @@ export const mockHikes: Hike[] = [
     duration: "3-4 hours",
     description:
       "Walk through the spectacular Partnachklamm gorge with its towering cliffs and rushing waters. Perfect for beginners!",
-    image_url: "src/assets/attila.jpg",
+    image_url: "/attila.jpg",
     max_participants: 25,
     organizer_name: "Max Müller",
     organizer_id: null,
