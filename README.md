@@ -42,8 +42,8 @@ To run this project locally, follow these steps:
 
 1. Clone the repository:
 ```
-git clone https://github.com/flaferty/hiking-club-website.git
-cd hiking-club-website
+git clone https://github.com/flaferty/tum-hiking-club-website.git
+cd tum-hiking-club-website
 ```
 2. Install dependencies:
 ```
