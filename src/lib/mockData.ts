@@ -14,7 +14,7 @@ export const mockHikes: Hike[] = [
     duration: "3-4 hours",
     description:
       "Walk through the spectacular Partnachklamm gorge with its towering cliffs and rushing waters. Perfect for beginners!",
-    image_url: "/attila.jpg",
+    image_url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
     max_participants: 25,
     organizer_name: "Max Müller",
     organizer_id: null,
