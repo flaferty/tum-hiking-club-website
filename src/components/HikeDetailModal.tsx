@@ -200,14 +200,14 @@ export function HikeDetailModal({ hike: initialHike, isOpen, onClose, onEnrollme
 
         {/* Additional Images - Scrollable Gallery */}
         {!isSingleImage && (
-          <div className="mt-6">
-            <h3 className="mb-2 font-semibold">More photos</h3>
-            <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-secondary/20">
+          <div className="mt-4 relative w-full">
+            <h3 className="mb-2 px-1 font-semibold text-sm text-muted-foreground">More photos</h3>
+            <div className="flex gap-3 overflow-x-auto pt-2 pb-4 px-2 w-full scrollbar-thin scrollbar-track-transparent scrollbar-thumb-secondary/20">
               {sortedImages.map((img) => (
                 <button
                   key={img.id}
                   onClick={() => setActiveImageUrl(img.image_url)}
-                  className={`relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg transition-all ${
+                  className={`relative h-16 w-24 flex-shrink-0 overflow-hidden rounded-lg transition-all ${
                     activeImageUrl === img.image_url
                       ? "ring-2 ring-primary ring-offset-2"
                       : "opacity-70 hover:opacity-100"

@@ -1,5 +1,7 @@
 import { Hike, Organizer, DAVHut, Badge } from "./types";
 
+
+
 export const mockHikes: Hike[] = [
   {
     id: "1",
@@ -106,49 +108,49 @@ export const mockOrganizers: Organizer[] = [
     id: "2",
     name: "Samu",
     role: "",
-    image: "src/assets/samu.jpg",
+    image: "/samu.jpg",
     bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ex dui, sodales non rutrum ac.",
   },
   {
     id: "3",
     name: "Vrushabh",
     role: "",
-    image: "src/assets/vru.jpg",
+    image: "/vru.jpg",
     bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ex dui, sodales non rutrum ac.",
   },
   {
     id: "4",
     name: "Andrea",
     role: "",
-    image: "src/assets/andrea.jpg",
+    image: "/andrea.jpg",
     bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ex dui, sodales non rutrum ac.",
   },
   {
     id: "5",
     name: "Julien",
     role: "",
-    image: "src/assets/julien.jpg",
+    image: "/julien.jpg",
     bio: "Certified mountain guide and first aid instructor. Ensures every hike is safe and enjoyable.",
   },
   {
     id: "6",
     name: "Georgi",
     role: "",
-    image: "src/assets/georgi.jpg",
+    image: "/georgi.jpg",
     bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ex dui, sodales non rutrum ac.",
   },
   {
     id: "7",
     name: "Hoda",
     role: "",
-    image: "src/assets/hoda.jpg",
+    image: "/hoda.jpg",
     bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ex dui, sodales non rutrum ac.",
   },
   {
     id: "8",
     name: "Alex",
     role: "",
-    image: "src/assets/alex.jpg",
+    image: "/alex.jpg",
     bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ex dui, sodales non rutrum ac.",
   },
 ];

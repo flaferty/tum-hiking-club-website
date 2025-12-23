@@ -290,7 +290,11 @@ export default function AddHike() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 font-heading text-2xl">
-              <Mountain className="h-6 w-6 text-primary" />
+              <img 
+                src="/logo-no-bg.png" 
+                alt="TUM Hiking Club Logo" 
+                className="h-9 w-9 object-contain rounded-md" 
+              />
               Add New Hike
             </CardTitle>
             <p className="text-muted-foreground">Fill in the details to create a new hiking adventure</p>

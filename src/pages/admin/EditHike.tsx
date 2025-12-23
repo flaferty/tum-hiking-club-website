@@ -352,7 +352,11 @@ export default function EditHike() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 font-heading text-2xl">
-              <Mountain className="h-6 w-6 text-primary" />
+               <img 
+                src="/logo-no-bg.png" 
+                alt="TUM Hiking Club Logo" 
+                className="h-9 w-9 object-contain rounded-md" 
+              />
               Edit Hike
             </CardTitle>
             <p className="text-muted-foreground">Update the hike details</p>
