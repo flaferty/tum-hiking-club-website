@@ -98,7 +98,7 @@ export const mockOrganizers: Organizer[] = [
     id: "1",
     name: "Attila",
     role: "",
-    image: "src/assets/attila.jpg",
+    image: "/attila.jpg",
     bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ex dui, sodales non rutrum ac.",
   },
   {
