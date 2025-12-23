@@ -43,7 +43,7 @@ export default function Participants() {
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-b from-primary/90 via-primary/70 to-background py-20">
         <img
-          src="src/assets/mountains_2.jpg"
+          src="/mountains_2.jpg"
           alt="Mountainous landscape fading out"
           className="absolute inset-0 h-full w-full object-cover opacity-60 mix-blend-overlay [mask-image:linear-gradient(to_bottom,black_50%,transparent_100%)]"
 
