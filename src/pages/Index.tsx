@@ -69,7 +69,7 @@ export default function Index() {
           <h1 className="mb-4 font-heading text-4xl font-bold text-snow md:text-6xl lg:text-7xl animate-fade-in">
             Explore Germany's
             <br />
-            <span className="text-sky">Stunning Trails</span>
+            <span className="text-snow">Stunning Trails</span>
           </h1>
 
           <p

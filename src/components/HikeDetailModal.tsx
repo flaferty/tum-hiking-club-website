@@ -162,15 +162,13 @@ export function HikeDetailModal({ hike: initialHike, isOpen, onClose, onEnrollme
 
   return (
     <Dialog open={isOpen} onOpenChange={() => onClose()}>
-      <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
+      <DialogContent className="flex flex-col max-h-[90vh] max-w-2xl overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="font-heading text-2xl">{hike.name}</DialogTitle>
         </DialogHeader>
         
         {/* Main Image */}
-        <div className={`relative w-full rounded-lg overflow-hidden focus:outline-none ${
-            isSingleImage ? "h-64 sm:h-80 md:h-[400px]" : "aspect-video"
-          }`}
+        <div className="relative w-full h-64 sm:h-80 md:h-[400px] shrink-0 rounded-lg overflow-hidden focus:outline-none bg-muted/20"
           onTouchStart={onTouchStart}
           onTouchMove={onTouchMove}
           onTouchEnd={onTouchEnd}
@@ -200,7 +198,7 @@ export function HikeDetailModal({ hike: initialHike, isOpen, onClose, onEnrollme
 
         {/* Additional Images - Scrollable Gallery */}
         {!isSingleImage && (
-          <div className="mt-4 relative w-full">
+          <div className="mt-4 relative w-full shrink-0">
             <h3 className="mb-2 px-1 font-semibold text-sm text-muted-foreground">More photos</h3>
             <div className="flex gap-3 overflow-x-auto pt-2 pb-4 px-2 w-full scrollbar-thin scrollbar-track-transparent scrollbar-thumb-secondary/20">
               {sortedImages.map((img) => (
