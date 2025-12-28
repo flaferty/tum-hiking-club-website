@@ -1,9 +1,9 @@
-import { Navigation } from "@/components/Navigation";
+import { Navigation } from "@/components/layout/Navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Mountain, Award } from "lucide-react";
-import { mockOrganizers } from "@/lib/mockData";
+import { Award } from "lucide-react";
+import { organizers } from "@/lib/data";
 
 export default function Organisers() {
   return (
@@ -13,7 +13,7 @@ export default function Organisers() {
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-b from-primary/90 via-primary/70 to-background py-20">
         <img
-          src="/mountains_2.jpg"
+          src="/images/hero/mountains_2.jpg"
           alt="Mountainous landscape fading out"
           className="absolute inset-0 h-full w-full object-cover opacity-60 mix-blend-overlay [mask-image:linear-gradient(to_bottom,black_50%,transparent_100%)]"
 
@@ -26,7 +26,7 @@ export default function Organisers() {
           <h1 className="mb-4 font-heading text-4xl font-bold text-snow md:text-5xl">Our Hike Leaders</h1>
 
           <p className="mx-auto max-w-2xl text-lg text-snow/80">
-            Every club member can organize and lead hikes. Our leaders take responsibility for everyone on the trail —
+            Every club member can organize and lead hikes. Our leaders take responsibility for everyone on the trail,
             waiting at every intersection and ensuring no one is left behind.
           </p>
         </div>
@@ -35,7 +35,7 @@ export default function Organisers() {
       {/* Team Grid */}
       <section className="container mx-auto px-4 py-16">
         <div className="flex flex-wrap justify-center gap-8">
-          {mockOrganizers.map((organizer, index) => (
+          {organizers.map((organizer, index) => (
             <Card
               key={organizer.id}
               className="group w-full md:w-[48%] lg:w-[23%] overflow-hidden transition-all duration-300 hover:shadow-elevated animate-slide-up"

@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/services/supabase/client';
 import { Hike, Waypoint } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
 

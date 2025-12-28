@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Navigation } from '@/components/Navigation';
+import { Navigation } from '@/components/layout/Navigation';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
@@ -13,12 +13,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/features/auth/AuthContext';
 import { useToast } from '@/hooks/use-toast';
-import { useHikes, useDeleteHike } from '@/hooks/useHikes';
+import { useHikes, useDeleteHike } from '@/features/hikes/useHikes';
 import { useUsers, useAssignRole, useRemoveRole } from '@/hooks/useUsers';
 import { Difficulty } from '@/lib/types';
-import { Database } from '@/integrations/supabase/types';
+import { Database } from '@/services/supabase/types';
 import { 
   Plus, 
   Pencil, 

@@ -2,9 +2,10 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "@/contexts/AuthContext";
-import { ErrorBoundary } from "@/components/ErrorBoundary";
-import ScrollToTop from "@/components/ScrollToTop";
+import { AuthProvider } from "@/features/auth/AuthContext";
+import { ErrorBoundary } from "@/components/layout/ErrorBoundary";
+import { Footer } from "@/components/layout/Footer";
+import ScrollToTop from "@/components/layout/ScrollToTop";
 import Index from "./pages/Index";
 import Organisers from "./pages/Organisers";
 import Participants from "./pages/Participants";
@@ -14,6 +15,7 @@ import AdminDashboard from "./pages/admin/Dashboard";
 import AddHike from "./pages/admin/AddHike";
 import EditHike from "./pages/admin/EditHike";
 import NotFound from "./pages/NotFound";
+
 
 const queryClient = new QueryClient();
 
@@ -36,6 +38,7 @@ const App = () => (
             <Route path="/admin/edit-hike/:id" element={<EditHike />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <Footer />
         </BrowserRouter>
       </AuthProvider>
     </ErrorBoundary>

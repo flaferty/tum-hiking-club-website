@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
-import { Database } from '@/integrations/supabase/types';
+import { supabase } from '@/services/supabase/client';
+import { Database } from '@/services/supabase/types';
 
 type AppRole = Database['public']['Enums']['app_role'];
 

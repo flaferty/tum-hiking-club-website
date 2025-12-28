@@ -1,19 +1,19 @@
 import { useState } from "react";
-import { Navigation } from "@/components/Navigation";
-import { HikeCard } from "@/components/HikeCard";
-import { HikeDetailModal } from "@/components/HikeDetailModal";
+import { Navigation } from "@/components/layout/Navigation";
+import { HikeCard } from "@/features/hikes/HikeCard";
+import { HikeDetailModal } from "@/features/hikes/HikeDetailModal";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Plus, ChevronDown, MapPin, History } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Hike } from "@/lib/types";
-import { useAuth } from "@/contexts/AuthContext";
-import { useHikes } from "@/hooks/useHikes";
+import { useAuth } from "@/features/auth/AuthContext";
+import { useHikes } from "@/features/hikes/useHikes";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-mountains.jpg";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ErrorBoundary } from "@/components/ErrorBoundary";
-import HikingMap from "@/components/HikingMap";
+import { ErrorBoundary } from "@/components/layout/ErrorBoundary";
+import HikingMap from "@/features/hikes/HikingMap";
 
 type FilterType = "all" | "upcoming" | "completed";
 
@@ -59,11 +59,11 @@ export default function Index() {
           className="mb-4 bg-card/20 text-card backdrop-blur-sm border-card/30 pl-2 pr-4 py-1 flex items-center gap-2"
         >
           <img
-            src="/logo.jpg"
-            alt="TUM Hiking Club Logo"
+            src="/images/logo/logo.jpg"
+            alt="TUM HN Hiking Club Logo"
             className="h-6 w-6 object-contain rounded-md"
           />
-          TUM Hiking Community
+          TUM HN Hiking Community
         </Badge>
 
           <h1 className="mb-4 font-heading text-4xl font-bold text-snow md:text-6xl lg:text-7xl animate-fade-in">
