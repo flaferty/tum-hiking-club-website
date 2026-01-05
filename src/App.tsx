@@ -40,6 +40,7 @@ const App = () => (
           </Routes>
           <Footer />
         </BrowserRouter>
+        <Analytics />
       </AuthProvider>
     </ErrorBoundary>
   </QueryClientProvider>
