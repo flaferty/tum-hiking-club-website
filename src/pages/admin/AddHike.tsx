@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Navigation } from '@/components/Navigation';
+import { Navigation } from '@/components/layout/Navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -17,11 +17,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/features/auth/AuthContext';
 import { useToast } from '@/hooks/use-toast';
-import { davHuts } from '@/lib/mockData';
+import { davHuts } from '@/lib/data';
 import { DAVHut } from '@/lib/types';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/services/supabase/client';
 import { 
   Mountain, 
   Upload, 
@@ -291,8 +291,8 @@ export default function AddHike() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 font-heading text-2xl">
               <img 
-                src="/logo-no-bg.png" 
-                alt="TUM Hiking Club Logo" 
+                src="/images/logo/logo-no-bg.png" 
+                alt="TUM HN Hiking Club Logo" 
                 className="h-9 w-9 object-contain rounded-md" 
               />
               Add New Hike

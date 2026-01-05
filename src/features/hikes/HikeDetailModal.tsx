@@ -19,10 +19,10 @@ import {
   Loader2
 } from 'lucide-react';
 import { format } from 'date-fns';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/features/auth/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState, useCallback, TouchEvent } from 'react';
-import { useEnrollment, useHike } from '@/hooks/useHikes';
+import { useEnrollment, useHike } from '@/features/hikes/useHikes';
 
 interface HikeDetailModalProps {
   hike: Hike | null;

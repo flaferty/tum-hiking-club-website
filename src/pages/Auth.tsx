@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Mountain, Mail, Lock, User, ArrowLeft } from 'lucide-react';
+import { Mail, Lock, User, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/features/auth/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
 
@@ -81,7 +81,7 @@ export default function Auth() {
         if (error) {
           toast({ title: 'Error', description: error, variant: 'destructive' });
         } else {
-          toast({ title: 'Account created!', description: 'Welcome to TUM Hiking Club!' });
+          toast({ title: 'Account created!', description: 'Welcome to TUM HN Hiking Club!' });
           navigate('/');
         }
       } else {
@@ -118,8 +118,8 @@ export default function Auth() {
         <Card className="animate-scale-in">
           <CardHeader className="text-center">
             <img
-              src="/logo-no-bg.png"
-              alt="TUM Hiking Club Logo"
+              src="/images/logo/logo-no-bg.png"
+              alt="TUM HN Hiking Club Logo"
               className="mx-auto mb-4 h-16 w-16 object-contain rounded-xl"
             />
             <CardTitle className="font-heading text-2xl">
@@ -129,7 +129,7 @@ export default function Auth() {
             </CardTitle>
             <CardDescription>
               {mode === 'signin' && 'Sign in to manage your hike enrollments'}
-              {mode === 'signup' && 'Join the TUM Hiking Community'}
+              {mode === 'signup' && 'Join the TUM HN Hiking Community'}
               {mode === 'forgot' && 'Enter your email to receive reset instructions'}
             </CardDescription>
           </CardHeader>

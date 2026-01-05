@@ -1,43 +1,70 @@
-# TUM Hiking Club Website
-This repository contains the source code for the TUM Hiking Club, a web application designed to connect hiking enthusiasts at the Technical University of Munich. 
-The platform allows users to discover, enroll in, and organize hiking events. It features an interactive map, detailed hike information, user profiles with statistics, and an admin dashboard for site management.
+# TUM HN Hiking Club Website
+A web platform developed for the TUM HN Hiking Club to manage event discovery, user enrollment, and administrative organization.
 
 ### Tech Stack
 - Frontend: React, TypeScript, Vite
-- Backend & Database: Supabase (PostgreSQL, Auth, Storage)
 - Styling: Tailwind CSS, shadcn/ui
 - State Management: TanStack Query (React Query)
-- Routing: React Router
+- Backend & Database: Supabase (PostgreSQL, Auth, Storage)
 - Mapping: Leaflet.js & React-Leaflet
 - Forms: React Hook Form & Zod
-- UI Components: Radix UI
-## Project Strcture:
+## Project Architecture:
 ```
 /
-├── public/                 # Static assets like robots.txt
+├── public/
+│   ├── images/
+│   └── robots.txt
 ├── src/
-│   ├── assets/             # Static images and assets for the app
-│   ├── components/         # Reusable React components
-│   │   └── ui/             # Unstyled components from shadcn/ui
-│   ├── contexts/           # React Context providers (e.g., AuthContext)
-│   ├── hooks/              # Custom React hooks for data fetching and logic
-│   ├── integrations/       # Supabase client and generated types
-│   ├── lib/                # Shared utilities, types, and mock data
-│   └── pages/              # Top-level page components for each route
-│       └── admin/          # Components for the admin dashboard
+│   ├── assets/             # Static assets (images) imported in code
+│   ├── components/
+│   │   ├── layout/         # Layout components (Navigation, Footer, etc.)
+│   │   └── ui/             # shadcn/ui primitives (Button, Input, etc.)
+│   ├── features/           # Feature-specific logic (The core of your app)
+│   │   ├── auth/           # AuthContext, login forms, protection logic
+│   │   └── hikes/          # Hike cards, maps, enrollment logic
+│   ├── hooks/              # Global custom hooks
+│   │   ├── use-mobile.tsx
+│   │   ├── use-toast.ts
+│   │   ├── useUserEnrollments.ts
+│   │   └── useUsers.ts
+│   ├── lib/                # Utilities and static data
+│   │   ├── data.ts         # Mock data or constants
+│   │   ├── types.ts        # (Legacy) types, moving toward src/types
+│   │   └── utils.ts        # cn() helper
+│   ├── pages/              # Route components
+│   │   ├── admin/          # Admin dashboard routes
+│   │   ├── Auth.tsx
+│   │   ├── Index.tsx
+│   │   ├── NotFound.tsx
+│   │   ├── Organisers.tsx
+│   │   ├── Participants.tsx
+│   │   └── Profile.tsx
+│   ├── services/           # External API integration
+│   │   └── supabase/       # Supabase client configuration
+│   ├── types/              # Global TypeScript definitions
+│   │   └── index.ts
+│   ├── App.tsx             # Main Router setup
+│   ├── main.tsx            # Entry point
+│   ├── index.css           # Global styles & Tailwind directives
+│   └── vite-env.d.ts
 ├── supabase/
-│   └── migrations/         # Supabase database migration scripts
-├── index.html              # Main HTML entry point
-├── package.json            # Project dependencies and scripts
-└── vite.config.ts          # Vite configuration
+│   ├── migrations/         # SQL history
+│   └── config.toml
+├── index.html
+├── package.json
+├── tailwind.config.ts
+├── tsconfig.json
+└── vite.config.ts
 ```
-## Getting Started
+## Setup & Installation 
 
 To run this project locally, follow these steps:
+
 ### Prerequisites
-- Node.js (v18 or later)
+- Node.js (v18+)
 - npm or yarn
-- Supabase Account and Supabase CLI
+- Supabase CLI
+
 ### Installation
 
 1. Clone the repository:
@@ -68,9 +95,9 @@ npm run dev
 ```
 The application will be available at http://localhost:8080.
 
-## Backend (Supabase)
+## Backend Overview
 
-This project uses Supabase for its backend services, including authentication, database, and file storage.
+The backend relies on Supabase (PostgreSQL). Security is handled via Row-Level Security (RLS) policies.
 
 ### Database
 
@@ -80,8 +107,6 @@ The database schema is defined in the `supabase/migrations` directory. Key table
 *   `profiles`: Stores user profile data, extending the default `auth.users` table.
 *   `hike_enrollments`: Manages the relationship between users and the hikes they are enrolled in or waitlisted for.
 *   `user_roles`: Assigns roles (e.g., `admin`, `user`) to users for authorization.
-*   `hike_images`: Stores URLs for hike-related photos.
-*   `waypoints`: Stores geographical points for multi-day hikes, such as overnight stops.
 
 ### Authentication
 

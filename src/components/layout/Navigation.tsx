@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Mountain, MapPin, Users, UserPlus, LayoutDashboard, User, LogOut, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/features/auth/AuthContext';
 import { useState } from 'react';
 import {
   DropdownMenu,
@@ -25,16 +25,15 @@ export function Navigation() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border/50 bg-card/80 backdrop-blur-md">
+    <header className="sticky top-0 z-[50] border-b border-border/0 bg-card/80 backdrop-blur-md">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
           <img 
-            src="/logo-no-bg.png" 
-            alt="TUM Hiking Club Logo" 
-            className="h-9 w-9 object-contain rounded-md" 
+            src="/images/logo/logo-no-bg.png" 
+            alt="TUM HN Hiking Club Logo" 
+            className="h-16 w-16 object-contain rounded-md" 
           />
-          <span className="font-heading text-lg font-bold text-foreground">Hiking Club</span>
         </Link>
 
         {/* Desktop Navigation */}

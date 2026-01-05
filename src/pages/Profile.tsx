@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Navigation } from '@/components/Navigation';
+import { Navigation } from '@/components/layout/Navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/features/auth/AuthContext';
 import { useUserStats } from '@/hooks/useUserEnrollments';
-import { mockBadges } from '@/lib/mockData';
+import { badges } from '@/lib/data';
 import { format } from 'date-fns';
 import { 
   Mountain, 
@@ -51,7 +51,7 @@ export default function Profile() {
   if (!user) return null;
 
   // Calculate badges earned based on real stats
-  const badgesEarned = mockBadges.filter(badge => {
+  const badgesEarned = badges.filter(badge => {
     if (badge.id === '1') return stats.hikesCompleted >= 1; // First Steps
     if (badge.id === '2') return stats.hikesCompleted >= 5; // Week Warrior (5 hikes)
     if (badge.id === '3') return stats.totalElevation >= 1000; // Peak Bagger
@@ -66,7 +66,7 @@ export default function Profile() {
       {/* Profile Header */}
        <section className="relative overflow-hidden bg-gradient-to-b from-primary/90 via-primary/70 to-background py-20">
         <img
-          src="/mountains_2.jpg"
+          src="/images/hero/mountains_2.jpg"
           alt="Mountainous landscape fading out"
           className="absolute inset-0 h-full w-full object-cover opacity-60 mix-blend-overlay [mask-image:linear-gradient(to_bottom,black_50%,transparent_100%)]"
 
@@ -250,7 +250,7 @@ export default function Profile() {
           </CardHeader>
           <CardContent>
             <div className="grid gap-4 md:grid-cols-4">
-              {mockBadges.map((badge) => {
+              {badges.map((badge) => {
                 const IconComponent = iconMap[badge.icon] || Award;
                 const isEarned = 
                   (badge.id === '1' && stats.hikesCompleted >= 1) ||

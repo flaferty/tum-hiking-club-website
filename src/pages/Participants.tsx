@@ -1,9 +1,9 @@
-import { Navigation } from "@/components/Navigation";
+import { Navigation } from "@/components/layout/Navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { MessageCircle, Users, Calendar, Shield, Backpack, QrCode, Activity } from "lucide-react";
+import { MessageCircle, Activity, Instagram } from "lucide-react";
 import QRCodeGenerator from "react-qr-code";
 
 
@@ -11,28 +11,28 @@ const faqs = [
   {
     question: "How do I become a club member?",
     answer:
-      "Join any of our open hikes first! After attending at least one hike, you can be added to our hiking club. Contact the admins to be added to the private group.",
+      "Join any of our open hikes first. At the end of it, you can be added to our hiking club whatsapp group, where we post updates and organize events.",
   },
   {
     question: "Can anyone join a hike?",
     answer:
-      "Yes! Our hikes are open to everyone - we want to reach as many people as possible. You don't need to be a member to join a hike.",
+      "Yes! Our hikes are open to everyone, as we want to reach as many people as possible. You don't need to be a member to join a hike.",
   },
   {
     question: "Can I organize my own hike?",
     answer:
-      "Yes! Every club member can organize and lead hikes. As a hike leader, you're responsible for all participants - wait at every hard part of the route and ensure no one is left behind.",
+      "Yes, as every club member can organize and lead hikes. As a hike leader, you're responsible for all participants: wait at every hard part of the route and ensure no one is left behind.",
   },
   {
     question: "What about photos and videos?",
     answer:
-      "By joining our club, you agree that we can take photos and videos of you, store them, and use them for marketing purposes on our Instagram channel. But of course, you'll also will have access to them 1-2 day after the hike ends",
+      "You'll have access to pictures that were taken during the hike 1-2 day after it ends by the link in the group. By joining our club, you agree that we can take photos and videos of you, store them, and use them for marketing purposes on our Instagram channel.",
   },
-  {
+/*   {
     question: "How do I join the club group?",
     answer:
       "The club is not an open group. After attending a hike, contact the admins to be added. This ensures all members have hiking experience.",
-  },
+  }, */
 ];
 
 export default function Participants() {
@@ -43,7 +43,7 @@ export default function Participants() {
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-b from-primary/90 via-primary/70 to-background py-20">
         <img
-          src="/mountains_2.jpg"
+          src="/images/hero/mountains_2.jpg"
           alt="Mountainous landscape fading out"
           className="absolute inset-0 h-full w-full object-cover opacity-60 mix-blend-overlay [mask-image:linear-gradient(to_bottom,black_50%,transparent_100%)]"
 
@@ -62,30 +62,28 @@ export default function Participants() {
         </div>
       </section>
 
-      {/* Main Content */}
       <section className="container mx-auto px-4 py-16">
         <div className="grid gap-12 lg:grid-cols-2">
-          {/* WhatsApp Community Card */}
+          {/* Instagram Community Card */}
           <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
-            <CardHeader className="bg-[#128C7E]/80 text-white">
+            <CardHeader className="bg-gradient-to-r from-[#833AB4]/85 via-[#FD1D1D]/85 to-[#F77737]/85 text-white">
               <CardTitle className="flex items-center gap-2">
                 <MessageCircle className="h-5 w-5" />
-                WhatsApp Community
+                Instagram Community
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6">
-              <h3 className="mb-4 font-heading text-xl font-semibold">Join Our WhatsApp Group</h3>
+              <h3 className="mb-4 font-heading text-xl font-semibold">Join Our Instagram</h3>
               <p className="mb-6 text-muted-foreground">
-                Stay updated on upcoming hikes, connect with fellow hikers, and share your adventures!
-              </p>
+                Check out photos from our latest adventures, get inspired for your next trip, and tag us in your stories!              </p>
 
               {/* QR Code placeholder */}
               <div className="mb-6 flex justify-center">
-                <div className="flex h-auto w-auto items-center justify-center rounded-xl border-2 border-dashed border-[#128C7E]/30 bg-white p-4">
+                <div className="flex h-auto w-auto items-center justify-center rounded-xl border-2 border-dashed border-[#833AB4]/30 bg-white p-4">
                   <QRCodeGenerator
-                    value="https://chat.whatsapp.com/EpCWwnfCKamLfmEJcT4uv0"
+                    value="https://www.instagram.com/tum.hiking.club/"
                     size={180}
-                    fgColor="#128C7E" // WhatsApp Green
+                    fgColor="#833AB4"
                     bgColor="#FFFFFF"
                     style={{ height: "auto", maxWidth: "100%", width: "100%" }}
                   />
@@ -93,16 +91,16 @@ export default function Participants() {
               </div>
               
 
-              <Button asChild className="w-full gap-2 bg-[#128C7E]/80 hover:bg-[#075E54] text-white" size="lg">
+              <Button asChild className="w-full gap-2 bg-gradient-to-r from-[#833AB4]/80 via-[#FD1D1D]/80 to-[#F77737]/90 hover:bg-[#833AB4] text-white" size="lg">
                 <a 
-                  href="https://chat.whatsapp.com/EpCWwnfCKamLfmEJcT4uv0" 
+                  href="https://www.instagram.com/tum.hiking.club/" 
                   target="_blank" 
                   rel="noopener noreferrer"
                 >
-                  <MessageCircle className="h-4 w-4" />
-                  Or Click to Join
+                  <Instagram className="h-4 w-4" />
+                    Click to Join
                 </a>
-              </Button>
+              </Button> 
 
               <p className="mt-3 text-center text-sm text-muted-foreground">
                 Scan the QR code or click the button to join
@@ -128,18 +126,18 @@ export default function Participants() {
                 {/* QR Code Container */}
                 <div className="mb-6 flex justify-center">
                   <div className="flex h-auto w-auto items-center justify-center rounded-xl border-2 border-dashed border-[#FC4C02]/30 bg-white p-4">
-                    <img
-                    src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(
-                      "https://strava.app.link/1baOJxDklZb"
-                    )}&color=333333&bgcolor=ffffff`}
-                    alt="Strava Club QR Code"
-                    className="h-[180px] w-[180px] object-contain opacity-90"
+                     <QRCodeGenerator
+                    value="https://strava.app.link/1baOJxDklZb"
+                    size={180}
+                    fgColor="#FC4C02"
+                    bgColor="#FFFFFF"
+                    style={{ height: "auto", maxWidth: "100%", width: "100%" }}
                   />
                 </div>
               </div>
 
                 <Button 
-                  className="w-full gap-2 bg-[#FC4C02]/80 text-white hover:bg-[#e34402]" 
+                  className="w-full gap-2 bg-[#FC4C02]/80 text-white hover:bg-[#fa5610]" 
                   size="lg"
                   asChild
                 >
