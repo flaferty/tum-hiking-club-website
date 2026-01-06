@@ -25,14 +25,14 @@ export function Navigation() {
   ];
 
   return (
-    <header className="sticky top-0 z-[50] border-b border-border/0 bg-card/80 backdrop-blur-md">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4">
+    <header className="sticky top-0 z-[50] border-b border-border/0 bg-card/80 backdrop-blur-sm">
+      <div className="container mx-auto flex h-16 items-center justify-between px-4 py-10">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
           <img 
             src="/images/logo/logo-no-bg.png" 
             alt="TUM HN Hiking Club Logo" 
-            className="h-16 w-16 object-contain rounded-md" 
+            className="h-24 w-24 object-contain rounded-md" 
           />
         </Link>
 
