@@ -19,7 +19,7 @@ export default function Organisers() {
 
         />
         <div className="container relative mx-auto px-4 text-center">
-          <Badge variant="secondary" className="mb-4 bg-card/20 text-card backdrop-blur-sm border-card/30">
+          <Badge variant="outline" className="mb-4 bg-card/20 text-card backdrop-blur-sm border-card/30">
             Meet Our Hike Leaders
           </Badge>
 
@@ -51,9 +51,9 @@ export default function Organisers() {
               </div>
 
               <CardContent className="p-4">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h3 className="font-heading text-lg font-semibold">{organizer.name}</h3>
+                <div className="flex justify-between">
+                  <div className="">
+                    <h3 className="text-center text-md font-semibold">{organizer.name}</h3>
                     <p className="text-sm text-primary">{organizer.role}</p>
                   </div>
                   {organizer.role === "Club President" && <Award className="h-5 w-5 text-trail" />}

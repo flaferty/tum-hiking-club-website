@@ -49,7 +49,7 @@ export default function Participants() {
 
         />
         <div className="container relative mx-auto px-4 text-center">
-          <Badge variant="secondary" className="mb-4 bg-card/20 text-card backdrop-blur-sm border-card/30">
+          <Badge variant="outline" className="mb-4 bg-card/20 text-card backdrop-blur-sm border-card/30">
             Join Our Community
           </Badge>
 
