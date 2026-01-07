@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useAuth } from '@/features/auth/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
+import { supabase } from '@/services/supabase/client';
 
 const signInSchema = z.object({
   email: z.string().email('Please enter a valid email'),
@@ -20,7 +21,7 @@ const signUpSchema = z.object({
   password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
-type AuthMode = 'signin' | 'signup' | 'forgot';
+type AuthMode = 'signin' | 'signup' | 'forgot' | 'update_password';
 
 export default function Auth() {
   const [mode, setMode] = useState<AuthMode>('signin');
@@ -34,11 +35,29 @@ export default function Auth() {
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  const [confirmPassword, setConfirmPassword] = useState('');
+
   useEffect(() => {
-    if (user) {
+    const isRecovery = window.location.hash.includes('type=recovery');
+
+    if (user && isRecovery) {
       navigate('/');
     }
   }, [user, navigate]);
+
+  useEffect(() => {
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (event === "PASSWORD_RECOVERY") {
+          setMode("update_password");
+        }
+      }
+    );
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -81,7 +100,36 @@ export default function Auth() {
         if (error) {
           toast({ title: 'Error', description: error, variant: 'destructive' });
         } else {
-          toast({ title: 'Account created!', description: 'Welcome to TUM HN Hiking Club!' });
+          toast({ title: 'Account created!',
+             description: 'Welcome to TUM HN Hiking Club! Please check your TUM email to confirm your account before logging in.',
+            duration: 6000,
+            className: "bg-blue-500 text-white border-blue-500/50"
+             });
+          setMode('signin');
+        }
+        
+        } else if (mode === 'update_password') {
+        if (!password) {
+           setErrors({ password: 'Password is required' });
+           setIsLoading(false);
+           return;
+        }
+
+        if (password !== confirmPassword) {
+           setErrors({ 
+             password: 'Passwords do not match', 
+             confirmPassword: 'Passwords do not match' 
+           });
+           setIsLoading(false);
+           return;
+        }
+
+        const { error } = await supabase.auth.updateUser({ password: password });
+        
+        if (error) {
+          toast({ title: 'Error', description: error.message, variant: 'destructive' });
+        } else {
+          toast({ title: 'Success', description: 'Your password has been updated.' });
           navigate('/');
         }
       } else {
@@ -126,11 +174,13 @@ export default function Auth() {
               {mode === 'signin' && 'Welcome Back'}
               {mode === 'signup' && 'Create Account'}
               {mode === 'forgot' && 'Reset Password'}
+              {mode === 'update_password' && 'Set New Password'}
             </CardTitle>
             <CardDescription>
               {mode === 'signin' && 'Sign in to manage your hike enrollments'}
               {mode === 'signup' && 'Join the TUM HN Hiking Community'}
               {mode === 'forgot' && 'Enter your email to receive reset instructions'}
+              {mode === 'update_password' && 'Enter your new password below'}
             </CardDescription>
           </CardHeader>
           
@@ -155,24 +205,26 @@ export default function Auth() {
                   )}
                 </div>
               )}
-              
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="you@tum.de"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10"
-                  />
+
+              {mode !== 'update_password' && (
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="yourmail@tum.de"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
+                  {errors.email && (
+                    <p className="text-sm text-destructive">{errors.email}</p>
+                  )}
                 </div>
-                {errors.email && (
-                  <p className="text-sm text-destructive">{errors.email}</p>
-                )}
-              </div>
+              )}
               
               {mode !== 'forgot' && (
                 <div className="space-y-2">
@@ -193,11 +245,32 @@ export default function Auth() {
                   )}
                 </div>
               )}
+
+              {mode === 'update_password' && (
+                <div className="space-y-2">
+                  <Label htmlFor="confirmPassword">Confirm Password</Label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <Input
+                      id="confirmPassword"
+                      type="password"
+                      placeholder="Repeat password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
+                  {errors.confirmPassword && (
+                    <p className="text-sm text-destructive">{errors.confirmPassword}</p>
+                  )}
+                </div>
+              )}
               
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? 'Loading...' : 
                   mode === 'signin' ? 'Sign In' : 
-                  mode === 'signup' ? 'Create Account' : 
+                  mode === 'signup' ? 'Create Account' :
+                  mode === 'update_password' ? 'Update Password' :
                   'Send Reset Link'}
               </Button>
             </form>

@@ -93,6 +93,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signUp = async (email: string, password: string, fullName: string): Promise<{ error: string | null }> => {
+    const lowerCaseEmail = email.toLowerCase();
+    if (!lowerCaseEmail.endsWith('@tum.de') && !lowerCaseEmail.endsWith('@mytum.de')) {
+      return { 
+        error: "Access is restricted to TUM students only. Please use your university email (@tum.de or @mytum.de)." 
+      };
+    }
     const redirectUrl = `${window.location.origin}/`;
 
     const { error } = await supabase.auth.signUp({
