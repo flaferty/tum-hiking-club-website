@@ -39,13 +39,13 @@ export default function Auth() {
 
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  useEffect(() => {
-    const isRecovery = window.location.hash.includes('type=recovery');
+  const [isRecovery] = useState(window.location.hash.includes('type=recovery'));
 
+  useEffect(() => {
     if (user && !isRecovery) {
       navigate('/');
     }
-  }, [user, navigate]);
+  }, [user, navigate, isRecovery]);
 
   useEffect(() => {
     const { data: authListener } = supabase.auth.onAuthStateChange(
