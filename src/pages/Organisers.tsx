@@ -75,7 +75,7 @@ export default function Organisers() {
             you can plan your own adventure and guide fellow hikers across Germany.
           </p>
           <Button asChild size="lg">
-            <a href="mailto:hiking@tum.de">Contact us to get started</a>
+            <a href="mailto:contact@tumhikingclub.com">Contact us to get started</a>
           </Button>
         </div>
       </section>
