@@ -42,7 +42,7 @@ export default function Auth() {
   useEffect(() => {
     const isRecovery = window.location.hash.includes('type=recovery');
 
-    if (user && isRecovery) {
+    if (user && !isRecovery) {
       navigate('/');
     }
   }, [user, navigate]);
