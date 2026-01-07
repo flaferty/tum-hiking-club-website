@@ -64,6 +64,7 @@ export default function EditHike() {
     location_lat: '',
     location_lng: '',
     description: '',
+    members_only: false,
   });
   
   const [images, setImages] = useState<File[]>([]);
@@ -93,6 +94,7 @@ export default function EditHike() {
         location_lat: hike.location_lat.toString(),
         location_lng: hike.location_lng.toString(),
         description: hike.description || '',
+        members_only: (hike as { members_only?: boolean }).members_only ?? false,
       });
       
       if (hike.images) {
@@ -260,6 +262,7 @@ export default function EditHike() {
           location_lng: parseFloat(formData.location_lng) || 0,
           description: formData.description || null,
           image_url: allImageUrls[0] || null,
+          members_only: formData.members_only,
         })
         .eq('id', id);
 
@@ -322,11 +325,11 @@ export default function EditHike() {
       });
       
       navigate('/admin/dashboard');
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error updating hike:', error);
       toast({
         title: 'Error updating hike',
-        description: error.message || 'Something went wrong',
+        description: (error as Error).message || 'Something went wrong',
         variant: 'destructive',
       });
     } finally {
@@ -742,6 +745,27 @@ export default function EditHike() {
                   onChange={handleInputChange}
                   rows={4}
                 />
+              </div>
+
+                <div className="flex items-center space-x-2 rounded-lg border p-4">
+                <input
+                  type="checkbox"
+                  id="members_only"
+                  className="h-4 w-4 rounded border-gray-300"
+                  checked={formData.members_only}
+                  onChange={(e) => setFormData(prev => ({ ...prev, members_only: e.target.checked }))}
+                />
+                <div className="grid gap-1.5 leading-none">
+                  <label
+                    htmlFor="members_only"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    Members Only Hike 🔒
+                  </label>
+                  <p className="text-sm text-muted-foreground">
+                    Only users with the "Member" role (WhatsApp group) can enroll.
+                  </p>
+                </div>
               </div>
 
               {/* Submit */}

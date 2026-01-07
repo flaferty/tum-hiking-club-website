@@ -27,6 +27,7 @@ export interface Hike {
   current_participants?: number;
   waypoints?: Waypoint[];
   images?: HikeImage[];
+  members_only: boolean;
 }
 
 export interface HikeEnrollment {

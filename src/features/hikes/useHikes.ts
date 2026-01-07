@@ -100,6 +100,7 @@ export function useHikes() {
           max_participants: hike.max_participants,
           organizer_name: hike.organizer_name,
           organizer_id: hike.organizer_id,
+          members_only: (hike as { members_only?: boolean }).members_only ?? false,
           status: status as 'upcoming' | 'completed',
           enrollment_count: count,
           current_participants: count,
@@ -174,6 +175,7 @@ export function useHike(id: string | undefined) {
         organizer_name: hike.organizer_name,
         organizer_id: hike.organizer_id,
         status: status as 'upcoming' | 'completed',
+        members_only: (hike as { members_only?: boolean }).members_only ?? false,
         enrollment_count: enrollmentCount,
         current_participants: enrollmentCount,
         waypoints: waypoints?.map(w => ({

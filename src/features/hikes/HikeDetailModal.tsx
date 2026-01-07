@@ -23,6 +23,8 @@ import { useAuth } from "@/features/auth/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState, useCallback, TouchEvent } from "react";
 import { useEnrollment, useHike } from "@/features/hikes/useHikes";
+import { WeatherForecast } from "@/features/weather/WeatherForecast";
+import { supabase } from "@/services/supabase/client";
 
 interface HikeDetailModalProps {
   hike: Hike | null;
@@ -50,9 +52,32 @@ export function HikeDetailModal({
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  const [userRoles, setUserRoles] = useState<string[]>([]);
+
+  useEffect(() => {
+    async function fetchRoles() {
+      if (!user) {
+        setUserRoles([]);
+        return;
+      }
+      const { data } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', user.id);
+      
+      if (data) {
+        setUserRoles(data.map(r => r.role));
+      }
+    }
+    fetchRoles();
+  }, [user, isOpen]);
+
   // Fetch fresh hike data to get updated enrollment count
   const { data: freshHike } = useHike(initialHike?.id);
   const hike = freshHike || initialHike;
+
+
+  const hasAccess = !hike?.members_only || userRoles.includes('member') || userRoles.includes('admin');
 
   const { enrollment, enroll, unenroll, isEnrolling, isUnenrolling } =
     useEnrollment(hike?.id);
@@ -169,6 +194,7 @@ export function HikeDetailModal({
   };
 
   const getButtonText = () => {
+    if (!hasAccess && user) return "Members Only Event";
     if (isLoading) return "Processing...";
     if (isWaitlisted) return "Leave Waitlist";
     if (isEnrolled) return "Unenroll";
@@ -283,6 +309,17 @@ export function HikeDetailModal({
           </div>
         </div>
 
+        {/* Weather Forecast */}
+        {hike.status === 'upcoming' && (
+          <div className="mt-2">
+            <WeatherForecast 
+              lat={hike.location_lat} 
+              lng={hike.location_lng} 
+              date={hike.date} 
+            />
+          </div>
+        )}
+
         {/* Location */}
         <div className="flex items-center gap-2 text-muted-foreground">
           <MapPin className="h-4 w-4" />
@@ -349,7 +386,7 @@ export function HikeDetailModal({
                   className="flex-1"
                   variant={isEnrolled ? "outline" : "default"}
                   onClick={handleEnroll}
-                  disabled={isLoading}
+                  disabled={isLoading || (!hasAccess && !isEnrolled)}
                 >
                   {isLoading && (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />

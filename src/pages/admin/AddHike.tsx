@@ -58,6 +58,7 @@ export default function AddHike() {
     location_lat: '',
     location_lng: '',
     description: '',
+    members_only: false,
   });
   
   const [images, setImages] = useState<File[]>([]);
@@ -211,6 +212,7 @@ export default function AddHike() {
           organizer_id: user.id,
           organizer_name: user.email?.split('@')[0] || 'Organizer',
           image_url: uploadedImageUrls[0] || null,
+          members_only: formData.members_only,
         })
         .select()
         .single();
@@ -260,11 +262,11 @@ export default function AddHike() {
       });
       
       navigate('/admin/dashboard');
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error creating hike:', error);
       toast({
         title: 'Error creating hike',
-        description: error.message || 'Something went wrong',
+        description: (error as Error).message || 'Something went wrong',
         variant: 'destructive',
       });
     } finally {
@@ -658,7 +660,26 @@ export default function AddHike() {
                   rows={4}
                 />
               </div>
-
+                <div className="flex items-center space-x-2 rounded-lg border p-4">
+                <input
+                  type="checkbox"
+                  id="members_only"
+                  className="h-4 w-4 rounded border-gray-300"
+                  checked={formData.members_only}
+                  onChange={(e) => setFormData(prev => ({ ...prev, members_only: e.target.checked }))}
+                />
+                <div className="grid gap-1.5 leading-none">
+                  <label
+                    htmlFor="members_only"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    Members Only Hike 🔒
+                  </label>
+                  <p className="text-sm text-muted-foreground">
+                    Only users with the "Member" role (WhatsApp group) can enroll.
+                  </p>
+                </div>
+              </div>
               {/* Submit */}
               <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
                 {isSubmitting ? 'Creating...' : 'Create Hike'}

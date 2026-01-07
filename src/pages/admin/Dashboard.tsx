@@ -57,13 +57,13 @@ const difficultyVariant: Record<Difficulty, 'easy' | 'moderate' | 'hard' | 'expe
 
 const roleIcons: Record<AppRole, typeof Shield> = {
   admin: ShieldAlert,
-  moderator: ShieldCheck,
+  member: ShieldCheck,
   user: Shield,
 };
 
 const roleColors: Record<AppRole, string> = {
   admin: 'bg-destructive/10 text-destructive border-destructive/20',
-  moderator: 'bg-primary/10 text-primary border-primary/20',
+  member: 'bg-green-100 text-green-700 border-green-200',
   user: 'bg-muted text-muted-foreground border-border',
 };
 
@@ -357,7 +357,7 @@ export default function AdminDashboard() {
                             <SelectValue placeholder="Add role..." />
                           </SelectTrigger>
                           <SelectContent>
-                            {(['admin', 'moderator', 'user'] as AppRole[])
+                            {(['admin', 'user', 'member'] as AppRole[])
                               .filter((role) => !u.roles.includes(role))
                               .map((role) => (
                                 <SelectItem key={role} value={role}>

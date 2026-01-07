@@ -153,6 +153,7 @@ export type Database = {
           id: string
           updated_at: string
           user_id: string
+          phone_number: string | null
         }
         Insert: {
           avatar_url?: string | null
@@ -162,6 +163,7 @@ export type Database = {
           id?: string
           updated_at?: string
           user_id: string
+          phone_number: string | null
         }
         Update: {
           avatar_url?: string | null
@@ -171,6 +173,7 @@ export type Database = {
           id?: string
           updated_at?: string
           user_id?: string
+          phone_number: string | null
         }
         Relationships: []
       }
@@ -256,7 +259,7 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "moderator" | "user"
+      app_role: "admin" | "user" | "member"
       waypoint_type: "start" | "end" | "overnight_stop"
     }
     CompositeTypes: {
@@ -385,7 +388,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "moderator", "user"],
+      app_role: ["admin", "user", "member"],
       waypoint_type: ["start", "end", "overnight_stop"],
     },
   },

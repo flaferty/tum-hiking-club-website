@@ -103,12 +103,12 @@ export function HikeCard({ hike, onClick }: HikeCardProps) {
         </div>
 
         {/* Optional location row (only if your Hike has it) */}
-        {"location" in hike && (hike as any).location ? (
+        {hike.location_name && (
           <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
             <MapPin className="h-4 w-4" />
-            <span className="line-clamp-1">{(hike as any).location}</span>
+            <span className="line-clamp-1">{hike.location_name}</span>
           </div>
-        ) : null}
+        )}
 
         {hike.description ? (
           <p className="mt-3 text-sm text-muted-foreground line-clamp-2">

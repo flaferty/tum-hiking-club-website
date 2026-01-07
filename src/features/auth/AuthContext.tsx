@@ -8,7 +8,7 @@ interface AuthContextType {
   isLoading: boolean;
   isAdmin: boolean;
   signIn: (email: string, password: string) => Promise<{ error: string | null }>;
-  signUp: (email: string, password: string, fullName: string) => Promise<{ error: string | null }>;
+  signUp: (email: string, password: string, fullName: string, phone: string) => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<{ error: string | null }>;
 }
@@ -92,7 +92,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { error: null };
   };
 
-  const signUp = async (email: string, password: string, fullName: string): Promise<{ error: string | null }> => {
+  const signUp = async (email: string, password: string, fullName: string, phone: string): Promise<{ error: string | null }> => {
     const lowerCaseEmail = email.toLowerCase();
     if (!lowerCaseEmail.endsWith('@tum.de') && !lowerCaseEmail.endsWith('@mytum.de')) {
       return { 
@@ -107,6 +107,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       options: {
         data: {
           full_name: fullName,
+          phone_number: phone,
         },
         emailRedirectTo: redirectUrl,
       },
