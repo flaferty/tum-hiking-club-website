@@ -138,7 +138,27 @@ export default function Auth() {
           setIsLoading(false);
           return;
         }
-        
+        const { data: userExists, error: checkError } = await supabase.rpc('check_email_exists', {
+          email_check: email
+        });
+
+        if (checkError) {
+           toast({ title: 'Error', description: 'System error checking email.', variant: 'destructive' });
+           setIsLoading(false);
+           return;
+        }
+
+        if (!userExists) {
+           toast({ 
+             title: 'Account not found', 
+             description: 'No account exists with this email address.', 
+             variant: 'destructive',
+           });
+           setErrors({ email: 'User not found' });
+           setIsLoading(false);
+           return;
+        }
+
         const { error } = await resetPassword(email);
         if (error) {
           toast({ title: 'Error', description: error, variant: 'destructive' });
