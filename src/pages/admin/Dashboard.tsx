@@ -81,6 +81,8 @@ export default function AdminDashboard() {
   const removeRoleMutation = useRemoveRole();
   const [viewParticipantsHike, setViewParticipantsHike] = useState<{id: string, name: string} | null>(null);
 
+  const currentUserProfile = users.find(u => u.user_id === user?.id);
+
   useEffect(() => {
     if (!isLoading && (!user || !isAdmin)) {
       navigate('/');
@@ -169,9 +171,12 @@ export default function AdminDashboard() {
           <Link to="/profile">
             <Card className="cursor-pointer transition-shadow hover:shadow-md">
               <CardContent className="flex items-center gap-3 p-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                  <Users className="h-5 w-5 text-primary" />
-                </div>
+               <Avatar className="h-10 w-10 border border-border">
+                  <AvatarImage src={currentUserProfile?.avatar_url || undefined} className="object-cover" />
+                  <AvatarFallback className="bg-primary/10 text-primary">
+                    <Users className="h-5 w-5" />
+                  </AvatarFallback>
+                </Avatar>
                 <div className="text-right">
                   <p className="text-sm font-medium">{user.email}</p>
                   <p className="text-xs text-muted-foreground">View Profile</p>
