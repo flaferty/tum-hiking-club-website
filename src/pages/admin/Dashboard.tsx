@@ -252,8 +252,8 @@ export default function AdminDashboard() {
                             Edit
                           </Button>
                         </Link>
-                        <div className="flex flex-col gap-2 sm:flex-row md:items-center"></div>
-                          <Button 
+
+                        <Button 
                             variant="secondary" 
                             size="sm" 
                             className="gap-1"
