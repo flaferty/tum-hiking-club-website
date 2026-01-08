@@ -39,7 +39,7 @@ async function syncMembers() {
     const cleanNumbers = rows
       .map(row => {
         const raw = row._rawData[0] || ''; 
-        return raw.replace(/[^0-9+]/g, '').trim();
+        return raw.replace(/[^0-9]/g, '').trim();
       })
       .filter(n => n.length > 7);
 
