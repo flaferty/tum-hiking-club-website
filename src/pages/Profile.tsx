@@ -1,12 +1,14 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Navigation } from '@/components/layout/Navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { supabase } from '@/services/supabase/client';
 import { useAuth } from '@/features/auth/AuthContext';
 import { useUserStats } from '@/hooks/useUserEnrollments';
 import { badges } from '@/lib/data';
 import { format } from 'date-fns';
+import { useToast } from '@/hooks/use-toast';
 import { 
   Mountain, 
   TrendingUp, 
@@ -18,11 +20,13 @@ import {
   Trophy,
   Calendar,
   Clock,
-  Loader2
+  Loader2,
+  Camera,
+  LucideIcon
 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip } from 'recharts';
 
-const iconMap: Record<string, any> = {
+const iconMap: Record<string, LucideIcon> = {
   footprints: Footprints,
   flame: Flame,
   mountain: Mountain,
@@ -33,6 +37,86 @@ export default function Profile() {
   const { user, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { stats, activityData, completedHikes, upcomingHikes, waitlistedHikes } = useUserStats();
+  const { toast } = useToast();
+
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+
+  // get profile data
+  useEffect(() => {
+    if (user) getProfile(); 
+  }, [user]);
+
+  const getProfile = async () => {
+    try {
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('avatar_url')
+        .eq('user_id', user.id)
+        .single();
+
+      if (error) {
+        console.warn('Error fetching profile:', error);
+      } else if (data) {
+        setAvatarUrl(data.avatar_url);
+      }
+    } catch (error) {
+      console.error('Error loading user data:', error);
+    }
+  };
+
+  const uploadAvatar = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      setUploading(true);
+
+      if (!event.target.files || event.target.files.length === 0) {
+        throw new Error('You must select an image to upload.');
+      }
+
+      const file = event.target.files[0];
+      const fileExt = file.name.split('.').pop();
+      const filePath = `${user!.id}/${Math.random()}.${fileExt}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('avatars')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('avatars')
+        .getPublicUrl(filePath);
+
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update({ avatar_url: publicUrl } as never)
+        .eq('user_id', user!.id);
+
+      if (updateError) throw updateError;
+
+      setAvatarUrl(publicUrl);
+      toast({ title: 'Success', description: 'Profile picture updated!' });
+
+    } catch (error: unknown) { 
+      let errorMessage = 'An error occurred while uploading.';
+      
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      } else if (typeof error === 'object' && error !== null && 'message' in error) {
+        errorMessage = (error as { message: string }).message;
+      }
+
+      toast({ 
+        title: 'Error', 
+        description: errorMessage, 
+        variant: 'destructive' 
+      });
+    } finally {
+      setUploading(false);
+    }
+  };
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -55,7 +139,11 @@ export default function Profile() {
     if (badge.id === '1') return stats.hikesCompleted >= 1; // First Steps
     if (badge.id === '2') return stats.hikesCompleted >= 5; // Week Warrior (5 hikes)
     if (badge.id === '3') return stats.totalElevation >= 1000; // Peak Bagger
-    if (badge.id === '4') return stats.hikesCompleted >= 10; // Trail Master
+    if (badge.id === '4') return stats.hikesCompleted >= 10;
+    if (badge.id === '5') return stats.totalDistance >= 50;   // Explorer
+    if (badge.id === '6') return stats.totalElevation >= 5000; // Sherpa
+    if (badge.id === '7') return stats.totalDistance >= 100;  // Globetrotter
+    if (badge.id === '8') return stats.hikesCompleted >= 10; // Club Veteran
     return false;
   }).length;
 
@@ -72,9 +160,42 @@ export default function Profile() {
 
         />
         <div className="container mx-auto px-4">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6">
             <div className="flex h-16 w-16 items-center justify-center rounded-full bg-card/20">
-              <User className="h-8 w-8 text-snow" />
+              {/* Avatar Upload Section */}
+            <div className="relative group">
+              <div className="flex h-24 w-24 items-center justify-center rounded-full bg-card/20 border-4 border-white/20 overflow-hidden shadow-xl bg-white/10">
+                {avatarUrl ? (
+                  <img 
+                    src={avatarUrl} 
+                    alt="Profile" 
+                    className="h-full w-full object-cover" 
+                  />
+                ) : (
+                  <User className="h-10 w-10 text-snow" />
+                )}
+                
+                {/* Upload Overlay */}
+                <label 
+                  htmlFor="avatar-upload" 
+                  className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                >
+                  {uploading ? (
+                    <Loader2 className="h-6 w-6 text-white animate-spin" />
+                  ) : (
+                    <Camera className="h-6 w-6 text-white" />
+                  )}
+                  <input
+                    type="file"
+                    id="avatar-upload"
+                    accept="image/*"
+                    onChange={uploadAvatar}
+                    disabled={uploading}
+                    className="hidden"
+                  />
+                </label>
+              </div>
+            </div>
             </div>
             <div>
               <h1 className="font-heading text-2xl font-bold text-snow md:text-3xl">
@@ -256,7 +377,11 @@ export default function Profile() {
                   (badge.id === '1' && stats.hikesCompleted >= 1) ||
                   (badge.id === '2' && stats.hikesCompleted >= 5) ||
                   (badge.id === '3' && stats.totalElevation >= 1000) ||
-                  (badge.id === '4' && stats.hikesCompleted >= 10);
+                  (badge.id === '4' && stats.hikesCompleted >= 10) || 
+                  (badge.id === '5' && stats.totalDistance >= 50) ||
+                  (badge.id === '6' && stats.totalElevation >= 5000) ||
+                  (badge.id === '7' && stats.totalDistance >= 100) ||
+                  (badge.id === '8' && stats.hikesCompleted >= 10);
                 
                 return (
                   <div

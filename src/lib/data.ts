@@ -180,4 +180,32 @@ export const badges: Badge[] = [
     icon: "award",
     earned: false,
   },
+  {
+  id: '5',
+  name: 'Explorer',
+  description: 'Hiked 50km total distance',
+  icon: 'footprints',
+  earned: false,
+},
+{
+  id: '6',
+  name: 'Sherpa',
+  description: 'Climbed 5,000m total elevation',
+  icon: 'mountain',
+  earned: false,
+},
+{
+  id: '7',
+  name: 'Globetrotter',
+  description: 'Hiked 100km total distance',
+  icon: 'award',
+  earned: false,
+},
+{
+  id: '8',
+  name: 'Club Veteran',
+  description: 'Completed 10 hikes',
+  icon: 'flame',
+  earned: false,
+}
 ];
