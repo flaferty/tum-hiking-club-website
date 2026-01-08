@@ -10,7 +10,8 @@ import "leaflet/dist/leaflet.css";
 import type { Hike, Waypoint } from "@/lib/types";
 
 // Fix default marker icons
-delete (L.Icon.Default.prototype as any)._getIconUrl;
+type DefaultIconPrototype = L.Icon.Default & { _getIconUrl?: string };
+delete (L.Icon.Default.prototype as unknown as DefaultIconPrototype)._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
   iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
@@ -114,7 +115,13 @@ function MapController({ selectedHike, hikes }: { selectedHike?: Hike; hikes: Hi
     }
 
 function HikingMap({ hikes, waypoints = [], selectedHikeId = null, onHikeSelect, className = "" }: HikingMapProps) {
-  const selectedHike = hikes.find((h) => h.id === selectedHikeId);
+  const sortedHikes = [...hikes].sort((a, b) => {
+    if (a.status === 'completed' && b.status === 'upcoming') return -1;
+    if (a.status === 'upcoming' && b.status === 'completed') return 1;
+    return 0;
+  });
+
+  const selectedHike = sortedHikes.find((h) => h.id === selectedHikeId);
   const displayWaypoints =
     selectedHike?.waypoints?.filter((w) => w.type === "overnight_stop") ||
     waypoints.filter((w) => w.type === "overnight_stop" && w.hike_id === selectedHikeId);
@@ -147,7 +154,7 @@ function HikingMap({ hikes, waypoints = [], selectedHikeId = null, onHikeSelect,
 
         <MapController selectedHike={selectedHike} hikes={hikes} />
 
-        {hikes.map((hike) => {
+        {sortedHikes.map((hike) => {
           const coords = getValidCoords(hike.location_lat, hike.location_lng);
           if (!coords) return null;
 

@@ -29,6 +29,7 @@ import {
   Trash2,
   X,
   Calendar as CalendarIcon,
+  ArrowLeft,
 } from 'lucide-react';
 
 interface WaypointInput {
@@ -289,6 +290,15 @@ export default function AddHike() {
       <Navigation />
       
       <div className="container mx-auto max-w-3xl px-4 py-8">
+        <Button 
+          variant="ghost" 
+          className="mb-4 gap-2 pl-0 hover:pl-2 transition-all"
+          onClick={() => navigate('/admin/dashboard')}
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back
+        </Button>
+
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 font-heading text-2xl">
@@ -673,7 +683,7 @@ export default function AddHike() {
                     htmlFor="members_only"
                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   >
-                    Members Only Hike 🔒
+                    Members Only Hike 
                   </label>
                   <p className="text-sm text-muted-foreground">
                     Only users with the "Member" role (WhatsApp group) can enroll.

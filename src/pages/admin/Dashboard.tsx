@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Navigation } from '@/components/layout/Navigation';
 import { Button } from '@/components/ui/button';
@@ -19,6 +19,7 @@ import { useHikes, useDeleteHike } from '@/features/hikes/useHikes';
 import { useUsers, useAssignRole, useRemoveRole } from '@/hooks/useUsers';
 import { Difficulty } from '@/lib/types';
 import { Database } from '@/services/supabase/types';
+import { HikeParticipantsModal } from '@/features/hikes/HikeParticipantsModal';
 import { 
   Plus, 
   Pencil, 
@@ -48,6 +49,8 @@ import {
 
 type AppRole = Database['public']['Enums']['app_role'];
 
+
+
 const difficultyVariant: Record<Difficulty, 'easy' | 'moderate' | 'hard' | 'expert'> = {
   easy: 'easy',
   moderate: 'moderate',
@@ -76,6 +79,7 @@ export default function AdminDashboard() {
   const deleteHikeMutation = useDeleteHike();
   const assignRoleMutation = useAssignRole();
   const removeRoleMutation = useRemoveRole();
+  const [viewParticipantsHike, setViewParticipantsHike] = useState<{id: string, name: string} | null>(null);
 
   useEffect(() => {
     if (!isLoading && (!user || !isAdmin)) {
@@ -202,8 +206,8 @@ export default function AdminDashboard() {
             <div className="space-y-4">
               {hikes.map((hike) => (
                 <Card key={hike.id} className="overflow-hidden">
-                  <CardContent className="flex items-center gap-4 p-0">
-                    <div className="relative h-24 w-32 shrink-0 overflow-hidden bg-muted">
+                  <CardContent className="flex flex-col gap-0 p-0 md:flex-row md:items-center md:gap-4">
+                    <div className="relative h-48 w-full shrink-0 overflow-hidden bg-muted md:h-24 md:w-32">
                       {hike.image_url ? (
                         <img
                           src={hike.image_url}
@@ -217,7 +221,7 @@ export default function AdminDashboard() {
                       )}
                     </div>
                     
-                    <div className="flex flex-1 items-center justify-between py-4 pr-4">
+                    <div className="flex flex-1 flex-col gap-4 p-4 md:flex-row md:items-center md:justify-between md:py-4 md:pr-4">
                       <div>
                         <div className="flex items-center gap-2">
                           <h3 className="font-heading font-semibold">{hike.name}</h3>
@@ -248,6 +252,16 @@ export default function AdminDashboard() {
                             Edit
                           </Button>
                         </Link>
+                        <div className="flex flex-col gap-2 sm:flex-row md:items-center"></div>
+                          <Button 
+                            variant="secondary" 
+                            size="sm" 
+                            className="gap-1"
+                            onClick={() => setViewParticipantsHike({ id: hike.id, name: hike.name })}
+                          >
+                            <Users className="h-3.5 w-3.5" />
+                            <span className="hidden sm:inline">View</span>
+                          </Button>
                         
                         <AlertDialog>
                           <AlertDialogTrigger asChild>
@@ -277,6 +291,7 @@ export default function AdminDashboard() {
                 </Card>
               ))}
               
+              
               {hikes.length === 0 && (
                 <div className="rounded-xl border border-dashed border-border bg-muted/30 p-12 text-center">
                   <Mountain className="mx-auto mb-4 h-12 w-12 text-muted-foreground/50" />
@@ -300,52 +315,55 @@ export default function AdminDashboard() {
               <div className="space-y-4">
                 {users.map((u) => (
                   <Card key={u.id} className="overflow-hidden">
-                    <CardContent className="flex items-center gap-4 p-4">
-                      <Avatar className="h-12 w-12">
-                        <AvatarImage src={u.avatar_url || undefined} />
-                        <AvatarFallback className="bg-primary/10 text-primary">
-                          {getInitials(u.full_name, u.email)}
-                        </AvatarFallback>
-                      </Avatar>
-                      
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2">
-                          <h3 className="font-heading font-semibold">
-                            {u.full_name || 'No name'}
-                          </h3>
-                          {u.user_id === user?.id && (
-                            <Badge variant="outline" className="text-xs">You</Badge>
-                          )}
+                    <CardContent className="flex flex-col gap-4 p-4 md:flex-row md:items-center">
+                      <div className="flex w-full items-center gap-4 md:w-auto"></div>
+                        <Avatar className="h-12 w-12 shrink-0">
+                          <AvatarImage src={u.avatar_url || undefined} />
+                          <AvatarFallback className="bg-primary/10 text-primary">
+                            {getInitials(u.full_name, u.email)}
+                          </AvatarFallback>
+                        </Avatar>
+                        
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2">
+                            <h3 className="font-heading font-semibold truncate">
+                              {u.full_name || 'No name'}
+                            </h3>
+                            {u.user_id === user?.id && (
+                              <Badge variant="outline" className="text-xs shrink-0">You</Badge>
+                            )}
+                          </div>
+                          <p className="text-sm text-muted-foreground break-all">{u.email}</p>
+                          <p className="text-xs text-muted-foreground">
+                            Joined {format(new Date(u.created_at), 'MMM d, yyyy')}
+                          </p>
                         </div>
-                        <p className="text-sm text-muted-foreground">{u.email}</p>
-                        <p className="text-xs text-muted-foreground">
-                          Joined {format(new Date(u.created_at), 'MMM d, yyyy')}
-                        </p>
-                      </div>
                       
-                      <div className="flex items-center gap-2">
-                        {u.roles.map((role) => {
-                          const RoleIcon = roleIcons[role];
-                          return (
-                            <Badge
-                              key={role}
-                              variant="outline"
-                              className={`gap-1 ${roleColors[role]}`}
-                            >
-                              <RoleIcon className="h-3 w-3" />
-                              {role}
-                              {u.user_id !== user?.id && (
-                                <button
-                                  onClick={() => handleRemoveRole(u.user_id, role)}
-                                  className="ml-1 hover:text-destructive"
-                                  disabled={removeRoleMutation.isPending}
-                                >
-                                  <X className="h-3 w-3" />
-                                </button>
-                              )}
-                            </Badge>
-                          );
-                        })}
+                      <div className="flex w-full flex-col gap-3 md:w-auto md:flex-row md:items-center md:ml-auto">
+                        <div className="flex flex-wrap gap-2">
+                          {u.roles.map((role) => {
+                            const RoleIcon = roleIcons[role];
+                            return (
+                              <Badge
+                                key={role}
+                                variant="outline"
+                                className={`gap-1 ${roleColors[role]}`}
+                              >
+                                <RoleIcon className="h-3 w-3" />
+                                {role}
+                                {u.user_id !== user?.id && (
+                                  <button
+                                    onClick={() => handleRemoveRole(u.user_id, role)}
+                                    className="ml-1 hover:text-destructive"
+                                    disabled={removeRoleMutation.isPending}
+                                  >
+                                    <X className="h-3 w-3" />
+                                  </button>
+                                )}
+                              </Badge>
+                            );
+                          })}
+                        </div>
                       </div>
                       
                       {u.user_id !== user?.id && (
@@ -353,7 +371,7 @@ export default function AdminDashboard() {
                           onValueChange={(value) => handleAssignRole(u.user_id, value as AppRole)}
                           disabled={assignRoleMutation.isPending}
                         >
-                          <SelectTrigger className="w-[140px]">
+                          <SelectTrigger className=" w-full md:w-[140px]">
                             <SelectValue placeholder="Add role..." />
                           </SelectTrigger>
                           <SelectContent>
@@ -375,6 +393,12 @@ export default function AdminDashboard() {
           </TabsContent>
         </Tabs>
       </div>
+      <HikeParticipantsModal 
+        hikeId={viewParticipantsHike?.id || null}
+        hikeName={viewParticipantsHike?.name || ''}
+        isOpen={!!viewParticipantsHike}
+        onClose={() => setViewParticipantsHike(null)}
+      />
     </div>
   );
 }
