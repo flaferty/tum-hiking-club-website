@@ -245,7 +245,7 @@ export default function AdminDashboard() {
                         </div>
                       </div>
                       
-                      <div className="flex items-center gap-2">
+                      <div className="flex flex-wrap items-center gap-2">
                         <Link to={`/admin/edit-hike/${hike.id}`}>
                           <Button variant="outline" size="sm" className="gap-1">
                             <Pencil className="h-3.5 w-3.5" />
@@ -260,7 +260,7 @@ export default function AdminDashboard() {
                             onClick={() => setViewParticipantsHike({ id: hike.id, name: hike.name })}
                           >
                             <Users className="h-3.5 w-3.5" />
-                            <span className="hidden sm:inline">View</span>
+                            <span>View</span>
                           </Button>
                         
                         <AlertDialog>

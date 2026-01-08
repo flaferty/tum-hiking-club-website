@@ -66,7 +66,7 @@ export function HikeParticipantsModal({ hikeId, isOpen, onClose, hikeName }: Pro
       <DialogContent className="max-h-[80vh] w-[95%] max-w-lg overflow-hidden">
         <DialogHeader>
           <DialogTitle>Participants: {hikeName}</DialogTitle>
-          <p className="text-sm text-muted-foreground">{participants.length} enrolled</p>
+          <p className="text-sm text-muted-foreground break-all">{participants.length} enrolled</p>
         </DialogHeader>
 
         <ScrollArea className="h-[50vh] pr-4">
@@ -92,9 +92,9 @@ export function HikeParticipantsModal({ hikeId, isOpen, onClose, hikeName }: Pro
                     </div>
                     
                     <div className="mt-1 space-y-1 text-sm text-muted-foreground">
-                      <div className="flex items-center gap-2">
-                        <Mail className="h-3 w-3" />
-                        <span className="truncate">{p.profiles?.email}</span>
+                      <div className="flex items-start gap-2">
+                        <Mail className="h-3 w-3 mt-1 shrink-0" />
+                        <span className="break-all">{p.profiles?.email}</span>
                       </div>
                       {p.profiles?.phone_number && (
                         <div className="flex items-center gap-2">
