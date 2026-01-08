@@ -61,14 +61,15 @@ export function Footer() {
             </div>
 
             <div className="text-sm text-muted-foreground space-y-1 flex flex-col items-center md:items-start ">
+              <p>TUM HN Hiking Club</p>
               <p>Bildungscampus 2</p>
-              <p>74076 Heilbronn</p>
+              <p>74076 Heilbronn, DE</p>
               <p>
                 <a
-                  href="mailto:hiking@tum.de"
+                  href="mailto:contact@tumhikingclub.com"
                   className="hover:text-primary transition-colors"
                 >
-                  hiking@tum.de
+                  contact@tumhikingclub.com
                 </a>
               </p>
               <p className="text-xs opacity-60 pt-2">&copy; {currentYear}</p>
@@ -103,7 +104,7 @@ export function Footer() {
               </a>
 
               <a
-                href="mailto:hiking@tum.de"
+                href="mailto:contact@tumhikingclub.com"
                 className="flex items-center gap-3 rounded-lg px-3 py-2 -mx-3 text-muted-foreground transition-colors hover:bg-muted/40 hover:text-primary"
               >
                 <Mail className="h-5 w-5 shrink-0" />
