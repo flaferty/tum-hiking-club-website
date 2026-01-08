@@ -103,7 +103,7 @@ export default function Auth() {
           toast({ title: 'Error', description: error, variant: 'destructive' });
         } else {
           toast({ title: 'Account created!',
-             description: 'Welcome to TUM HN Hiking Club! Please check your TUM email to confirm your account before logging in.',
+             description: 'Welcome to TUM HN Hiking Club! Please check your TUM email to confirm your account before logging in. It might be in the spam folder.',
             duration: 6000,
             className: "bg-blue-500 text-white border-blue-500/50"
              });

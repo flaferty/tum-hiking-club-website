@@ -254,7 +254,7 @@ export default function AdminDashboard() {
                         </Link>
 
                         <Button 
-                            variant="secondary" 
+                            variant="outline" 
                             size="sm" 
                             className="gap-1"
                             onClick={() => setViewParticipantsHike({ id: hike.id, name: hike.name })}
