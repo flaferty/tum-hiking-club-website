@@ -44,6 +44,87 @@ export default function Index() {
     setIsModalOpen(true);
   };
 
+   {/* Upcoming Adventures */}
+   const UpcomingSection = (
+    <section className="container mx-auto px-4 ">
+      <h2 className="mb-6 font-heading text-2xl font-bold md:text-3xl">
+        Upcoming Adventures
+      </h2>
+
+      {isLoading ? (
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="rounded-xl border bg-card p-4">
+              <Skeleton className="h-48 w-full rounded-lg mb-4" />
+              <Skeleton className="h-6 w-3/4 mb-2" />
+              <Skeleton className="h-4 w-1/2" />
+            </div>
+          ))}
+        </div>
+      ) : upcomingHikes.length > 0 ? (
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {upcomingHikes.map((hike, index) => (
+            <div
+              key={hike.id}
+              className="animate-slide-up"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
+              <HikeCard hike={hike} onClick={() => handleHikeSelect(hike)} />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="rounded-xl border border-dashed border-border bg-muted/30 p-12 text-center">
+          <p className="text-muted-foreground">No upcoming hikes scheduled.</p>
+        </div>
+      )}
+    </section>
+  );
+
+  {/* Past Adventures - Collapsible */}
+  const PastSection = pastHikes.length > 0 && (
+    <section className="container mx-auto px-4 pb-16">
+      <Collapsible open={pastHikesOpen} onOpenChange={setPastHikesOpen}>
+        <CollapsibleTrigger asChild>
+          <Button
+            variant="ghost"
+            className="mb-4 gap-2 text-muted-foreground hover:text-foreground"
+          >
+            <History className="h-4 w-4" />
+            Past Adventures
+            <Badge variant="secondary" className="ml-1">
+              {pastCount}
+            </Badge>
+            <ChevronDown
+              className={`h-4 w-4 transition-transform ${
+                pastHikesOpen ? "rotate-180" : ""
+              }`}
+            />
+          </Button>
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {pastHikes.map((hike, index) => (
+              <div
+                key={hike.id}
+                className="animate-slide-up"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <HikeCard hike={hike} onClick={() => handleHikeSelect(hike)} />
+              </div>
+            ))}
+          </div>
+        </CollapsibleContent>
+      </Collapsible>
+    </section>
+  );
+
+  const SectionDivider = (
+    <div className="mx-auto px-4">
+      <div className="my-14 h-px bg-border/60" />
+    </div>
+  );
+
   const scrollToMap = () => {
     document
       .getElementById("hiking-map")
@@ -138,7 +219,10 @@ export default function Index() {
               <Button
                 variant={filter === "completed" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setFilter("completed")}
+                onClick={() => {
+                  setFilter("completed");
+                  setPastHikesOpen(true);
+                }}
               >
                 Completed
               </Button>
@@ -173,86 +257,18 @@ export default function Index() {
         )}
       </section>
 
-      {/* Upcoming Adventures */}
-      <section className="container mx-auto px-4 ">
-        <h2 className="mb-6 font-heading text-2xl font-bold md:text-3xl">
-          Upcoming Adventures
-        </h2>
-
-        {isLoading ? (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="rounded-xl border bg-card p-4">
-                <Skeleton className="h-48 w-full rounded-lg mb-4" />
-                <Skeleton className="h-6 w-3/4 mb-2" />
-                <Skeleton className="h-4 w-1/2" />
-              </div>
-            ))}
-          </div>
-        ) : upcomingHikes.length > 0 ? (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {upcomingHikes.map((hike, index) => (
-              <div
-                key={hike.id}
-                className="animate-slide-up"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <HikeCard hike={hike} onClick={() => handleHikeSelect(hike)} />
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="rounded-xl border border-dashed border-border bg-muted/30 p-12 text-center">
-            <p className="text-muted-foreground">
-              No upcoming hikes scheduled.
-            </p>
-          </div>
-        )}
-      </section>
-
-<div className="mx-auto px-4">
-  <div className="my-14 h-px bg-border/60" />
-</div>
-
-      {/* Past Adventures - Collapsible */}
-      {pastHikes.length > 0 && (
-        <section className="container mx-auto px-4 pb-16">
-          <Collapsible open={pastHikesOpen} onOpenChange={setPastHikesOpen}>
-            <CollapsibleTrigger asChild>
-              <Button
-                variant="ghost"
-                className="mb-4 gap-2 text-muted-foreground hover:text-foreground"
-              >
-                <History className="h-4 w-4" />
-                Past Adventures
-                <Badge variant="secondary" className="ml-1">
-                  {pastCount}
-                </Badge>
-                <ChevronDown
-                  className={`h-4 w-4 transition-transform ${
-                    pastHikesOpen ? "rotate-180" : ""
-                  }`}
-                />
-              </Button>
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {pastHikes.map((hike, index) => (
-                  <div
-                    key={hike.id}
-                    className="animate-slide-up"
-                    style={{ animationDelay: `${index * 0.1}s` }}
-                  >
-                    <HikeCard
-                      hike={hike}
-                      onClick={() => handleHikeSelect(hike)}
-                    />
-                  </div>
-                ))}
-              </div>
-            </CollapsibleContent>
-          </Collapsible>
-        </section>
+      {filter === "completed" ? (
+        <>
+          {PastSection}
+          {SectionDivider}
+          {UpcomingSection}
+        </>
+      ) : (
+        <>
+          {UpcomingSection}
+          {SectionDivider}
+          {PastSection}
+        </>
       )}
 
       {/* Hike Detail Modal */}
