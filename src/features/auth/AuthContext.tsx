@@ -95,7 +95,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signUp = async (email: string, password: string, fullName: string, phone: string): Promise<{ error: string | null }> => {
     const lowerCaseEmail = email.toLowerCase();
     const cleanPhone = phone.replace(/[\s-]/g, '');
-
     if (!lowerCaseEmail.endsWith('@tum.de') && !lowerCaseEmail.endsWith('@mytum.de')) {
       return { 
         error: "Access is restricted to TUM students only. Please use your university email (@tum.de or @mytum.de)." 

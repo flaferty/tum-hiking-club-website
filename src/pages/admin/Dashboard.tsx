@@ -20,6 +20,7 @@ import { useUsers, useAssignRole, useRemoveRole } from '@/hooks/useUsers';
 import { Difficulty } from '@/lib/types';
 import { Database } from '@/services/supabase/types';
 import { HikeParticipantsModal } from '@/features/hikes/HikeParticipantsModal';
+import { AdminEmail } from '@/pages/admin/AdminEmail';
 import { 
   Plus, 
   Pencil, 
@@ -32,7 +33,8 @@ import {
   Shield,
   ShieldCheck,
   ShieldAlert,
-  X
+  X,
+  Mail
 } from 'lucide-react';
 import { format } from 'date-fns';
 import {
@@ -195,6 +197,10 @@ export default function AdminDashboard() {
             <TabsTrigger value="users" className="gap-2">
               <Users className="h-4 w-4" />
               Users
+            </TabsTrigger>
+            <TabsTrigger value="emails" className="gap-2">
+              <Mail className="h-4 w-4" />
+              Emails
             </TabsTrigger>
           </TabsList>
           
@@ -395,6 +401,20 @@ export default function AdminDashboard() {
                 ))}
               </div>
             )}
+          </TabsContent>
+
+          <TabsContent value="emails">
+            <div className="space-y-6">
+              <div className="flex flex-col gap-2">
+                <h2 className="text-xl font-heading font-semibold">Email Communication</h2>
+                <p className="text-muted-foreground">
+                  Send photos and updates to all participants of past hikes.
+                </p>
+              </div>
+              
+              {/* This renders the form we created */}
+              <AdminEmail />
+            </div>
           </TabsContent>
         </Tabs>
       </div>
