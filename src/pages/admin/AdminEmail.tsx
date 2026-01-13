@@ -52,6 +52,13 @@ export function AdminEmail() {
 
     try {
       setIsSending(true);
+
+      const { data: { session } } = await supabase.auth.getSession();
+    
+      if (!session) {
+        throw new Error("No active session");
+      }
+
       const { data, error } = await supabase.functions.invoke("send-hike-photos", {
         body: {
           hikeId: selectedHikeId,
@@ -60,8 +67,15 @@ export function AdminEmail() {
         },
       });
 
-      if (error) throw new Error(error.message || "Failed to invoke function");
-      if (data?.error) throw new Error(data.error);
+      if (error) {
+      console.error("Invoke error:", error);
+      throw new Error(error.message || JSON.stringify(error));
+    }
+    
+    if (data?.error) {
+      console.error("Function returned error:", data.error);
+      throw new Error(typeof data.error === 'string' ? data.error : JSON.stringify(data.error));
+    }
 
       toast({ 
         title: "Emails Sent!", 
