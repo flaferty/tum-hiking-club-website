@@ -164,7 +164,7 @@ export default function AdminDashboard() {
       <Navigation />
       
       <div className="container mx-auto px-4 py-8">
-        <div className="mb-8 flex items-center justify-between">
+        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h1 className="font-heading text-3xl font-bold">Admin Dashboard</h1>
             <p className="text-muted-foreground">Manage hikes and users</p>
