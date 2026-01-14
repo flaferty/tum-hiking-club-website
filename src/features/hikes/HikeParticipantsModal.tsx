@@ -78,15 +78,15 @@ export function HikeParticipantsModal({ hikeId, isOpen, onClose, hikeName }: Pro
             ) : (
               participants.map((p) => (
                 <div key={p.user_id} className="flex items-start gap-3 rounded-lg border p-3">
-                  <Avatar>
+                  <Avatar className="shrink-0">
                     <AvatarImage src={p.profiles?.avatar_url} />
                     <AvatarFallback>{p.profiles?.full_name?.substring(0,2).toUpperCase() || 'U'}</AvatarFallback>
                   </Avatar>
                   
-                  <div className="flex-1 min-w-0 overflow-hidden">
+                  <div className="flex-1 w-0">
                     <div className="flex items-center justify-between">
                       <p className="font-semibold truncate">{p.profiles?.full_name || 'Unknown'}</p>
-                      <Badge variant={p.status === 'waitlisted' ? 'secondary' : 'default'} className="text-xs">
+                      <Badge variant={p.status === 'waitlisted' ? 'secondary' : 'default'} className="text-xs shrink-0">
                         {p.status}
                       </Badge>
                     </div>
