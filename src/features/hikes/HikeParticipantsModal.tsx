@@ -92,9 +92,9 @@ export function HikeParticipantsModal({ hikeId, isOpen, onClose, hikeName }: Pro
                     </div>
                     
                     <div className="mt-1 space-y-1 text-sm text-muted-foreground">
-                      <div className="flex items-start gap-2">
+                      <div className="flex items-center gap-2 min-w-0">
                         <Mail className="h-3 w-3 mt-1 shrink-0" />
-                        <span className="break-all">{p.profiles?.email}</span>
+                        <span className="truncate">{p.profiles?.email}</span>
                       </div>
                       {p.profiles?.phone_number && (
                         <div className="flex items-center gap-2">
