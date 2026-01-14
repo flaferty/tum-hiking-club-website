@@ -179,8 +179,8 @@ export default function AdminDashboard() {
                     <Users className="h-5 w-5" />
                   </AvatarFallback>
                 </Avatar>
-                <div className="text-right">
-                  <p className="text-sm font-medium">{user.email}</p>
+                <div className="text-right min-w-0">
+                  <p className="text-sm font-medium truncate max-w-[150px] sm:max-w-[250px]">{user.email}</p>
                   <p className="text-xs text-muted-foreground">View Profile</p>
                 </div>
               </CardContent>
