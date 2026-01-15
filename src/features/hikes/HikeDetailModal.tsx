@@ -232,7 +232,7 @@ export function HikeDetailModal({
 
         {/* Main Image */}
         <div
-          className="relative w-full h-64 sm:h-80 md:h-[400px] shrink-0 rounded-lg overflow-hidden focus:outline-none bg-muted/20"
+          className="relative w-full aspect-video sm:h-80 md:h-[400px] shrink-0 rounded-lg overflow-hidden focus:outline-none bg-muted/20"
           onTouchStart={onTouchStart}
           onTouchMove={onTouchMove}
           onTouchEnd={onTouchEnd}
@@ -241,7 +241,7 @@ export function HikeDetailModal({
             <img
               src={activeImageUrl}
               alt={`${hike.name} photo`}
-              className="w-full h-full object-contain bg-muted/20"
+              className="w-full h-full object-cover bg-muted/20"
               loading="lazy"
             />
           ) : (

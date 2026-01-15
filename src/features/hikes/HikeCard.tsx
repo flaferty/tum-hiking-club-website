@@ -90,7 +90,7 @@ export function HikeCard({ hike, onClick }: HikeCardProps) {
 
       <CardContent className="p-5">
         <div className="flex items-start justify-between gap-3">
-          <h3 className="font-heading text-lg font-semibold leading-snug line-clamp-2">
+          <h3 className="font-heading text-lg font-semibold leading-snug line-clamp-2 min-w-0 break-words">
             {hike.name}
           </h3>
 
@@ -104,8 +104,8 @@ export function HikeCard({ hike, onClick }: HikeCardProps) {
 
         {/* Optional location row (only if your Hike has it) */}
         {hike.location_name && (
-          <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
-            <MapPin className="h-4 w-4" />
+          <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground min-w-0">
+            <MapPin className="h-4 w-4 shrink-0" />
             <span className="line-clamp-1">{hike.location_name}</span>
           </div>
         )}
@@ -117,12 +117,12 @@ export function HikeCard({ hike, onClick }: HikeCardProps) {
         ) : null}
 
         <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <span className="font-medium text-foreground/80">
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="font-medium text-foreground/80 whitespace-nowrap">
               {hike.distance} km
             </span>
             <span className="opacity-60">•</span>
-            <span className="opacity-80">
+            <span className="opacity-80 truncate">
               {hike.max_participants} max
             </span>
           </div>
