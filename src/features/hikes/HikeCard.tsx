@@ -33,11 +33,10 @@ export function HikeCard({ hike, onClick }: HikeCardProps) {
         transition
         hover:shadow-lg
         focus-within:ring-2 focus-within:ring-ring
-        w-full max-w-full
       "
     >
       {/* Media */}
-      <div className="relative w-full aspect-[4/3] bg-muted shrink-0">
+      <div className="relative aspect-[16/10] bg-muted">
         {hike.image_url ? (
           <>
             <img
@@ -45,7 +44,6 @@ export function HikeCard({ hike, onClick }: HikeCardProps) {
               alt={hike.name}
               className="
                 h-full w-full object-cover
-                object-center
                 transition-transform duration-500
                 group-hover:scale-[1.03]
               "
@@ -90,9 +88,9 @@ export function HikeCard({ hike, onClick }: HikeCardProps) {
         </div>
       </div>
 
-      <CardContent className="p-5 flex-1 flex flex-col gap-3 min-w-0 overflow-hidden">
+      <CardContent className="p-5">
         <div className="flex items-start justify-between gap-3">
-          <h3 className="font-heading text-lg font-semibold leading-snug line-clamp-2 min-w-0 flex-1 break-words">
+          <h3 className="font-heading text-lg font-semibold leading-snug line-clamp-2">
             {hike.name}
           </h3>
 
@@ -113,7 +111,7 @@ export function HikeCard({ hike, onClick }: HikeCardProps) {
         )}
 
         {hike.description ? (
-          <p className="mt-3 text-sm text-muted-foreground line-clamp-2 break-words overflow-hidden">
+          <p className="mt-3 text-sm text-muted-foreground line-clamp-2">
             {hike.description}
           </p>
         ) : null}
