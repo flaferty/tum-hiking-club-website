@@ -7,6 +7,17 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Checkbox } from "@/components/ui/checkbox";
 
 import {
   Calendar,
@@ -53,6 +64,8 @@ export function HikeDetailModal({
   const navigate = useNavigate();
 
   const [userRoles, setUserRoles] = useState<string[]>([]);
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
+  const [disclaimerAccepted, setDisclaimerAccepted] = useState(false);
 
   useEffect(() => {
     async function fetchRoles() {
@@ -187,10 +200,17 @@ export function HikeDetailModal({
 
     if (isEnrolled) {
       unenroll(hike.id);
+      onEnrollmentChange?.();
     } else {
-      enroll({ hikeId: hike.id, maxParticipants: hike.max_participants });
+      setDisclaimerAccepted(false);
+      setShowDisclaimer(true);
     }
+  };
+
+  const confirmEnroll = () => {
+    enroll({ hikeId: hike.id, maxParticipants: hike.max_participants });
     onEnrollmentChange?.();
+    setShowDisclaimer(false);
   };
 
   const getButtonText = () => {
@@ -411,6 +431,40 @@ export function HikeDetailModal({
           </Button>
         </div>
       </DialogContent>
+
+      <AlertDialog open={showDisclaimer} onOpenChange={setShowDisclaimer}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Enrollment Disclaimer</AlertDialogTitle>
+            <AlertDialogDescription>
+              By enrolling in this hike, you acknowledge that:
+              <ul className="list-disc list-inside mt-2 space-y-1">
+                <li>You are physically capable of completing this hike</li>
+                <li>You have a proper equipment for this hike</li>
+                <li>You understand the risks involved in outdoor activities</li>
+                <li>You are responsible for your own safety and equipment</li>
+              </ul>
+              <div className="flex items-center space-x-2 mt-4">
+                <Checkbox 
+                  id="disclaimer-accept" 
+                  checked={disclaimerAccepted}
+                  onCheckedChange={(checked) => setDisclaimerAccepted(checked as boolean)}
+                />
+                <label
+                  htmlFor="disclaimer-accept"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                >
+                  I have read and agree to the above terms
+                </label>
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmEnroll} disabled={!disclaimerAccepted}>Confirm Enrollment</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Dialog>
   );
 }
