@@ -330,7 +330,7 @@ export function HikeDetailModal({
         {hike.description && (
           <div>
             <h4 className="mb-2 font-heading font-semibold">About this hike</h4>
-            <p className="text-muted-foreground">{hike.description}</p>
+            <p className="text-muted-foreground whitespace-pre-wrap">{hike.description}</p>
           </div>
         )}
 
