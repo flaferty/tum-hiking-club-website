@@ -52,7 +52,7 @@ export default function Index() {
       </h2>
 
       {isLoading ? (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full overflow-hidden">
           {[1, 2, 3].map((i) => (
             <div key={i} className="rounded-xl border bg-card p-4">
               <Skeleton className="h-48 w-full rounded-lg mb-4" />
@@ -62,7 +62,7 @@ export default function Index() {
           ))}
         </div>
       ) : upcomingHikes.length > 0 ? (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full overflow-hidden">
           {upcomingHikes.map((hike, index) => (
             <div
               key={hike.id}
@@ -103,7 +103,7 @@ export default function Index() {
           </Button>
         </CollapsibleTrigger>
         <CollapsibleContent>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {pastHikes.map((hike, index) => (
               <div
                 key={hike.id}

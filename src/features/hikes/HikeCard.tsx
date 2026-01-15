@@ -33,10 +33,11 @@ export function HikeCard({ hike, onClick }: HikeCardProps) {
         transition
         hover:shadow-lg
         focus-within:ring-2 focus-within:ring-ring
+        w-full max-w-full
       "
     >
       {/* Media */}
-      <div className="relative aspect-[16/10] bg-muted">
+      <div className="relative w-full aspect-[4/3] bg-muted shrink-0">
         {hike.image_url ? (
           <>
             <img
@@ -44,6 +45,7 @@ export function HikeCard({ hike, onClick }: HikeCardProps) {
               alt={hike.name}
               className="
                 h-full w-full object-cover
+                object-center
                 transition-transform duration-500
                 group-hover:scale-[1.03]
               "
@@ -88,9 +90,9 @@ export function HikeCard({ hike, onClick }: HikeCardProps) {
         </div>
       </div>
 
-      <CardContent className="p-5">
+      <CardContent className="p-5 flex-1 flex flex-col gap-3 min-w-0 overflow-hidden">
         <div className="flex items-start justify-between gap-3">
-          <h3 className="font-heading text-lg font-semibold leading-snug line-clamp-2 min-w-0 break-words">
+          <h3 className="font-heading text-lg font-semibold leading-snug line-clamp-2 min-w-0 flex-1 break-words">
             {hike.name}
           </h3>
 
@@ -104,25 +106,25 @@ export function HikeCard({ hike, onClick }: HikeCardProps) {
 
         {/* Optional location row (only if your Hike has it) */}
         {hike.location_name && (
-          <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground min-w-0">
-            <MapPin className="h-4 w-4 shrink-0" />
+          <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
+            <MapPin className="h-4 w-4" />
             <span className="line-clamp-1">{hike.location_name}</span>
           </div>
         )}
 
         {hike.description ? (
-          <p className="mt-3 text-sm text-muted-foreground line-clamp-2">
+          <p className="mt-3 text-sm text-muted-foreground line-clamp-2 break-words overflow-hidden">
             {hike.description}
           </p>
         ) : null}
 
         <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
-          <div className="flex items-center gap-2 min-w-0">
-            <span className="font-medium text-foreground/80 whitespace-nowrap">
+          <div className="flex items-center gap-2">
+            <span className="font-medium text-foreground/80">
               {hike.distance} km
             </span>
             <span className="opacity-60">•</span>
-            <span className="opacity-80 truncate">
+            <span className="opacity-80">
               {hike.max_participants} max
             </span>
           </div>
