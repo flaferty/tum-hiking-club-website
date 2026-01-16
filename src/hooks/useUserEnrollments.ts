@@ -66,7 +66,7 @@ export function useUserStats() {
   const { data: enrollments = [] } = useUserEnrollments();
 
   const completedHikes = enrollments.filter(
-    e => e.status === 'enrolled' && e.hike.status === 'completed'
+    e => (e.status === 'enrolled' || e.status === 'verified') && e.hike.status === 'completed'
   );
 
   const upcomingHikes = enrollments.filter(

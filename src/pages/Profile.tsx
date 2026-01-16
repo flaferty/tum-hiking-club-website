@@ -198,10 +198,10 @@ export default function Profile() {
             </div>
             </div>
             <div>
-              <h1 className="font-heading text-2xl font-bold text-white md:text-3xl">
+              <h1 className="font-heading text-2xl font-bold text-snow md:text-3xl">
                 {user.user_metadata?.full_name || user.email}
               </h1>
-              <p className="text-gray-300">
+              <p className="text-snow/70">
                 {stats.hikesCompleted} hikes completed · {badgesEarned} badges earned
               </p>
             </div>
@@ -329,7 +329,7 @@ export default function Profile() {
               <div>
                 <h4 className="mb-3 font-heading font-semibold text-green-600">Completed</h4>
                 <div className="space-y-2">
-                  {completedHikes.map(({ hike }) => (
+                  {completedHikes.map(({ status, hike }) => (
                     <div key={hike.id} className="flex items-center justify-between rounded-lg border border-green-500/30 bg-green-500/5 p-3">
                       <div className="flex items-center gap-3">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-500/10">
@@ -342,7 +342,8 @@ export default function Profile() {
                       </div>
                       <div className="text-right">
                         <p className="text-sm font-medium">{format(new Date(hike.date), 'dd/MM/yyyy')}</p>
-                        <Badge variant="completed" className="text-xs">Completed</Badge>
+                        {status === 'verified' && <Badge variant="verified" className="text-xs">Verified</Badge>
+                          || <Badge variant="completed" className="text-xs">Completed</Badge>} 
                       </div>
                     </div>
                   ))}
