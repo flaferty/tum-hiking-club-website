@@ -29,7 +29,7 @@ export default function Imprint() {
             
             {/* Impressum Section */}
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold mb-6">Legal Notice / Impressum</h2>
+              <h2 className="text-3xl font-bold mb-6">Legal Notice / Impressum</h2>
               <div>
                 <h3 className="font-semibold text-lg mb-2">According to / Angaben gemäß § 5 DDG</h3>
                 <p className="text-muted-foreground">TUM HN Hiking Club</p>
@@ -57,7 +57,7 @@ export default function Imprint() {
 
             {/* Disclaimer Section */}
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold mb-6">Disclaimer / Haftungsausschluss</h2>
+              <h2 className="text-3xl font-bold mb-6">Disclaimer / Haftungsausschluss</h2>
 
               <div className="space-y-2">
                 <h3 className="font-semibold text-lg mb-2">Hikes participation / Teilnahme an Wanderungen</h3>

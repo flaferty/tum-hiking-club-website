@@ -76,7 +76,7 @@ export function Footer() {
               <p className="text-xs opacity-60">and not an official organ of the Technical University of Munich (TUM).</p>
               <div className="flex items-center space-x-4 opacity-60 pt-2">
                 <p className="text-xs">&copy; {currentYear}</p>
-                <a href="/imprint" className="text-sm hover:underline transition-all">Impressum</a>
+                <a href="/imprint" className="text-sm hover:underline transition-all">Legal Notice</a>
                 <a href="/privacy" className="text-sm hover:underline transition-all">Privacy Policy</a>
               </div>
             </div>
