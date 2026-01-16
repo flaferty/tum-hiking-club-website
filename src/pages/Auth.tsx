@@ -25,7 +25,12 @@ const signUpSchema = z.object({
 type AuthMode = 'signin' | 'signup' | 'forgot' | 'update_password';
 
 export default function Auth() {
-  const [mode, setMode] = useState<AuthMode>('signin');
+  const [isRecovery, setIsRecovery] = useState(() => 
+    window.location.hash.includes('type=recovery')
+  );
+    const [mode, setMode] = useState<AuthMode>(() => 
+    window.location.hash.includes('type=recovery') ? 'update_password' : 'signin'
+  );
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
@@ -39,13 +44,28 @@ export default function Auth() {
 
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const [isRecovery] = useState(window.location.hash.includes('type=recovery'));
-
   useEffect(() => {
-    if (user && !isRecovery) {
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (event === "PASSWORD_RECOVERY") {
+          setIsRecovery(true);
+          setMode("update_password");
+        }
+      }
+    );
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, []);
+
+ useEffect(() => {
+    const isUrlRecovery = window.location.hash.includes('type=recovery');
+
+    if (user && !isRecovery && !isUrlRecovery && mode !== 'update_password') {
       navigate('/');
     }
-  }, [user, navigate, isRecovery]);
+  }, [user, navigate, isRecovery, mode]);
 
   useEffect(() => {
     const { data: authListener } = supabase.auth.onAuthStateChange(

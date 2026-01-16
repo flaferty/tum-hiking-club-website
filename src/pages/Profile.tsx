@@ -198,10 +198,10 @@ export default function Profile() {
             </div>
             </div>
             <div>
-              <h1 className="font-heading text-2xl font-bold text-snow md:text-3xl">
+              <h1 className="font-heading text-2xl font-bold text-white md:text-3xl">
                 {user.user_metadata?.full_name || user.email}
               </h1>
-              <p className="text-snow/70">
+              <p className="text-gray-300">
                 {stats.hikesCompleted} hikes completed · {badgesEarned} badges earned
               </p>
             </div>
