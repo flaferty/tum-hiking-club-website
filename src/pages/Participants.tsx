@@ -49,13 +49,13 @@ export default function Participants() {
 
         />
         <div className="container relative mx-auto px-4 text-center">
-          <Badge variant="outline" className="mb-4 bg-card/20 text-card backdrop-blur-sm border-card/30">
+          <Badge variant="outline" className="mb-4 bg-card/20 text-white backdrop-blur-sm border-card/30 backdrop:text-white">
             Join Our Community
           </Badge>
 
-          <h1 className="mb-4 font-heading text-4xl font-bold text-snow md:text-5xl">Join the Hiking Club</h1>
+          <h1 className="mb-4 font-heading text-4xl font-bold text-snow md:text-5xl text-white">Join the Hiking Club</h1>
 
-          <p className="mx-auto max-w-2xl text-lg text-snow/80">
+          <p className="mx-auto max-w-2xl text-lg text-gray-300 ">
             Hikes are open to everyone! Join one to become a member and start leading your own adventures across
             Germany.
           </p>

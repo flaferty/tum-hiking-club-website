@@ -146,7 +146,7 @@ export default function Index() {
         <div className="container relative mx-auto flex h-full flex-col items-center justify-center px-4 text-center">
           <Badge
             variant="outline"
-            className="mb-4 bg-card/20 text-card backdrop-blur-sm border-card/30 pl-2 pr-4 py-1 flex items-center gap-2"
+            className="mb-4 bg-card/20 text-white backdrop-blur-sm border-card/30 pl-2 pr-4 py-1 flex items-center gap-2"
           >
             <img
               src="/images/logo/logo.jpg"
@@ -156,14 +156,14 @@ export default function Index() {
             TUM HN Hiking Community
           </Badge>
 
-          <h1 className="mb-4 font-heading text-4xl font-bold text-snow md:text-6xl lg:text-7xl animate-fade-in">
+          <h1 className="mb-4 font-heading text-4xl font-bold text-white md:text-6xl lg:text-7xl animate-fade-in">
             Pick a trail.
             <br />
-            <span className="text-snow">We’ll bring the people.</span>
+            <span className="text-white">We’ll bring the people.</span>
           </h1>
 
           <p
-            className="mb-8 max-w-2xl text-lg text-snow/80 md:text-xl animate-fade-in"
+            className="mb-8 max-w-2xl text-lg text-gray-300 md:text-xl animate-fade-in"
             style={{ animationDelay: "0.1s" }}
           >
             Join fellow TUM students on unforgettable hiking adventures through

@@ -3,6 +3,7 @@ import { Mountain, MapPin, Users, UserPlus, LayoutDashboard, User, LogOut, Menu,
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/features/auth/AuthContext';
 import { useState } from 'react';
+import { ModeToggle } from "@/components/layout/ModeToggle";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -67,6 +68,7 @@ export function Navigation() {
 
         {/* User Actions */}
         <div className="hidden items-center gap-2 md:flex">
+          <ModeToggle />
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -83,7 +85,7 @@ export function Navigation() {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={signOut} className="text-destructive">
+                <DropdownMenuItem onClick={signOut} className="text-red-600 dark:text-red-400 focus:text-red-600 dark:focus:text-red-400 cursor-pointer">
                   <LogOut className="mr-2 h-4 w-4" />
                   Sign Out
                 </DropdownMenuItem>
@@ -140,6 +142,11 @@ export function Navigation() {
                 </Button>
               </Link>
             )}
+
+            <div className="flex items-center justify-between py-2">
+               <span className="text-sm font-medium text-muted-foreground">Theme</span>
+               <ModeToggle />
+            </div>
 
             <div className="mt-2 border-t border-border pt-2">
               {user ? (

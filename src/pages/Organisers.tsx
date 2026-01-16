@@ -19,13 +19,13 @@ export default function Organisers() {
 
         />
         <div className="container relative mx-auto px-4 text-center">
-          <Badge variant="outline" className="mb-4 bg-card/20 text-card backdrop-blur-sm border-card/30">
+          <Badge variant="outline" className="mb-4 bg-card/20 text-white backdrop-blur-sm border-card/30 backdrop:text-white">
             Meet Our Hike Leaders
           </Badge>
 
-          <h1 className="mb-4 font-heading text-4xl font-bold text-snow md:text-5xl">Our Hike Leaders</h1>
+          <h1 className="mb-4 font-heading text-4xl font-bold text-snow md:text-5xl text-white">Our Hike Leaders</h1>
 
-          <p className="mx-auto max-w-2xl text-lg text-snow/80">
+          <p className="mx-auto max-w-2xl text-lg text-snow/80 text-gray-300">
             Every club member can organize and lead hikes. Our leaders take responsibility for everyone on the trail,
             waiting at every intersection and ensuring no one is left behind.
           </p>
