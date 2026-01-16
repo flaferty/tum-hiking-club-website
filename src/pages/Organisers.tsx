@@ -25,7 +25,7 @@ export default function Organisers() {
 
           <h1 className="mb-4 font-heading text-4xl font-bold text-snow md:text-5xl text-white">Our Hike Leaders</h1>
 
-          <p className="mx-auto max-w-2xl text-lg text-snow/80 text-gray-300">
+          <p className="mx-auto max-w-2xl text-lg text-grey-300 text-gray-300">
             Every club member can organize and lead hikes. Our leaders take responsibility for everyone on the trail,
             waiting at every intersection and ensuring no one is left behind.
           </p>
