@@ -19,7 +19,7 @@ export default function Privacy() {
 
         />
         <div className="container relative mx-auto px-4 text-center">
-          <h1 className="mb-4 font-heading text-4xl font-bold text-snow md:text-5xl">Privacy Policy</h1>
+          <h1 className="mb-4 font-heading text-4xl font-bold text-white md:text-5xl">Privacy Policy</h1>
         </div>
       </section>
 
@@ -168,6 +168,25 @@ export default function Privacy() {
 
                 <h3 className="text-xl font-bold mt-4">Inquiry by E-Mail, Telephone, or Fax</h3> <p className="mt-2">If you contact us by e-mail, telephone, or fax, your inquiry including all resulting personal data (name, inquiry) will be stored and processed by us for the purpose of processing your request. We do not pass on this data without your consent.</p> <p className="mt-2">The processing of this data is based on Art. 6 Para. 1 lit. b GDPR, insofar as your inquiry is related to the fulfillment of a contract or is necessary for the implementation of pre-contractual measures. In all other cases, processing is based on our legitimate interest in the effective processing of requests addressed to us (Art. 6 Para. 1 lit. f GDPR) or on your consent (Art. 6 Para. 1 lit. a GDPR) insofar as this was requested; the consent is revocable at any time.</p> <p className="mt-2">The data sent by you to us via contact requests remains with us until you request us to delete it, revoke your consent to storage, or the purpose for data storage no longer applies (e.g., after completed processing of your request). Mandatory statutory provisions – in particular statutory retention periods – remain unaffected.</p>
 
+              </div>
+
+              <div>
+                <h2 className="text-2xl font-bold mt-6">5. Analysis Tools and Advertising</h2>
+                <h3 className="text-xl font-bold mt-4">Vercel Web Analytics</h3>
+                <p className="mt-2">
+                  This website uses Vercel Web Analytics, a web analytics service provided by<p className="mt-2">
+                  Vercel Inc.<br />
+                  340 S Lemon Ave #4133<br />
+                  Walnut, CA 91789<br />
+                  USA
+                </p>
+                </p>
+                <p className="mt-2">
+                  Vercel Web Analytics allows us to analyze the use of our website without using cookies or storing personally identifiable information (PII). The visitor's IP address is anonymized immediately and is not stored permanently. The analysis is used to optimize our website and visitor experience.
+                </p>
+                <p className="mt-2">
+                  Data processing is based on our legitimate interest in the statistical analysis of user behavior for optimization and marketing purposes (Art. 6 (1) (f) GDPR).
+                </p>
               </div>
               <p>Source: <a href="[https://www.e-recht24.de](https://www.e-recht24.de)">(https://www.e-recht24.de)</a></p>
             </div>
@@ -475,6 +494,24 @@ export default function Privacy() {
                       abgeschlossener Bearbeitung Ihres Anliegens). Zwingende gesetzliche Bestimmungen &ndash; insbesondere
                       gesetzliche Aufbewahrungsfristen &ndash; bleiben unber&uuml;hrt.</p>
 
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold mt-6">5. Analyse-Tools und Werbung</h2>
+                <h3 className="text-xl font-bold mt-4">Vercel Web Analytics</h3>
+                <p className="mt-2">
+                  Diese Website nutzt Vercel Web Analytics, einen Webanalysedienst der <p className="mt-2">
+                  Vercel Inc.<br />
+                  340 S Lemon Ave #4133<br />
+                  Walnut, CA 91789<br />
+                  USA
+                </p>
+                </p>
+                <p className="mt-2">
+                  Vercel Web Analytics ermöglicht uns die Analyse der Website-Nutzung, ohne dass dabei Cookies verwendet oder personenbezogene Daten (PII) gespeichert werden. Die IP-Adresse der Besucher wird umgehend anonymisiert und nicht dauerhaft gespeichert. Die Analyse dient der Optimierung unseres Webangebots und der Nutzererfahrung.
+                </p>
+                <p className="mt-2">
+                  Die Datenverarbeitung erfolgt auf Grundlage unseres berechtigten Interesses an der statistischen Analyse des Nutzerverhaltens zu Optimierungs- und Marketingzwecken (Art. 6 Abs. 1 lit. f DSGVO).
+                </p>
               </div>
               <p>Quelle: <a href="https://www.e-recht24.de">https://www.e-recht24.de</a></p>
             </div>

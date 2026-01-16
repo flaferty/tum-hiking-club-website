@@ -19,7 +19,7 @@ export default function Imprint() {
 
         />
         <div className="container relative mx-auto px-4 text-center">
-          <h1 className="mb-4 font-heading text-4xl font-bold text-snow md:text-5xl">Legal Notice</h1>
+          <h1 className="mb-4 font-heading text-4xl font-bold text-white md:text-5xl">Legal Notice</h1>
         </div>
       </section>
 
