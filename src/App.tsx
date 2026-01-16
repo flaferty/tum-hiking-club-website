@@ -16,6 +16,8 @@ import AdminDashboard from "./pages/admin/Dashboard";
 import AddHike from "./pages/admin/AddHike";
 import EditHike from "./pages/admin/EditHike";
 import NotFound from "./pages/NotFound";
+import Imprint from "./pages/Imprint";
+import Privacy from "./pages/Privacy";
 
 
 const queryClient = new QueryClient();
@@ -30,6 +32,8 @@ const App = () => (
         <ScrollToTop />
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/imprint" element={<Imprint />} />
+            <Route path="/privacy" element={<Privacy />} />
             <Route path="/organisers" element={<Organisers />} />
             <Route path="/participants" element={<Participants />} />
             <Route path="/auth" element={<Auth />} />

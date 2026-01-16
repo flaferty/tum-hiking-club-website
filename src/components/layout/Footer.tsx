@@ -60,7 +60,7 @@ export function Footer() {
               </div>
             </div>
 
-            <div className="text-sm text-muted-foreground space-y-1 flex flex-col items-center md:items-start ">
+            <div className="text-sm text-muted-foreground space-y-1 flex flex-col items-center md:items-start">
               <p>TUM HN Hiking Club</p>
               <p>Bildungscampus 2</p>
               <p>74076 Heilbronn, DE</p>
@@ -72,7 +72,13 @@ export function Footer() {
                   contact@tumhikingclub.com
                 </a>
               </p>
-              <p className="text-xs opacity-60 pt-2">&copy; {currentYear}</p>
+              <p className="text-xs opacity-60 pt-2">TUM HN Hiking Club is an independent student initiative</p>
+              <p className="text-xs opacity-60">and not an official organ of the Technical University of Munich (TUM).</p>
+              <div className="flex items-center space-x-4 opacity-60 pt-2">
+                <p className="text-xs">&copy; {currentYear}</p>
+                <a href="/imprint" className="text-sm hover:underline transition-all">Legal Notice</a>
+                <a href="/privacy" className="text-sm hover:underline transition-all">Privacy Policy</a>
+              </div>
             </div>
           </div>
 
