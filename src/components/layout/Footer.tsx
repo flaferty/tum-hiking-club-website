@@ -37,15 +37,15 @@ export function Footer() {
       </div>
 
       <div className="relative mx-auto max-w-7xl px-6 sm:px-8 py-10">
-        <div className="flex gap-10  flex-col md:flex-row justify-between items-center md:gap-12">
+        <div className="flex gap-10 flex-col md:flex-row md:w-full md:flex-wrap md:content-start justify-between md:items-baseline md:gap-12">
           {/* Left: Brand block (stacked) */}
-          <div className="flex flex-col gap-5 ">
+          <div className="flex flex-col">
             <div className="flex items-center flex-col md:flex-row  items-center gap-2 pt-2">
               <Link to="/" className="shrink-0" aria-label="Go to homepage">
                 <img
                   src="/images/logo/logo-no-bg-cropped.png"
                   alt="Logo"
-                  className="h-20 w-20 sm:h-24 sm:w-24 md:h-28 md:w-28 object-contain"
+                  className="h-auto w-20 sm:h-auto sm:w-24 md:h-auto md:w-28 object-contain"
                 />
               </Link>
 
@@ -60,7 +60,7 @@ export function Footer() {
               </div>
             </div>
 
-            <div className="text-sm text-muted-foreground space-y-1 flex flex-col items-center md:items-start">
+            <div className="text-sm text-muted-foreground space-y-1 flex flex-col items-center md:items-start md:pl-2 md:pt-4">
               <p>TUM HN Hiking Club</p>
               <p>Bildungscampus 2</p>
               <p>74076 Heilbronn, DE</p>
@@ -72,23 +72,16 @@ export function Footer() {
                   contact@tumhikingclub.com
                 </a>
               </p>
-              <p className="text-xs opacity-60 pt-2">TUM HN Hiking Club is an independent student initiative</p>
-              <p className="text-xs opacity-60">and not an official organ of the Technical University of Munich (TUM).</p>
-              <div className="flex items-center space-x-4 opacity-60 pt-2">
-                <p className="text-xs">&copy; {currentYear}</p>
-                <a href="/imprint" className="text-sm hover:underline transition-all">Legal Notice</a>
-                <a href="/privacy" className="text-sm hover:underline transition-all">Privacy Policy</a>
-              </div>
             </div>
           </div>
 
           {/* Right: Social links */}
-          <div className="md:pl-10 ">
+          <div className="flex flex-col items-center mt-auto md:pr-6">
             <h3 className="font-heading font-bold text-lg text-foreground">
               Our Social Media
             </h3>
 
-            <div className="mt-4 flex flex-col gap-2 text-sm  items-center md:items-start pb-24 md:pb-0">
+            <div className="mt-4 flex flex-col gap-2 text-sm items-center md:items-start">
               <a
                 href="https://www.instagram.com/tum.hiking.club/"
                 target="_blank"
@@ -118,6 +111,18 @@ export function Footer() {
               </a>
             </div>
           </div>
+
+          {/* Bottom: Legal stuff */}
+          <div className="flex flex-col relative mx-auto max-w-7xl items-center md:items-start md:basis-full">
+            <p className="text-xs opacity-60">TUM HN Hiking Club is an independent student initiative</p>
+            <p className="text-xs opacity-60 text-center">and not an official organ of the Technical University of Munich (TUM).</p>
+            <div className="flex items-baseline space-x-4 opacity-60 pt-2">
+              <p className="text-xs">&copy; {currentYear}</p>
+              <a href="/imprint" className="text-sm hover:underline transition-all">Legal Notice</a>
+              <a href="/privacy" className="text-sm hover:underline transition-all">Privacy Policy</a>
+            </div>
+          </div>
+
         </div>
       </div>
     </footer>
