@@ -1,3 +1,5 @@
+ToDo: Add how contribute guide
+
 # TUM HN Hiking Club Website
 A web platform developed for the TUM HN Hiking Club to manage event discovery, user enrollment, and administrative organization.
 
@@ -76,6 +78,7 @@ cd tum-hiking-club-website
 ```
 npm i
 ```
+ToDo: Update supabase to create a local db
 3. Set up your Supabase project:
 
 - Log in to the Supabase CLI: supabase login.

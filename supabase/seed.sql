@@ -17,17 +17,18 @@ VALUES (
 ON CONFLICT (id) DO NOTHING;
 
 -- 2. Create the User Identity (Required for login to work)
-INSERT INTO auth.identities (id, user_id, identity_data, provider, last_sign_in_at, created_at, updated_at)
+INSERT INTO auth.identities (id, user_id, identity_data, provider, provider_id, last_sign_in_at, created_at, updated_at)
 VALUES (
-    gen_random_uuid(),
+    'cc7c6711-7807-4ab2-8527-8d38cabe3ed2',
     'cc7c6711-7807-4ab2-8527-8d38cabe3ed2',
     '{"sub":"cc7c6711-7807-4ab2-8527-8d38cabe3ed2","email":"admin@example.com"}',
     'email',
+    'cc7c6711-7807-4ab2-8527-8d38cabe3ed2', -- Use the User ID as the provider_id for email login
     now(),
     now(),
     now()
 )
-ON CONFLICT (user_id, provider) DO NOTHING;
+ON CONFLICT (id) DO NOTHING;
 
 -- 3. Assign the Admin Role
 INSERT INTO public.user_roles (user_id, role)
