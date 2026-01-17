@@ -231,7 +231,7 @@ export default function Profile() {
                         />
                       </div>
                       <p className="text-center text-sm text-muted-foreground">
-                        Share this QR code to let others view your profile
+                        Share this QR code to earn a verify badge (Experimental)
                       </p>
                       <p className="text-center text-xs text-muted-foreground font-mono">
                         ID: {user.id}

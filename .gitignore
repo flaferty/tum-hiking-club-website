@@ -31,3 +31,5 @@ supabase/.temp
 supabase/.branches
 supabase/tmp
 data.sql
+
+qr-codes/

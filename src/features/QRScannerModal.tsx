@@ -378,9 +378,11 @@ export function QRScanner({ isOpen, onClose, hikeId, hikeName, enrollmentCount }
               </div>
 
               {/* Scanning overlay */}
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className={`h-[85%] aspect-square border-4 rounded-lg shadow-lg transition-colors duration-300 ${error ? 'border-red-500' : lastScanned && scanFailed ? 'border-red-500' : lastScanned && scanSuccess ? 'border-green-500' : 'border-primary'}`}></div>
-              </div>
+              {!error && (
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div className={`h-[85%] aspect-square border-4 rounded-lg shadow-lg transition-colors duration-300 ${error ? 'border-red-500' : lastScanned && scanFailed ? 'border-red-500' : lastScanned && scanSuccess ? 'border-green-500' : 'border-primary'}`}></div>
+                </div>
+              )}
             </div>
 
           </div>
