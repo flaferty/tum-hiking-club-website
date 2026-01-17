@@ -21,6 +21,7 @@ import { Difficulty } from '@/lib/types';
 import { Database } from '@/services/supabase/types';
 import { HikeParticipantsModal } from '@/features/hikes/HikeParticipantsModal';
 import { AdminEmail } from '@/pages/admin/AdminEmail';
+import { QRScanner } from '@/features/QRScannerModal';
 import { 
   Plus, 
   Pencil, 
@@ -34,7 +35,8 @@ import {
   ShieldCheck,
   ShieldAlert,
   X,
-  Mail
+  Mail,
+  QrCode
 } from 'lucide-react';
 import { format } from 'date-fns';
 import {
@@ -82,6 +84,7 @@ export default function AdminDashboard() {
   const assignRoleMutation = useAssignRole();
   const removeRoleMutation = useRemoveRole();
   const [viewParticipantsHike, setViewParticipantsHike] = useState<{id: string, name: string} | null>(null);
+  const [scanQRHike, setScanQRHike] = useState<{id: string, name: string, enrollmentCount: number} | null>(null);
 
   const currentUserProfile = users.find(u => u.user_id === user?.id);
 
@@ -273,6 +276,16 @@ export default function AdminDashboard() {
                             <Users className="h-3.5 w-3.5" />
                             <span>View</span>
                           </Button>
+
+                        <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="gap-1"
+                            onClick={() => setScanQRHike({ id: hike.id, name: hike.name, enrollmentCount: hike.enrollment_count })}
+                          >
+                            <QrCode className="h-3.5 w-3.5" />
+                            <span>Scan QR</span>
+                          </Button>
                         
                         <AlertDialog>
                           <AlertDialogTrigger asChild>
@@ -423,6 +436,13 @@ export default function AdminDashboard() {
         hikeName={viewParticipantsHike?.name || ''}
         isOpen={!!viewParticipantsHike}
         onClose={() => setViewParticipantsHike(null)}
+      />
+      <QRScanner 
+        isOpen={!!scanQRHike}
+        onClose={() => setScanQRHike(null)}
+        hikeId={scanQRHike?.id || ''}
+        hikeName={scanQRHike?.name || ''}
+        enrollmentCount={scanQRHike?.enrollmentCount}
       />
     </div>
   );
