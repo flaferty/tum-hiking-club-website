@@ -240,7 +240,7 @@ export default function Profile() {
                   </DialogContent>
                 </Dialog>
               </div>
-              <p className="text-snow/70">
+              <p className="text-white/70">
                 {stats.hikesCompleted} hikes completed · {badgesEarned} badges earned
               </p>
             </div>
