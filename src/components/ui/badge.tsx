@@ -18,6 +18,7 @@ const badgeVariants = cva(
         expert: "border-mountain/20 bg-mountain/10 text-mountain",
         upcoming: "border-primary/20 bg-primary/10 text-primary",
         completed: "border-border bg-muted text-muted-foreground",
+        verified: "border-green-500/20 bg-green-500/10 text-green-700 dark:text-green-600",
       },
     },
     defaultVariants: {

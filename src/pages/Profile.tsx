@@ -22,9 +22,13 @@ import {
   Clock,
   Loader2,
   Camera,
+  QrCode,
   LucideIcon
 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip } from 'recharts';
+import { QRCodeSVG } from 'qrcode.react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 
 const iconMap: Record<string, LucideIcon> = {
   footprints: Footprints,
@@ -41,6 +45,7 @@ export default function Profile() {
 
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [qrDialogOpen, setQrDialogOpen] = useState(false);
 
   // get profile data
   useEffect(() => {
@@ -159,7 +164,7 @@ export default function Profile() {
           className="absolute inset-0 h-full w-full object-cover opacity-60 mix-blend-overlay [mask-image:linear-gradient(to_bottom,black_50%,transparent_100%)]"
 
         />
-        <div className="container mx-auto px-4">
+        <div className="container relative z-10 mx-auto px-4">
           <div className="flex items-center gap-6">
             <div className="flex h-16 w-16 items-center justify-center rounded-full bg-card/20">
               {/* Avatar Upload Section */}
@@ -197,11 +202,45 @@ export default function Profile() {
               </div>
             </div>
             </div>
-            <div>
-              <h1 className="font-heading text-2xl font-bold text-white md:text-3xl">
-                {user.user_metadata?.full_name || user.email}
-              </h1>
-              <p className="text-gray-300">
+            <div className="flex-1">
+              <div className="flex items-center gap-3">
+                <h1 className="font-heading text-2xl font-bold text-snow md:text-3xl">
+                  {user.user_metadata?.full_name || user.email}
+                </h1>
+                <Dialog open={qrDialogOpen} onOpenChange={setQrDialogOpen}>
+                  <DialogTrigger asChild>
+                    <Button 
+                      variant="outline" 
+                      size="icon"
+                      className="h-8 w-8 border-white/20 bg-white/10 text-snow hover:bg-white/20 hover:text-snow"
+                    >
+                      <QrCode className="h-4 w-4" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                      <DialogTitle>Your Profile QR Code</DialogTitle>
+                    </DialogHeader>
+                    <div className="flex flex-col items-center gap-4 p-6">
+                      <div className="rounded-lg bg-white p-4">
+                        <QRCodeSVG 
+                          value={user.id} 
+                          size={200}
+                          level="H"
+                          includeMargin={true}
+                        />
+                      </div>
+                      <p className="text-center text-sm text-muted-foreground">
+                        Share this QR code to earn a verify badge (Experimental)
+                      </p>
+                      <p className="text-center text-xs text-muted-foreground font-mono">
+                        ID: {user.id}
+                      </p>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </div>
+              <p className="text-snow/70">
                 {stats.hikesCompleted} hikes completed · {badgesEarned} badges earned
               </p>
             </div>
@@ -329,7 +368,7 @@ export default function Profile() {
               <div>
                 <h4 className="mb-3 font-heading font-semibold text-green-600">Completed</h4>
                 <div className="space-y-2">
-                  {completedHikes.map(({ hike }) => (
+                  {completedHikes.map(({ status, hike }) => (
                     <div key={hike.id} className="flex items-center justify-between rounded-lg border border-green-500/30 bg-green-500/5 p-3">
                       <div className="flex items-center gap-3">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-500/10">
@@ -342,7 +381,8 @@ export default function Profile() {
                       </div>
                       <div className="text-right">
                         <p className="text-sm font-medium">{format(new Date(hike.date), 'dd/MM/yyyy')}</p>
-                        <Badge variant="completed" className="text-xs">Completed</Badge>
+                        {status === 'verified' && <Badge variant="verified" className="text-xs">Verified</Badge>
+                          || <Badge variant="completed" className="text-xs">Completed</Badge>} 
                       </div>
                     </div>
                   ))}
