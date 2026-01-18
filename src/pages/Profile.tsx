@@ -204,7 +204,7 @@ export default function Profile() {
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-3">
-                <h1 className="font-heading text-2xl font-bold text-snow md:text-3xl">
+                <h1 className="font-heading text-2xl font-bold text-white md:text-3xl">
                   {user.user_metadata?.full_name || user.email}
                 </h1>
                 <Dialog open={qrDialogOpen} onOpenChange={setQrDialogOpen}>
