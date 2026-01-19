@@ -55,7 +55,7 @@ export default function Participants() {
 
           <h1 className="mb-4 font-heading text-4xl font-bold text-snow md:text-5xl text-white">Join the Hiking Club</h1>
 
-          <p className="mx-auto max-w-2xl text-lg text-gray-300 ">
+          <p className="mx-auto max-w-2xl text-lg text-gray-200 ">
             Hikes are open to everyone! Join one to become a member and start leading your own adventures across
             Germany.
           </p>
