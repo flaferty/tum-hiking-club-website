@@ -1,4 +1,5 @@
 -- Seed Script to create an Admin User in Supabase (dummy credentials, change as needed)
+-- ! For Local Developpment only
 
 -- 1. AUTH.USERS: Create Users in the Auth system
 INSERT INTO auth.users (id, email, encrypted_password, email_confirmed_at, raw_app_meta_data, raw_user_meta_data, created_at, updated_at, role, instance_id, aud, confirmation_token, recovery_token, email_change_token_new, email_change) VALUES 
@@ -74,7 +75,7 @@ INSERT INTO auth.users (id, email, encrypted_password, email_confirmed_at, raw_a
     ('c1111111-1111-4111-c111-000000000031', 'will.power@mytum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Will Power"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', '')
 ON CONFLICT (id) DO NOTHING;
 
--- 2. AUTH.IDENTITIES: Create login identies for all users (Required for login to work)
+-- 2. AUTH.IDENTITIES: Create login identities for all users (Required for login to work)
 INSERT INTO auth.identities (id, user_id, identity_data, provider, provider_id, last_sign_in_at, created_at, updated_at)
 SELECT gen_random_uuid(), id, format('{"sub":"%s","email":"%s"}', id, email)::jsonb, 'email', id, now(), now(), now()
 FROM auth.users

@@ -5,7 +5,7 @@ alter table "public"."hike_enrollments" add constraint "hike_enrollments_status_
 alter table "public"."hike_enrollments" validate constraint "hike_enrollments_status_check";
 
 
-  create policy "Admins manage enrollements"
+  create policy "Admins manage enrollments"
   on "public"."hike_enrollments"
   as permissive
   for all
