@@ -212,7 +212,7 @@ export default function Profile() {
                     <Button 
                       variant="outline" 
                       size="icon"
-                      className="h-8 w-8 border-white/20 bg-white/10 text-snow hover:bg-white/20 hover:text-snow"
+                      className="h-8 w-8 border-white/20 bg-white/10 text-white hover:bg-white/20 hover:text-white"
                     >
                       <QrCode className="h-4 w-4" />
                     </Button>
