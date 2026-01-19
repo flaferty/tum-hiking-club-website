@@ -1,7 +1,10 @@
-ToDo: Add how contribute guide
-
 # TUM HN Hiking Club Website
 A web platform developed for the TUM HN Hiking Club to manage event discovery, user enrollment, and administrative organization.
+
+## Contribute
+Feedback, suggestions or help of any kind is more than welcome. 
+
+You can open an issue or fork the project and do a merge request. Alternatively you can contact us at: contact@tumhikingclub.com
 
 ### Tech Stack
 - Frontend: React, TypeScript, Vite
@@ -10,7 +13,8 @@ A web platform developed for the TUM HN Hiking Club to manage event discovery, u
 - Backend & Database: Supabase (PostgreSQL, Auth, Storage)
 - Mapping: Leaflet.js & React-Leaflet
 - Forms: React Hook Form & Zod
-## Project Architecture:
+
+### Project Architecture:
 ```
 /
 ├── public/
@@ -58,8 +62,8 @@ A web platform developed for the TUM HN Hiking Club to manage event discovery, u
 ├── tsconfig.json
 └── vite.config.ts
 ```
-## Setup & Installation 
 
+## Setup & Installation 
 To run this project locally, follow these steps:
 
 ### Prerequisites
@@ -78,24 +82,48 @@ cd tum-hiking-club-website
 ```
 npm i
 ```
-ToDo: Update supabase to create a local db
 3. Set up your Supabase project:
 
-- Log in to the Supabase CLI: supabase login.
-- Link your local project to your Supabase project: supabase link --project-ref yjdsekbintlevafarmko. You will need your database password.
-- Push the database migrations to your Supabase project:
+- Log in to the Supabase CLI:
 ```
-supabase db push
+npx supabase login
 ```
-4. Configure Environment Variables: Create a .env file in the root of the project and add your Supabase project URL and Anon Key. You can find these in your Supabase project's "Project Settings" > "API".
+
+- Start your local database (requires docker):
 ```
-VITE_SUPABASE_URL=YOUR_SUPABASE_URL
-VITE_SUPABASE_PUBLISHABLE_KEY=YOUR_SUPABASE_ANON_KEY
+npx supabase start
 ```
+You should now be able to access the Supabase dashboard at http://localhost:54323.
+
+- Configure Environment Variables:
+
+Create a ```.env.local``` file in the root of the project and add your Supabase project URL and Publishable Key. You can find these after running ```npx supabase start``` or ```npx supabase status```
+```
+VITE_SUPABASE_URL="http://localhost:54321"
+VITE_SUPABASE_PUBLISHABLE_KEY="sb_publishable_[your_token]"
+```
+
+- Update the database:
+
+After pulling from a branch, make sure your local databse schema is up to date by running:
+
+```
+npx supabase reset
+```
+
 5. Run the development server:
 ```
 npm run dev
 ```
+
+6. Save your local database changes (optional):
+
+If you modify the database locally, you must save your changes into a migration file so they can eventually be apply to the production database. Run the following:
+```
+supabase db diff -f name_of_change
+```
+
+
 The application will be available at http://localhost:8080.
 
 ## Backend Overview

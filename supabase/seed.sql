@@ -1,41 +1,204 @@
 -- Seed Script to create an Admin User in Supabase (dummy credentials, change as needed)
+-- ! For Local Developpment only
 
--- 1. Create the Admin User in the Auth system
--- INSERT INTO auth.users (id, email, encrypted_password, email_confirmed_at, raw_app_meta_data, raw_user_meta_data, created_at, updated_at, role, instance_id)
--- VALUES (
---     'cc7c6711-7807-4ab2-8527-8d38cabe3ed2', -- Your specific Admin ID
---     'admin@example.com',                    -- LOGIN EMAIL
---     crypt('password123', gen_salt('bf')),   -- LOGIN PASSWORD
---     now(),
---     '{"provider":"email","providers":["email"]}',
---     '{"full_name":"Local Admin"}',
---     now(),
---     now(),
---     'authenticated',
---     '00000000-0000-0000-0000-000000000000'
--- )
--- ON CONFLICT (id) DO NOTHING;
+-- 1. AUTH.USERS: Create Users in the Auth system
+INSERT INTO auth.users (id, email, encrypted_password, email_confirmed_at, raw_app_meta_data, raw_user_meta_data, created_at, updated_at, role, instance_id, aud, confirmation_token, recovery_token, email_change_token_new, email_change) VALUES 
+    -- Admins (Prefix: a111...)
+    ('a1111111-1111-4111-a111-000000000001', 'admin@tum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Local Admin"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('a1111111-1111-4111-a111-000000000002', 'justin.case@tum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Justin Case"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('a1111111-1111-4111-a111-000000000003', 'barb.dwyer@mytum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Barb Dwyer"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
 
--- 2. Create the User Identity (Required for login to work)
--- INSERT INTO auth.identities (id, user_id, identity_data, provider, provider_id, last_sign_in_at, created_at, updated_at)
--- VALUES (
---     'cc7c6711-7807-4ab2-8527-8d38cabe3ed2',
---     'cc7c6711-7807-4ab2-8527-8d38cabe3ed2',
---     '{"sub":"cc7c6711-7807-4ab2-8527-8d38cabe3ed2","email":"admin@example.com"}',
---     'email',
---     'cc7c6711-7807-4ab2-8527-8d38cabe3ed2', -- Use the User ID as the provider_id for email login
---     now(),
---     now(),
---     now()
--- )
--- ON CONFLICT (id) DO NOTHING;
+    -- Members (Prefix: b111...)
+    ('b1111111-1111-4111-b111-000000000001', 'paige.turner@tum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Paige Turner"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('b1111111-1111-4111-b111-000000000002', 'chris.p.bacon@mytum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Chris P. Bacon"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('b1111111-1111-4111-b111-000000000003', 'anita.bath@tum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Anita Bath"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('b1111111-1111-4111-b111-000000000004', 'barry.cade@mytum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Barry Cade"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('b1111111-1111-4111-b111-000000000005', 'artie.choke@tum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Artie Choke"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('b1111111-1111-4111-b111-000000000006', 'eileen.over@mytum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Eileen Over"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('b1111111-1111-4111-b111-000000000007', 'al.dente@tum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Al Dente"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('b1111111-1111-4111-b111-000000000008', 'anne.teak@mytum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Anne Teak"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('b1111111-1111-4111-b111-000000000009', 'ben.dover@tum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Ben Dover"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('b1111111-1111-4111-b111-000000000010', 'bill.board@mytum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Bill Board"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('b1111111-1111-4111-b111-000000000011', 'cam.payne@tum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Cam Payne"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('b1111111-1111-4111-b111-000000000012', 'crystal.ball@mytum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Crystal Ball"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('b1111111-1111-4111-b111-000000000013', 'dan.d.lyon@tum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Dan D. Lyon"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('b1111111-1111-4111-b111-000000000014', 'don.key@mytum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Don Key"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('b1111111-1111-4111-b111-000000000015', 'earl.e.bird@tum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Earl E. Bird"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('b1111111-1111-4111-b111-000000000016', 'frank.n.stein@mytum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Frank N. Stein"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('b1111111-1111-4111-b111-000000000017', 'gail.force@tum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Gail Force"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('b1111111-1111-4111-b111-000000000018', 'hazel.nutt@mytum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Hazel Nutt"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('b1111111-1111-4111-b111-000000000019', 'holly.wood@tum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Holly Wood"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('b1111111-1111-4111-b111-000000000020', 'horace.cope@mytum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Horace Cope"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('b1111111-1111-4111-b111-000000000021', 'hugo.first@tum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Hugo First"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('b1111111-1111-4111-b111-000000000022', 'ilene.dover@mytum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Ilene Dover"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('b1111111-1111-4111-b111-000000000023', 'jack.pott@tum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Jack Pott"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('b1111111-1111-4111-b111-000000000024', 'jim.nasium@mytum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Jim Nasium"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('b1111111-1111-4111-b111-000000000025', 'jo.king@tum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Jo King"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('b1111111-1111-4111-b111-000000000026', 'justin.thyme@mytum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Justin Thyme"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('b1111111-1111-4111-b111-000000000027', 'katy.pult@tum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Katy Pult"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('b1111111-1111-4111-b111-000000000028', 'laura.norder@mytum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Laura Norder"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('b1111111-1111-4111-b111-000000000029', 'lee.king@tum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Lee King"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('b1111111-1111-4111-b111-000000000030', 'luke.warm@mytum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Luke Warm"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('b1111111-1111-4111-b111-000000000031', 'marsha.mellow@tum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Marsha Mellow"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
 
--- 3. Assign the Admin Role
--- INSERT INTO public.user_roles (user_id, role)
--- VALUES ('cc7c6711-7807-4ab2-8527-8d38cabe3ed2', 'admin')
--- ON CONFLICT (user_id, role) DO NOTHING;
+    -- Users (Prefix: c111...)
+    ('c1111111-1111-4111-c111-000000000001', 'robin.banks@tum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Robin Banks"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('c1111111-1111-4111-c111-000000000002', 'tim.burr@mytum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Tim Burr"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('c1111111-1111-4111-c111-000000000003', 'sue.flay@tum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Sue Flay"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('c1111111-1111-4111-c111-000000000004', 'phil.mcavity@mytum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Phil McAvity"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('c1111111-1111-4111-c111-000000000005', 'otto.graph@tum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Otto Graph"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('c1111111-1111-4111-c111-000000000006', 'anna.graham@mytum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Anna Graham"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('c1111111-1111-4111-c111-000000000007', 'matt.tress@mytum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Matt Tress"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('c1111111-1111-4111-c111-000000000008', 'may.b.not@tum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"May B. Not"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('c1111111-1111-4111-c111-000000000009', 'mike.rophone@mytum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Mike Rophone"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('c1111111-1111-4111-c111-000000000010', 'moe.mentum@tum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Moe Mentum"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('c1111111-1111-4111-c111-000000000011', 'neil.down@mytum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Neil Down"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('c1111111-1111-4111-c111-000000000012', 'olive.branch@tum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Olive Branch"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('c1111111-1111-4111-c111-000000000013', 'pat.t.cake@mytum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Pat T. Cake"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('c1111111-1111-4111-c111-000000000014', 'paul.bearer@tum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Paul Bearer"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('c1111111-1111-4111-c111-000000000015', 'penny.lane@mytum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Penny Lane"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('c1111111-1111-4111-c111-000000000016', 'pepe.roni@tum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Pepe Roni"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('c1111111-1111-4111-c111-000000000017', 'phil.a.mignon@mytum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Phil A. Mignon"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('c1111111-1111-4111-c111-000000000018', 'polly.ester@tum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Polly Ester"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('c1111111-1111-4111-c111-000000000019', 'ray.gunn@mytum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Ray Gunn"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('c1111111-1111-4111-c111-000000000020', 'rick.oshea@tum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Rick O''Shea"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('c1111111-1111-4111-c111-000000000021', 'rose.bush@mytum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Rose Bush"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('c1111111-1111-4111-c111-000000000022', 'sal.a.mander@tum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Sal A. Mander"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('c1111111-1111-4111-c111-000000000023', 'sarah.nader@mytum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Sarah Nader"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('c1111111-1111-4111-c111-000000000024', 'stan.still@tum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Stan Still"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('c1111111-1111-4111-c111-000000000025', 'sue.case@mytum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Sue Case"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('c1111111-1111-4111-c111-000000000026', 'ted.e.bear@tum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Ted E. Bear"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('c1111111-1111-4111-c111-000000000027', 'terry.cloth@mytum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Terry Cloth"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('c1111111-1111-4111-c111-000000000028', 'tim.lee@tum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Tim Lee"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('c1111111-1111-4111-c111-000000000029', 'tom.a.toe@mytum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Tom A. Toe"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('c1111111-1111-4111-c111-000000000030', 'ty.coon@tum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Ty Coon"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', ''),
+    ('c1111111-1111-4111-c111-000000000031', 'will.power@mytum.de', extensions.crypt('12345678', extensions.gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}', '{"full_name":"Will Power"}', now(), now(), 'authenticated', '00000000-0000-0000-0000-000000000000', 'authenticated', '', '', '', '')
+ON CONFLICT (id) DO NOTHING;
 
--- 4. Create a Profile (So the app doesn't crash looking for a name)
--- INSERT INTO public.profiles (user_id, full_name, email)
--- VALUES ('cc7c6711-7807-4ab2-8527-8d38cabe3ed2', 'Local Admin', 'admin@example.com')
--- ON CONFLICT (user_id) DO NOTHING;
+-- 2. AUTH.IDENTITIES: Create login identities for all users (Required for login to work)
+INSERT INTO auth.identities (id, user_id, identity_data, provider, provider_id, last_sign_in_at, created_at, updated_at)
+SELECT gen_random_uuid(), id, format('{"sub":"%s","email":"%s"}', id, email)::jsonb, 'email', id, now(), now(), now()
+FROM auth.users
+ON CONFLICT (id) DO NOTHING;
+
+-- 3. PUBLIC.PROFILES: Create Public Profiles
+INSERT INTO public.profiles (user_id, full_name, email)
+SELECT id, raw_user_meta_data->>'full_name', email
+FROM auth.users
+ON CONFLICT (user_id) DO NOTHING;
+
+-- 4. PUBLIC.USER_ROLES: Assign Roles
+INSERT INTO public.user_roles (user_id, role)
+SELECT id, 'admin'::public.app_role
+FROM auth.users
+WHERE id::text LIKE 'a111%'
+ON CONFLICT DO NOTHING;
+
+INSERT INTO public.user_roles (user_id, role)
+SELECT id, 'member'::public.app_role
+FROM auth.users
+WHERE id::text LIKE 'b111%'
+ON CONFLICT DO NOTHING;
+
+INSERT INTO public.user_roles (user_id, role)
+SELECT id, 'user'::public.app_role
+FROM auth.users
+WHERE id::text LIKE 'c111%'
+ON CONFLICT DO NOTHING;
+
+-- 5 PUBLIC.HIKES
+INSERT INTO "public"."hikes" ("id", "name", "date", "end_date", "location_lat", "location_lng", "location_name", "difficulty", "distance", "elevation", "duration", "description", "image_url", "max_participants", "organizer_id", "organizer_name", "status", "created_at", "updated_at", "members_only") VALUES
+    ('1affcce5-b3a9-4793-8318-69cd39637381', 'Hike to Burg Stettenfels', '2023-03-12', NULL, 49.088300, 9.280900, 'Flein', 'easy', 17.0, 346, '6 hours', '', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/cc7c6711-7807-4ab2-8527-8d38cabe3ed2/1766448390348-fa0ccgh4x.jpg', 20, 'a1111111-1111-4111-a111-000000000001', 'Local Admin', 'upcoming', '2025-12-23 00:06:31.382474+00', '2025-12-23 00:06:31.382474+00', false),
+    ('c57d76d5-09ce-4fc9-8050-53ac6a193e26', 'Torch Hike', '2024-12-08', NULL, 49.089400, 9.281700, 'Heilbronn', 'moderate', 22.0, 400, '9', NULL, 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766453962676-9blpbr.jpg', 60, 'a1111111-1111-4111-a111-000000000002', 'Justin Case', 'upcoming', '2025-12-23 01:39:23.82691+00', '2025-12-23 01:44:21.714828+00', false),
+    ('4eaf15d3-d072-42ba-90c7-b063d184691c', 'Torch Hike', '2025-12-06', NULL, 49.091300, 9.276000, 'Untergruppenbach', 'moderate', 20.0, 400, '8 hours', NULL, 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766501289321-kzrav.jpg', 60, 'a1111111-1111-4111-a111-000000000003', 'Barb Dwyer', 'upcoming', '2025-12-23 14:48:10.412548+00', '2026-01-13 14:16:03.702659+00', false),
+    ('92c278e0-b26a-4e26-a213-976808b25811', 'Bad Urach Wasserfall hike', '2025-04-27', NULL, 48.493100, 9.404200, 'Bad Urach', 'easy', 15.0, 520, '8 hours', NULL, 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766499223965-mddsz.jpg', 20, 'a1111111-1111-4111-a111-000000000001', 'Local Admin', 'upcoming', '2025-12-23 14:13:45.08348+00', '2025-12-23 14:13:45.08348+00', false),
+    ('f52cf45f-8d4f-4cbf-bee1-491b23c9fd01', 'Neckarsteinach Hike', '2023-12-19', NULL, 49.408100, 8.838600, 'Neckarsteinach', 'moderate', 18.0, 600, '7 hours', NULL, 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766497226541-4zm0j.jpg', 20, 'a1111111-1111-4111-a111-000000000002', 'Justin Case', 'upcoming', '2025-12-23 13:39:46.062179+00', '2025-12-23 13:40:27.476111+00', false),
+    ('811e6f99-df5d-4898-a9b5-71c3d38e8508', 'Burg Teck Hike', '2024-02-03', NULL, 48.587900, 9.450100, 'Owen', 'moderate', 12.0, 700, '7 hours', NULL, 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766497516645-ndqtc7.jpg', 20, 'a1111111-1111-4111-a111-000000000003', 'Barb Dwyer', 'upcoming', '2025-12-23 13:45:17.740237+00', '2025-12-23 13:45:17.740237+00', false),
+    ('7ab31d20-1a95-4a63-8917-d44266f53f0f', 'Monbachtal buddy program hike', '2024-05-01', NULL, 48.774700, 8.730000, 'Bad Liebenzell ', 'easy', 12.5, 270, '5 hours', NULL, 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766497823382-6n2biq.jpg', 20, 'a1111111-1111-4111-a111-000000000001', 'Local Admin', 'upcoming', '2025-12-23 13:50:23.919042+00', '2025-12-23 13:50:23.919042+00', false),
+    ('01cf5bf5-0f6c-4bda-ac31-9f8f262d2e6b', 'Murrhardt hike', '2024-06-29', NULL, 48.981800, 9.573700, 'Murrhardt', 'easy', 13.7, 400, '7 hours', NULL, 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766498022255-bal69uj.jpg', 20, 'a1111111-1111-4111-a111-000000000002', 'Justin Case', 'upcoming', '2025-12-23 13:53:42.990952+00', '2025-12-23 13:53:42.990952+00', false),
+    ('16894688-b477-484e-af07-cfbac7d5dd14', 'Semester opening hike', '2024-10-19', NULL, 48.556100, 9.375600, 'Neuffen', 'easy', 17.0, 500, '8 hours', NULL, 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766498305270-a4f2xe.jpg', 20, 'a1111111-1111-4111-a111-000000000003', 'Barb Dwyer', 'upcoming', '2025-12-23 13:58:26.242577+00', '2025-12-23 13:58:26.242577+00', false),
+    ('039d8acd-f9cf-4b51-a470-7f35f83d111e', 'Hohenzollern castle hike', '2024-11-16', NULL, 48.323600, 8.967400, 'Hohenzollern', 'moderate', 22.0, 750, '7 hours', NULL, 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766498495369-oaginy.jpg', 20, 'a1111111-1111-4111-a111-000000000001', 'Local Admin', 'upcoming', '2025-12-23 14:01:36.669475+00', '2025-12-23 14:01:36.669475+00', false),
+    ('d98bad88-2be8-4015-9ff9-1a04e1d6b01b', 'Schwarzwald hike', '2025-01-26', NULL, 48.751600, 8.549300, 'Bad Wilbad', 'easy', 14.0, 450, '6 hours', NULL, 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766498872401-itx4bi.jpg', 20, 'a1111111-1111-4111-a111-000000000002', 'Justin Case', 'upcoming', '2025-12-23 14:07:53.238936+00', '2025-12-23 14:07:53.238936+00', false),
+    ('c3ae7b45-fbde-4d75-82b4-9fae6710291b', 'H├Âllenlocher semester ending hike', '2025-02-27', NULL, 48.511900, 9.345500, 'H├Âllenlocher', 'moderate', 22.5, 750, '9 hours', NULL, 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766498978840-dwfrj.jpg', 20, 'a1111111-1111-4111-a111-000000000003', 'Barb Dwyer', 'upcoming', '2025-12-23 14:09:40.030452+00', '2025-12-23 14:09:40.030452+00', false),
+    ('fd20d974-0db3-4b04-889f-03af95ceb083', 'Neuschwanstein Castle hike', '2025-05-01', NULL, 47.558400, 10.741700, 'Hohenschwangau', 'easy', 11.0, 370, '5 hours', NULL, 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766499649097-q177y4.jpg', 40, 'a1111111-1111-4111-a111-000000000001', 'Local Admin', 'upcoming', '2025-12-23 14:20:50.44736+00', '2025-12-23 14:20:50.44736+00', false),
+    ('79f2f5a8-1b40-4f08-8bfe-15ca3379f57f', 'German Alps hike', '2025-06-07', '2025-06-10', 47.409900, 10.279700, 'Oberstdorf', 'expert', 55.8, 3216, '4 days', NULL, 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766508593047-380u1.jpg', 12, 'a1111111-1111-4111-a111-000000000002', 'Justin Case', 'upcoming', '2025-12-23 14:33:44.274779+00', '2026-01-11 18:35:09.690532+00', true),
+    ('4eda6c04-4556-44ea-9e79-143e9e964fcc', 'Schnapsbrunnenweg hike', '2025-05-29', NULL, 48.617700, 8.127900, 'Sasbachwalden', 'moderate', 15.5, 600, '6 hours', NULL, 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766499857244-uc39bn.jpg', 25, 'a1111111-1111-4111-a111-000000000003', 'Barb Dwyer', 'upcoming', '2025-12-23 14:24:18.742603+00', '2025-12-23 14:34:56.713303+00', false),
+    ('bbb3ef69-4bc5-422d-b329-52f24e1a0967', 'Rodelbahn hike', '2025-07-13', NULL, 48.283200, 8.173200, 'Hausach', 'easy', 11.0, 600, '5 hours', NULL, 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766500725079-b3hxai.jpg', 15, 'a1111111-1111-4111-a111-000000000001', 'Local Admin', 'upcoming', '2025-12-23 14:38:46.274669+00', '2025-12-23 14:38:46.274669+00', false),
+    ('3927fa1d-1560-4b4e-a6c2-f27ce797d63a', 'Lichtenstein castle hike', '2025-08-16', NULL, 48.413200, 9.260300, 'Honau', 'easy', 14.0, 640, '6 hours', NULL, 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766500992825-wjcrdv.jpg', 20, 'a1111111-1111-4111-a111-000000000002', 'Justin Case', 'upcoming', '2025-12-23 14:43:13.859053+00', '2025-12-23 14:43:13.859053+00', false),
+    ('a73dc9a2-f4d1-40e4-a0d9-5e5a84878967', 'Klosterruine Hirsau hike', '2025-10-19', NULL, 48.737800, 8.732400, 'Calw', 'easy', 19.0, 600, '6 hours', NULL, 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766501155685-wjnsnd.jpg', 40, 'a1111111-1111-4111-a111-000000000003', 'Barb Dwyer', 'upcoming', '2025-12-23 14:45:56.748182+00', '2026-01-13 14:16:09.844248+00', false),
+    ('28f8d0f2-6922-4b7b-b006-c8ec3486f24f', 'Gausbach Hike', '2026-01-18', NULL, 48.686800, 8.363600, 'Gausbach', 'hard', 17.8, 720, '6 h', 'Departure from Heilbronn Hbf at 7:24.(RE45 richtung Karlsruhe, Platform 7)\nExpected arrival back in Heilbronn at 19:22 or 20:22.\nThis will be a hard hike, even harder than usual because of the weather. Please only come if you have a proper equipment.\nPlease be sure to bring warm and waterproof clothes.\nSpikes can be useful but not mandatory. Big snow/hiking socks are more than recommended.\nLike always, you are responsible for having a valid ticket. The Deutschland ticket is valid throughout the journey.\nPlanned route: https://www.komoot.com/de-de/tour/2750449267?share_token=aoWC7DClKSa8rIVDEDzyW1762q1TuD1hYju4LdT2wI4UZwcj1Y&ref=wtd\nChanges may occur to the route depending on the weather conditions, number of people, etc.', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1768314050399-x4fpia.jpg', 50, 'a1111111-1111-4111-a111-000000000001', 'Local Admin', 'upcoming', '2026-01-13 14:20:51.883678+00', '2026-01-15 15:39:33.348823+00', false);
+
+-- 6.PUBLIC.HIKES_IMAGES
+INSERT INTO "public"."hike_images" ("id", "hike_id", "image_url", "display_order", "created_at") VALUES
+	('af1d14a2-2ce2-4bc6-a45e-7f35a1501de6', '1affcce5-b3a9-4793-8318-69cd39637381', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/cc7c6711-7807-4ab2-8527-8d38cabe3ed2/1766448390348-fa0ccgh4x.jpg', 0, '2025-12-23 00:06:31.502149+00'),
+	('9e965af7-5903-41dc-b224-c3d94aa6a669', '1affcce5-b3a9-4793-8318-69cd39637381', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/cc7c6711-7807-4ab2-8527-8d38cabe3ed2/1766448390851-blzyo7l5c.jpg', 1, '2025-12-23 00:06:31.502149+00'),
+	('ca2825c3-6593-4425-8675-10281b4bc801', 'c57d76d5-09ce-4fc9-8050-53ac6a193e26', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766453962676-9blpbr.jpg', 0, '2025-12-23 01:39:23.952404+00'),
+	('c4a0ba29-7471-4488-935a-e50c67fe3934', 'c57d76d5-09ce-4fc9-8050-53ac6a193e26', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766453963131-sk9ftg.jpg', 1, '2025-12-23 01:39:23.952404+00'),
+	('2108e05a-c117-4009-a4c9-1f5eab0f762c', 'f52cf45f-8d4f-4cbf-bee1-491b23c9fd01', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766497226541-4zm0j.jpg', 0, '2025-12-23 13:40:27.846524+00'),
+	('b15a3f53-1cda-4f31-aaff-db807b2e27a5', '811e6f99-df5d-4898-a9b5-71c3d38e8508', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766497516645-ndqtc7.jpg', 0, '2025-12-23 13:45:17.826787+00'),
+	('21ff75c2-94a1-4877-b5fa-86316576380b', '811e6f99-df5d-4898-a9b5-71c3d38e8508', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766497517278-uv12ua.jpg', 1, '2025-12-23 13:45:17.826787+00'),
+	('fadcff7a-5ad3-441c-b50e-df7b87c35dde', '7ab31d20-1a95-4a63-8917-d44266f53f0f', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766497823382-6n2biq.jpg', 0, '2025-12-23 13:50:24.010056+00'),
+	('c53909ee-41f0-4cc2-a058-6363d9cb751d', '01cf5bf5-0f6c-4bda-ac31-9f8f262d2e6b', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766498022255-bal69uj.jpg', 0, '2025-12-23 13:53:43.122022+00'),
+	('ae99bb2c-685e-4000-b3f8-bf57c8b9223e', '16894688-b477-484e-af07-cfbac7d5dd14', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766498305270-a4f2xe.jpg', 0, '2025-12-23 13:58:26.331579+00'),
+	('cd9d634e-bffe-4c7f-a06f-e2af16b0530b', '16894688-b477-484e-af07-cfbac7d5dd14', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766498305770-0u8dts.jpg', 1, '2025-12-23 13:58:26.331579+00'),
+	('d8b526e8-c067-4182-a11b-e6f96017c676', '039d8acd-f9cf-4b51-a470-7f35f83d111e', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766498495369-oaginy.jpg', 0, '2025-12-23 14:01:36.746429+00'),
+	('daba2ad7-c39b-4a74-b528-671d15c46748', '039d8acd-f9cf-4b51-a470-7f35f83d111e', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766498496134-299j9.jpg', 1, '2025-12-23 14:01:36.746429+00'),
+	('73cdf46a-d0d2-45f4-84e1-36bc9ecdca18', 'd98bad88-2be8-4015-9ff9-1a04e1d6b01b', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766498872401-itx4bi.jpg', 0, '2025-12-23 14:07:53.332593+00'),
+	('eb4468a6-c98c-4045-beb9-6cbc75ce7320', 'd98bad88-2be8-4015-9ff9-1a04e1d6b01b', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766498872871-0jtoq.jpg', 1, '2025-12-23 14:07:53.332593+00'),
+	('9c542e39-7c92-49c5-a464-51c2960a9de9', 'c3ae7b45-fbde-4d75-82b4-9fae6710291b', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766498978840-dwfrj.jpg', 0, '2025-12-23 14:09:40.104491+00'),
+	('2c16b962-5567-431d-8c71-7485e1a799cc', 'c3ae7b45-fbde-4d75-82b4-9fae6710291b', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766498979578-youyx3.jpg', 1, '2025-12-23 14:09:40.104491+00'),
+	('07867e24-ae55-491c-bf60-f370e6b3642a', '92c278e0-b26a-4e26-a213-976808b25811', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766499223965-mddsz.jpg', 0, '2025-12-23 14:13:45.18057+00'),
+	('88a9d343-8234-42cd-a547-c6f07a7f238d', '92c278e0-b26a-4e26-a213-976808b25811', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766499224617-a4c8wr.jpg', 1, '2025-12-23 14:13:45.18057+00'),
+	('5223232b-5bea-43b7-a3e8-60b9fff4993b', 'fd20d974-0db3-4b04-889f-03af95ceb083', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766499649097-q177y4.jpg', 0, '2025-12-23 14:20:50.519251+00'),
+	('9b069f3c-b646-40b6-bcc4-351d111941af', 'fd20d974-0db3-4b04-889f-03af95ceb083', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766499649583-a80mdc.jpg', 1, '2025-12-23 14:20:50.519251+00'),
+	('3f985dab-4671-4bf9-af37-04c025f85b15', 'fd20d974-0db3-4b04-889f-03af95ceb083', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766499649992-jffvek.jpg', 2, '2025-12-23 14:20:50.519251+00'),
+	('84375e13-2812-4d15-868c-c06a3347d773', '4eda6c04-4556-44ea-9e79-143e9e964fcc', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766499857244-uc39bn.jpg', 0, '2025-12-23 14:24:18.849152+00'),
+	('dafbb6ab-0584-46be-991d-9239cdfcbcd9', '4eda6c04-4556-44ea-9e79-143e9e964fcc', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766499858301-ac0m3w.jpg', 1, '2025-12-23 14:24:18.849152+00'),
+	('52ca0b46-90d0-4942-8d22-5289f917b9aa', 'bbb3ef69-4bc5-422d-b329-52f24e1a0967', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766500725079-b3hxai.jpg', 0, '2025-12-23 14:38:46.353552+00'),
+	('3036ed0e-ec1b-41bf-a2d9-5dbd5ba1088c', 'bbb3ef69-4bc5-422d-b329-52f24e1a0967', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766500725620-2rzbm.jpg', 1, '2025-12-23 14:38:46.353552+00'),
+	('148c134a-b829-422a-bd39-483e6e7261a5', '3927fa1d-1560-4b4e-a6c2-f27ce797d63a', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766500992825-wjcrdv.jpg', 0, '2025-12-23 14:43:13.993487+00'),
+	('d9613df5-ccb7-4a02-8d69-f3d917011c48', '3927fa1d-1560-4b4e-a6c2-f27ce797d63a', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766500993404-krduic.jpg', 1, '2025-12-23 14:43:13.993487+00'),
+	('8a2f3d04-9f1d-4f0d-935b-87e58c01ca07', 'a73dc9a2-f4d1-40e4-a0d9-5e5a84878967', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766501155685-wjnsnd.jpg', 0, '2025-12-23 14:45:56.834406+00'),
+	('27530430-ae53-4422-b0d2-3594f4ce44e0', 'a73dc9a2-f4d1-40e4-a0d9-5e5a84878967', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766501156276-unxt2y.jpg', 1, '2025-12-23 14:45:56.834406+00'),
+	('fc1ec9c2-8ac8-4408-b2e9-2a9c65f44f5d', '4eaf15d3-d072-42ba-90c7-b063d184691c', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766501289321-kzrav.jpg', 0, '2025-12-23 14:48:10.496406+00'),
+	('e218fcc7-a609-4087-9354-932775eee37a', '4eaf15d3-d072-42ba-90c7-b063d184691c', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766501289967-dpjpiw.jpg', 1, '2025-12-23 14:48:10.496406+00'),
+	('c077c0c9-a4dc-47aa-b965-9b3e1e5ab918', '79f2f5a8-1b40-4f08-8bfe-15ca3379f57f', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766508593047-380u1.jpg', 0, '2025-12-23 16:49:54.655396+00'),
+	('fdd87c16-33d3-4915-95d7-5bb512489ec4', '79f2f5a8-1b40-4f08-8bfe-15ca3379f57f', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766508593646-px8tkw.jpg', 1, '2025-12-23 16:49:54.655396+00'),
+	('3c50e3cc-3825-4d5e-b2c8-953d1f10f401', '79f2f5a8-1b40-4f08-8bfe-15ca3379f57f', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1766508593951-b74nj.jpg', 2, '2025-12-23 16:49:54.655396+00'),
+	('365ec6e6-3c5b-433a-85d9-7512bb067bc6', '28f8d0f2-6922-4b7b-b006-c8ec3486f24f', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1768314050399-x4fpia.jpg', 0, '2026-01-13 14:20:52.013923+00'),
+	('8c1a690e-5e1c-4db6-bcda-107977ed23bf', '28f8d0f2-6922-4b7b-b006-c8ec3486f24f', 'https://yjdsekbintlevafarmko.supabase.co/storage/v1/object/public/hike-images/08aaf6c6-17f8-49f5-9182-34e80378e987/1768314051071-knrcjj.jpg', 1, '2026-01-13 14:20:52.013923+00');
+
+-- 7. PUBLIC.WAYPOINTS
+INSERT INTO "public"."waypoints" ("id", "hike_id", "latitude", "longitude", "name", "type", "day_number", "created_at") VALUES
+	('3bd46054-68a5-4ea8-af5d-b236c5c4b2b7', '79f2f5a8-1b40-4f08-8bfe-15ca3379f57f', 47.4136, 10.3471, 'Edmund-Probst-Haus', 'overnight_stop', 1, '2026-01-11 18:35:09.95145+00'),
+	('3f710e8d-528c-4ab7-855c-7575e863196d', '79f2f5a8-1b40-4f08-8bfe-15ca3379f57f', 47.4136, 10.3471, 'Edmund-Probst-Haus', 'overnight_stop', 2, '2026-01-11 18:35:09.95145+00'),
+	('529ee40d-c54d-4349-9b7c-5aac6bee6c40', '79f2f5a8-1b40-4f08-8bfe-15ca3379f57f', 47.3924, 10.42, 'Prinz Luitpold Haus', 'overnight_stop', 3, '2026-01-11 18:35:09.95145+00');
+
+-- 8. PUBLIC.HIKE_ENROLLMENTS
+INSERT INTO "public"."hike_enrollments" ("id", "user_id", "hike_id", "enrolled_at", "status")
+    SELECT
+    gen_random_uuid() as id,
+    u.id as user_id,
+    h.id as hike_id,
+    -- 95% of dates are 1-30 days BEFORE the hike.
+    -- 5% of dates are 1-2 days AFTER the hike (simulating late verification).
+    (
+        h.date 
+        + (CASE WHEN random() < 0.95 THEN -1 ELSE 1 END * floor(random() * 30 + 1)::int * interval '1 day')
+        + (interval '9 hours') -- Set a base time around 9 AM
+        + (floor(random() * 8)::int * interval '1 hour') -- Randomize time of day
+    ) as enrolled_at,
+    -- Randomly assign 'enrolled' or 'verified'
+    CASE WHEN random() < 0.5 THEN 'enrolled' ELSE 'verified' END as status
+    FROM
+    auth.users u
+    CROSS JOIN public.hikes h
+    WHERE
+    -- Filter to only the users we created (Admins, Members, Users)
+    (u.id::text LIKE 'a111%' OR u.id::text LIKE 'b111%' OR u.id::text LIKE 'c111%')
+    
+    -- Each hike has from 8 to 65 enrollments
+    AND random() < (
+        (abs(hashtext(h.id::text)) % 86 + 15) / 100.0
+    )
+ON CONFLICT DO NOTHING;
