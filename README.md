@@ -120,7 +120,7 @@ npm run dev
 
 If you modify the database locally, you must save your changes into a migration file so they can eventually be apply to the production database. Run the following:
 ```
-supabase db diff -f name_of_change
+npx supabase db diff -f name_of_change
 ```
 
 
