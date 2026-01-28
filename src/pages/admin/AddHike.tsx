@@ -30,7 +30,15 @@ import {
   X,
   Calendar as CalendarIcon,
   ArrowLeft,
+  ChevronLeft, 
+  ChevronRight
 } from 'lucide-react';
+
+interface HikeImageItem {
+  id: string;
+  file: File;
+  previewUrl: string;
+}
 
 interface WaypointInput {
   id: string;
@@ -62,16 +70,69 @@ export default function AddHike() {
     members_only: false,
   });
   
-  const [images, setImages] = useState<File[]>([]);
-  const [imagePreview, setImagePreview] = useState<string[]>([]);
+  const [hikeImages, setHikeImages] = useState<HikeImageItem[]>([]);
   const [waypoints, setWaypoints] = useState<WaypointInput[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 
   useEffect(() => {
     if (!isLoading && (!user || !isAdmin)) {
       navigate('/');
     }
   }, [user, isAdmin, isLoading, navigate]);
+
+  const processFiles = (files: File[]) => {
+    if (files.length + hikeImages.length > 5) {
+      toast({ title: 'Too many images', description: 'Max 5 allowed', variant: 'destructive' });
+      return;
+    }
+    files.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setHikeImages(prev => [...prev, {
+          id: crypto.randomUUID(),
+          file: file,
+          previewUrl: reader.result as string
+        }]);
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const moveImage = (index: number, direction: 'left' | 'right') => {
+    if ((direction === 'left' && index === 0) || (direction === 'right' && index === hikeImages.length - 1)) return;
+    setHikeImages(prev => {
+      const newArr = [...prev];
+      const target = direction === 'left' ? index - 1 : index + 1;
+      [newArr[index], newArr[target]] = [newArr[target], newArr[index]];
+      return newArr;
+    });
+  };
+
+  const removeImage = (id: string) => {
+    setHikeImages(prev => prev.filter(img => img.id !== id));
+  };
+
+  const handleDragStart = (index: number) => {
+    setDraggedIndex(index);
+  };
+
+  const handleImageDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDropImage = (targetIndex: number) => {
+    if (draggedIndex === null) return;
+    
+    setHikeImages(prev => {
+      const newArr = [...prev];
+      [newArr[draggedIndex], newArr[targetIndex]] = [newArr[targetIndex], newArr[draggedIndex]];
+      return newArr;
+    });
+    
+    setDraggedIndex(null);
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -80,24 +141,7 @@ export default function AddHike() {
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
-    if (files.length + images.length > 5) {
-      toast({
-        title: 'Too many images',
-        description: 'Maximum 5 images allowed.',
-        variant: 'destructive'
-      });
-      return;
-    }
-    
-    setImages(prev => [...prev, ...files]);
-    
-    files.forEach(file => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setImagePreview(prev => [...prev, reader.result as string]);
-      };
-    reader.readAsDataURL(file);
-    });
+    processFiles(files);
   };
 
   const handleDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
@@ -106,35 +150,28 @@ export default function AddHike() {
     const files = Array.from(e.dataTransfer.files).filter(file => file.type.startsWith('image/'));
     if (files.length === 0) return;
     
-    if (files.length + images.length > 5) {
-      toast({
-        title: 'Too many images',
-        description: 'Maximum 5 images allowed.',
-        variant: 'destructive'
-      });
+    if (files.length + hikeImages.length > 5) {
+      toast({ title: 'Too many images', description: 'Max 5 allowed', variant: 'destructive' });
       return;
     }
-    
-    setImages(prev => [...prev, ...files]);
     
     files.forEach(file => {
       const reader = new FileReader();
       reader.onload = () => {
-        setImagePreview(prev => [...prev, reader.result as string]);
+        setHikeImages(prev => [...prev, {
+          id: crypto.randomUUID(),
+          file: file,
+          previewUrl: reader.result as string
+        }]);
       };
       reader.readAsDataURL(file);
     });
-  }, [images.length, toast]);
+  }, [hikeImages.length, toast]);
 
   const handleDragOver = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
   }, []);
-
-  const removeImage = (index: number) => {
-    setImages(prev => prev.filter((_, i) => i !== index));
-    setImagePreview(prev => prev.filter((_, i) => i !== index));
-  };
 
   const addWaypoint = () => {
     setWaypoints(prev => [...prev, {
@@ -177,13 +214,13 @@ export default function AddHike() {
     try {
       // Upload images to storage
       const uploadedImageUrls: string[] = [];
-      for (const image of images) {
-        const fileExt = image.name.split('.').pop();
+      for (const image of hikeImages) {
+        const fileExt = image.file.name.split('.').pop();
         const fileName = `${user.id}/${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
         
         const { error: uploadError } = await supabase.storage
           .from('hike-images')
-          .upload(fileName, image);
+          .upload(fileName, image.file);
         
         if (uploadError) throw uploadError;
         
@@ -336,19 +373,27 @@ export default function AddHike() {
                   />
                 </div>
                 
-                {imagePreview.length > 0 && (
+                {hikeImages.length > 0 && (
                   <div className="mt-4 flex flex-wrap gap-2">
-                    {imagePreview.map((src, index) => (
-                      <div key={index} className="relative">
+                    {hikeImages.map((img, index) => (
+                      <div 
+                        key={img.id}
+                        draggable
+                        onDragStart={() => handleDragStart(index)}
+                        onDragOver={handleImageDragOver}
+                        onDrop={() => handleDropImage(index)}
+                        className="relative cursor-move hover:opacity-80 transition-opacity"
+                      >
                         <img 
-                          src={src} 
+                          src={img.previewUrl} 
                           alt={`Preview ${index + 1}`}
                           className="h-20 w-20 rounded-lg object-cover"
                         />
                         <button
                           type="button"
-                          onClick={() => removeImage(index)}
-                          className="absolute -right-2 -top-2 rounded-full bg-destructive p-1 text-destructive-foreground"
+                          onClick={() => removeImage(img.id)}
+                          className="absolute -right-2 -top-2 rounded-full bg-destructive p-1 text-destructive-foreground hover:bg-destructive/90"
+                          title="Remove"
                         >
                           <X className="h-3 w-3" />
                         </button>

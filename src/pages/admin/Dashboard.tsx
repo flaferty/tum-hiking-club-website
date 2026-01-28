@@ -174,7 +174,7 @@ export default function AdminDashboard() {
           </div>
           
           <Link to="/profile">
-            <Card className="cursor-pointer transition-shadow hover:shadow-md">
+            <Card className="cursor-pointer transition-shadow hover:shadow-md w-fit">
               <CardContent className="flex items-center gap-3 p-3">
                <Avatar className="h-10 w-10 border border-border">
                   <AvatarImage src={currentUserProfile?.avatar_url || undefined} className="object-cover" />
@@ -182,8 +182,8 @@ export default function AdminDashboard() {
                     <Users className="h-5 w-5" />
                   </AvatarFallback>
                 </Avatar>
-                <div className="text-right min-w-0">
-                  <p className="text-sm font-medium truncate max-w-[150px] sm:max-w-[250px]">{user.email}</p>
+                <div className="text-right">
+                  <p className="text-sm font-medium">{user.email}</p>
                   <p className="text-xs text-muted-foreground">View Profile</p>
                 </div>
               </CardContent>
