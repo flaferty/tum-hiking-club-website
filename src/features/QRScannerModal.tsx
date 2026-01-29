@@ -1,11 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
-import QrScanner from 'react-qr-scanner';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import Scanner from 'react-qr-scanner';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { supabase } from '@/services/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import { toast } from '@/hooks/use-toast';
 import { QrCode, CheckCircle2, AlertCircle, List, Award } from 'lucide-react';
 
 interface QRScannerProps {
@@ -29,70 +29,39 @@ export function QRScanner({ isOpen, onClose, hikeId, hikeName, enrollmentCount }
   const [scannedUsers, setScannedUsers] = useState<ScannedUser[]>([]);
   const [showList, setShowList] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
-  const [lastScanned, setLastScanned] = useState<string>('');
   const [error, setError] = useState<string>('');
-  const [scanSuccess, setScanSuccess] = useState(false);
-  const [scanFailed, setScanFailed] = useState(false);
   const [scannerKey, setScannerKey] = useState(0);
   const [totalEnrolled, setTotalEnrolled] = useState<number>(enrollmentCount || 0);
   const [totalVerified, setTotalVerified] = useState<number>(0);
-  const { toast } = useToast();
+
+  // Using refs to avoid re-rendering on every scan
+  const scannedUsersRef = useRef<ScannedUser[]>([]);
+  const lastScannedRef = useRef<string>('');
+  const scanSuccessRef = useRef(false);
+  const scanFailedRef = useRef(false);
 
   // If react-qr-scanner stops emitting callbacks, remount it.
   const lastOnScanAtRef = useRef<number>(Date.now());
   const isProcessingRef = useRef(false);
+
+  useEffect(() => {
+    scannedUsersRef.current = scannedUsers;
+  }, [scannedUsers]);
 
   // Reset state when dialog opens/closes
   useEffect(() => {
     if (!isOpen) {
       setScannedUsers([]);
       setShowList(false);
-      setLastScanned('');
       setError('');
-      setScanSuccess(false);
-      setScanFailed(false);
       setScannerKey(0);
       isProcessingRef.current = false;
+
+      scannedUsersRef.current = [];
+      lastScannedRef.current = '';
+      scanSuccessRef.current = false;
+      scanFailedRef.current = false;
     }
-  }, [isOpen]);
-
-  // Watchdog: if we haven't received any onScan callbacks for a while, remount the scanner.
-  useEffect(() => {
-    if (!isOpen) return;
-
-    lastOnScanAtRef.current = Date.now();
-
-    const intervalId = window.setInterval(() => {
-      const msSinceLastCallback = Date.now() - lastOnScanAtRef.current;
-      if (msSinceLastCallback > 8000) {
-        console.warn('[QRScanner] onScan stalled; remounting scanner', { msSinceLastCallback });
-        setScannerKey(k => k + 1);
-        lastOnScanAtRef.current = Date.now();
-      }
-    }, 2000);
-
-    const handleVisibility = () => {
-      if (!document.hidden) {
-        console.warn('[QRScanner] tab visible; remounting scanner');
-        setScannerKey(k => k + 1);
-        lastOnScanAtRef.current = Date.now();
-      }
-    };
-
-    const handleFocus = () => {
-      console.warn('[QRScanner] window focused; remounting scanner');
-      setScannerKey(k => k + 1);
-      lastOnScanAtRef.current = Date.now();
-    };
-
-    document.addEventListener('visibilitychange', handleVisibility);
-    window.addEventListener('focus', handleFocus);
-
-    return () => {
-      window.clearInterval(intervalId);
-      document.removeEventListener('visibilitychange', handleVisibility);
-      window.removeEventListener('focus', handleFocus);
-    };
   }, [isOpen]);
 
   // Fetch enrollment and verified counts
@@ -118,36 +87,33 @@ export function QRScanner({ isOpen, onClose, hikeId, hikeName, enrollmentCount }
     }
   }, [isOpen, hikeId]);
 
-  const validateUserId = (userId: string): boolean => {
+  const validateUserId = useCallback((userId: string): boolean => {
     // UUID v4 format validation
-    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    const uuidRegex = /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/i;
     return uuidRegex.test(userId);
-  };
+  }, []);
 
-  const handleScan = async (data: { text: string } | null) => {
-    // Keep for debugging: helps confirm if onScan is firing.
-    console.log(data);
-    lastOnScanAtRef.current = Date.now();
+  const handleScan = useCallback(async (data: {text: string, timestamp: number} | null) => {
+    // Avoid overlapping DB requests
+    if (isProcessingRef.current) return;
 
-    // NOTE: react-qr-scanner often calls onScan with null when nothing is detected.
+    // Clear previous states
+    scanFailedRef.current = false;
+    scanSuccessRef.current = false;
+
+    // No data scanned
     if (!data || !data.text) return;
 
     const scannedText = data.text.trim();
 
-    // Avoid overlapping DB requests (can overwhelm the main thread / camera pipeline).
-    if (isProcessingRef.current) return;
-
     // Prevent duplicate scans
-    if (scanFailed || scanSuccess || scannedText === lastScanned) return;
-
+    if (scannedText === lastScannedRef.current) return;
+    
+    lastOnScanAtRef.current = data.timestamp;
+    lastScannedRef.current = scannedText;
     isProcessingRef.current = true;
-    setLastScanned(scannedText);
 
     try {
-      // Clear previous states
-      setError('');
-      setScanFailed(false);
-      setScanSuccess(false);
 
       // Validate UUID format
       if (!validateUserId(scannedText)) {
@@ -156,20 +122,18 @@ export function QRScanner({ isOpen, onClose, hikeId, hikeName, enrollmentCount }
           description: 'Invalid QR code format',
           variant: 'destructive',
         });
-        setScanFailed(true);
-        setTimeout(() => setScanFailed(false), 1000);
+        scanFailedRef.current = true;
         return;
       }
 
       // Check if already scanned
-      if (scannedUsers.some(u => u.id === scannedText)) {
+      if (scannedUsersRef.current.some(u => u.id === scannedText)) {
         toast({
           title: 'Already scanned',
           description: 'User already scanned',
           variant: 'destructive',
         });
-        setScanFailed(true);
-        setTimeout(() => setScanFailed(false), 1000);
+        scanFailedRef.current = true;
         return;
       }
 
@@ -186,8 +150,7 @@ export function QRScanner({ isOpen, onClose, hikeId, hikeName, enrollmentCount }
           description: 'User not found in database',
           variant: 'destructive',
         });
-        setScanFailed(true);
-        setTimeout(() => setScanFailed(false), 1000);
+        scanFailedRef.current = true;
         return;
       }
 
@@ -212,52 +175,76 @@ export function QRScanner({ isOpen, onClose, hikeId, hikeName, enrollmentCount }
       if (newUser.wasVerified) {
         toast({
           title: 'User already verified',
-          description: `${profile.full_name} has already the badge verfied applied`
+          description: `${profile.full_name} has already the badge verfied applied`,
         });
-        setScanFailed(true);
-        setTimeout(() => setScanFailed(false), 1000);
+        scanFailedRef.current = true;
         return;
       }
 
+      scannedUsersRef.current = [...scannedUsersRef.current, newUser];
       setScannedUsers(prev => [...prev, newUser]);
 
       if (!newUser.wasEnrolled) {
-        setTotalEnrolled(totalEnrolled + 1)
+        setTotalEnrolled(prev => prev + 1);
       }
 
-      // Update total verified count
-      setTotalVerified(totalVerified + 1)
-      
+      setTotalVerified(prev => prev + 1);
+
       // Show green overlay on success
-      setScanSuccess(true);
-      setTimeout(() => setScanSuccess(false), 1000);
-      
+      scanSuccessRef.current = true;
+
       toast({
         title: 'User scanned',
-        description: newUser.wasEnrolled 
+        description: newUser.wasEnrolled
           ? `${profile.full_name || profile.email} added to verification list`
           : `${profile.full_name || profile.email} will be enrolled and verified`,
       });
-    } catch (err) {
+    }
+    catch (err) {
       console.error('Error verifying user:', err);
       toast({
         title: 'Error',
         description: 'Error verifying user',
         variant: 'destructive',
       });
-      setScanFailed(true);
-      setTimeout(() => setScanFailed(false), 1000);
-    } finally {
-      isProcessingRef.current = false;
-    }
-  };
+      scanFailedRef.current = true;
+    } 
+    finally {
+      // Add delay between scans
+      window.setTimeout(() => {
+        isProcessingRef.current = false;
+      }, 500);
 
-  const handleError = (err: Error) => {
+      // Reset last scanned text every 5s to avoid dupplicate scans
+      window.setTimeout(() => {
+        lastScannedRef.current = '';
+      }, 5000);
+    }
+  }, [hikeId, validateUserId]);
+
+  const handleError = useCallback((err: Error) => {
     console.error('QR Scanner Error:', err);
     setError('Camera access denied or unavailable');
     // Often recoverable by forcing a remount.
     setScannerKey(k => k + 1);
-  };
+  }, []);
+
+  // Memoize Scanner props to avoid the library thinking constraints/style changed and restarting the stream.
+  const scannerFormats = useMemo(() => ['qr_code'], []);
+  const scannerStyle = useMemo(() => ({ width: '100%', height: '100%' }), []);
+  const scannerConstraints = useMemo(
+    () => ({
+      video: {
+        facingMode: { ideal: 'environment' },
+        width: { ideal: 1920 },
+        height: { ideal: 1920 },
+      },
+    }),
+    [],
+  );
+  const scannerComponents = useMemo(() => ({
+    finder: true,
+  }), []);
 
   const handleApplyVerifyBadge = async () => {
     if (scannedUsers.length === 0) {
@@ -357,30 +344,23 @@ export function QRScanner({ isOpen, onClose, hikeId, hikeName, enrollmentCount }
                   </Alert>
                 </div>
               )}
+
               <div className="qr-scanner-container absolute inset-0">
-                <QrScanner
+                <Scanner
                   key={`${isOpen ? 'scanner-active' : 'scanner-inactive'}-${scannerKey}`}
-                  delay={500}
                   onError={handleError}
                   onScan={handleScan}
-                  style={{
-                    width: '100%',
-                    height: '100%'
-                  }}
-                  constraints={{
-                    video: { 
-                      facingMode: { ideal: 'environment' },
-                      width: { ideal: 1920 },
-                      height: { ideal: 1920 }
-                    }
-                  }}
+                  formats={scannerFormats}
+                  style={scannerStyle}
+                  constraints={scannerConstraints}
+                  // components={scannerComponents}
                   />
               </div>
 
               {/* Scanning overlay */}
               {!error && (
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <div className={`h-[85%] aspect-square border-4 rounded-lg shadow-lg transition-colors duration-300 ${error ? 'border-red-500' : lastScanned && scanFailed ? 'border-red-500' : lastScanned && scanSuccess ? 'border-green-500' : 'border-primary'}`}></div>
+                  <div className={`h-[85%] aspect-square border-4 rounded-lg shadow-lg transition-colors duration-300 ${scanFailedRef.current ? 'border-red-500' : scanSuccessRef.current ? 'border-green-500' : 'border-primary'}`}></div>
                 </div>
               )}
             </div>
