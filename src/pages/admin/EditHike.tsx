@@ -350,6 +350,16 @@ export default function EditHike() {
         }
       }
 
+      // Update display_order for existing images that were reordered
+      for (let i = 0; i < existingImages.length; i++) {
+        const { error: updateError } = await supabase
+          .from('hike_images')
+          .update({ display_order: i })
+          .eq('id', existingImages[i].id);
+
+        if (updateError) throw updateError;
+      }
+
       // Insert new images
       if (uploadedImageUrls.length > 0) {
         const newImageRecords = uploadedImageUrls.map((url, index) => ({
