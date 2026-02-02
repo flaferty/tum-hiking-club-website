@@ -86,7 +86,7 @@ export function HikeParticipantsModal({ hikeId, isOpen, onClose, hikeName }: Pro
                   <div className="flex-1 w-0">
                     <div className="flex items-center justify-between">
                       <p className="font-semibold truncate">{p.profiles?.full_name || 'Unknown'}</p>
-                      <Badge variant={p.status === 'waitlisted' ? 'secondary' : 'default'} className="text-xs shrink-0">
+                      <Badge variant={p.status === 'verified' ? 'verified' : p.status === 'waitlisted' ? 'secondary' : 'default'} className="text-xs shrink-0">
                         {p.status}
                       </Badge>
                     </div>
