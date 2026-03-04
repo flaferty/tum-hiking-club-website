@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Mountain, MapPin, Users, UserPlus, LayoutDashboard, User, LogOut, Menu, X } from 'lucide-react';
+import { Mountain, MapPin, Users, UserPlus, LayoutDashboard, User, LogOut, Menu, X, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/features/auth/AuthContext';
 import { useState } from 'react';
@@ -23,6 +23,7 @@ export function Navigation() {
     { path: '/', label: 'Map', icon: MapPin },
     { path: '/organisers', label: 'Organisers', icon: Users },
     { path: '/participants', label: 'Join Us', icon: UserPlus },
+    { path: '/faq', label: 'FAQ', icon: HelpCircle },
   ];
 
   return (

@@ -175,9 +175,8 @@ INSERT INTO "public"."waypoints" ("id", "hike_id", "latitude", "longitude", "nam
 	('529ee40d-c54d-4349-9b7c-5aac6bee6c40', '79f2f5a8-1b40-4f08-8bfe-15ca3379f57f', 47.3924, 10.42, 'Prinz Luitpold Haus', 'overnight_stop', 3, '2026-01-11 18:35:09.95145+00');
 
 -- 8. PUBLIC.HIKE_ENROLLMENTS
-INSERT INTO "public"."hike_enrollments" ("id", "user_id", "hike_id", "enrolled_at", "status")
+INSERT INTO "public"."hike_enrollments" ("user_id", "hike_id", "enrolled_at", "status")
     SELECT
-    gen_random_uuid() as id,
     u.id as user_id,
     h.id as hike_id,
     -- 95% of dates are 1-30 days BEFORE the hike.

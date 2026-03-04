@@ -4,7 +4,7 @@ import { HikeCard } from "@/features/hikes/HikeCard";
 import { HikeDetailModal } from "@/features/hikes/HikeDetailModal";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Plus, ChevronDown, MapPin, History } from "lucide-react";
+import { Plus, ChevronDown, MapPin, History, CalendarDays, Sparkles } from "lucide-react";
 import {
   Collapsible,
   CollapsibleContent,
@@ -18,6 +18,9 @@ import heroImage from "@/assets/hero-mountains.jpg";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ErrorBoundary } from "@/components/layout/ErrorBoundary";
 import HikingMap from "@/features/hikes/HikingMap";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+
 
 type FilterType = "all" | "upcoming" | "completed";
 
@@ -74,8 +77,46 @@ export default function Index() {
           ))}
         </div>
       ) : (
-        <div className="rounded-xl border border-dashed border-border bg-muted/30 p-12 text-center">
-          <p className="text-muted-foreground">No upcoming hikes scheduled.</p>
+        <div className="rounded-xl border border-dashed border-border bg-muted/30 p-10 text-center">
+          <div className="mx-auto max-w-2xl">
+            <Card className="overflow-hidden m-2">
+              <CardHeader className="bg-primary/10 pb-4">
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <CalendarDays className="h-5 w-5 text-primary" />
+                  Planned Dates
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  {[
+                    { date: "12 Apr", note: "After retakes" },
+                    { date: "01 May", note: null },
+                    { date: "07 Jun", note: null },
+                    { date: "05 Jul", note: null },
+                  ].map((hike) => (
+                    <div
+                      key={hike.date}
+                      className="flex flex-col items-center rounded-lg border bg-card p-3 text-center shadow-sm transition-colors hover:border-primary/40"
+                    >
+                      <span className="text-lg font-bold">{hike.date}</span>
+                      {hike.note && (
+                        <span className="mt-1 text-xs text-muted-foreground">{hike.note}</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-6 flex items-start gap-2 rounded-lg bg-muted/60 p-3 text-sm text-muted-foreground">
+                  <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                  <p>
+                    We also organize <strong className="text-foreground">spontaneous hikes</strong> throughout the semester with 1–2 weeks notice.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          <p className="">No information on the upcoming hikes (yet)</p>
+          <p> Check the <a href="/faq" className="font-medium text-primary underline underline-offset-2 hover:text-primary/80">FAQ</a> for more details</p>
         </div>
       )}
     </section>
