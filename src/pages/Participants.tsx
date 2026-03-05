@@ -1,15 +1,10 @@
-import { useEffect, useState } from "react";
 import { Navigation } from "@/components/layout/Navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { MessageCircle, Activity, Instagram, CalendarDays, Sparkles } from "lucide-react";
+import { MessageCircle, Activity, Instagram } from "lucide-react";
 import QRCodeGenerator from "react-qr-code";
-import { fetchAndParseFAQSection, FAQSection } from "@/features/FAQParser";
-import { Skeleton } from "@/components/ui/skeleton";
-
-
+import PlannedDatesCard from "@/components/PlannedDatesCard";
 
 /* const faqs = [
   {
@@ -40,14 +35,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 ]; */
 
 export default function Participants() {
-  const [faqs, setFaqs] = useState<FAQSection>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  
-  useEffect(() => {
-    fetchAndParseFAQSection("Upcoming Hikes")
-      .then(setFaqs)
-      .finally(() => setIsLoading(false));
-  }, []);
 
   return (
     <div className="min-h-screen bg-background">
@@ -76,54 +63,17 @@ export default function Participants() {
       </section>
 
       {/* Upcoming Hike Section */}
-      <section className="bg-muted/50 py-16">
+      <section className="bg-muted/50 pt-16 pb-8">
         <div className="container mx-auto px-4">
           <h2 className="mb-2 text-center font-heading text-2xl font-bold md:text-3xl">
             Upcoming Hikes
           </h2>
           <p className="mb-8 text-center text-muted-foreground">Summer Semester 2026</p>
+          <p className="mb-10 text-center text-lg leading-relaxed text-muted-foreground">
+            We try to organize at least one hike on the <span className="font-semibold text-foreground">first weekend of every month</span> (usually the Sunday).
+          </p>
 
-          <div className="mx-auto max-w-2xl">
-            <Card className="overflow-hidden">
-              <CardHeader className="bg-primary/10 pb-4">
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <CalendarDays className="h-5 w-5 text-primary" />
-                  Planned Dates
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-6">
-                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                  {[
-                    { date: "12 Apr", note: "After retakes" },
-                    { date: "01 May", note: null },
-                    { date: "07 Jun", note: null },
-                    { date: "05 Jul", note: null },
-                  ].map((hike) => (
-                    <div
-                      key={hike.date}
-                      className="flex flex-col items-center rounded-lg border bg-card p-3 text-center shadow-sm transition-colors hover:border-primary/40"
-                    >
-                      <span className="text-lg font-bold">{hike.date}</span>
-                      {hike.note && (
-                        <span className="mt-1 text-xs text-muted-foreground">{hike.note}</span>
-                      )}
-                    </div>
-                  ))}
-                </div>
-
-                <div className="mt-6 flex items-start gap-2 rounded-lg bg-muted/60 p-3 text-sm text-muted-foreground">
-                  <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                  <p>
-                    We also organize <strong className="text-foreground">spontaneous hikes</strong> throughout the semester with 1–2 weeks notice. Check the{" "}
-                    <a href="/faq" className="font-medium text-primary underline underline-offset-2 hover:text-primary/80">
-                      FAQ
-                    </a>{" "}
-                    for more details.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          <PlannedDatesCard />
         </div>
       </section>
 

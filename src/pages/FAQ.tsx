@@ -13,15 +13,60 @@ import {
   type FAQSection,
 } from "@/features/FAQParser";
 
+const slugify = (text: string) => {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "");
+};
+
 export default function FAQ() {
   const [faqSections, setFaqSections] = useState<FAQSection[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [activeItem, setActiveItem] = useState("");
 
   useEffect(() => {
     fetchAndParseFAQ()
 		.then(setFaqSections)
     	.finally(() => setIsLoading(false));
   }, []);
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.slice(1);
+      setActiveItem(hash);
+    };
+
+    handleHashChange();
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
+
+  useEffect(() => {
+    if (!isLoading && faqSections.length > 0) {
+      const hash = window.location.hash.slice(1);
+      if (hash) {
+        setTimeout(() => {
+          const element = document.getElementById(hash);
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth", block: "center" });
+          }
+        }, 100);
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+  }, [isLoading, faqSections]);
+
+  const handleAccordionChange = (value: string) => {
+    if (value) {
+      window.history.pushState(null, "", `#${value}`);
+      setActiveItem(value);
+    } else {
+      window.history.pushState(null, "", window.location.pathname);
+      setActiveItem("");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -73,21 +118,33 @@ export default function FAQ() {
                   {section.title}
                 </h2>
 
-                <Accordion type="single" collapsible className="space-y-4">
-                  {section.questions.map((faq, index) => (
-                    <AccordionItem
-                      key={index}
-                      value={`${section.title}-${index}`}
-                      className="rounded-lg border border-border bg-card px-4"
-                    >
-                      <AccordionTrigger className="text-left font-medium hover:no-underline">
-                        {faq.question}
-                      </AccordionTrigger>
-                      <AccordionContent className="text-muted-foreground [&_p]:mb-2 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-2 [&_li]:mb-1 [&_a]:underline [&_a]:text-primary">
-                        <div dangerouslySetInnerHTML={{ __html: faq.answer }} />
-                      </AccordionContent>
-                    </AccordionItem>
-                  ))}
+                <Accordion
+                  type="single"
+                  collapsible
+                  className="space-y-4"
+                  value={activeItem}
+                  onValueChange={handleAccordionChange}
+                >
+                  {section.questions.map((faq) => {
+                    const slug = slugify(faq.question);
+                    return (
+                      <AccordionItem
+                        key={slug}
+                        value={slug}
+                        id={slug}
+                        className="rounded-lg border border-border bg-card px-4"
+                      >
+                        <AccordionTrigger className="text-left font-medium hover:no-underline">
+                          {faq.question}
+                        </AccordionTrigger>
+                        <AccordionContent className="text-muted-foreground [&_p]:mb-2 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-2 [&_li]:mb-1 [&_a]:underline [&_a]:text-primary">
+                          <div
+                            dangerouslySetInnerHTML={{ __html: faq.answer }}
+                          />
+                        </AccordionContent>
+                      </AccordionItem>
+                    );
+                  })}
                 </Accordion>
               </div>
             ))}

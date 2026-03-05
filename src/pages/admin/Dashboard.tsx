@@ -17,10 +17,13 @@ import { useAuth } from '@/features/auth/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { useHikes, useDeleteHike } from '@/features/hikes/useHikes';
 import { useUsers, useAssignRole, useRemoveRole } from '@/hooks/useUsers';
+import { usePlannedDates, useAddPlannedDate, useDeletePlannedDate } from '@/features/hikes/usePlannedDates';
 import { Difficulty } from '@/lib/types';
 import { Database } from '@/services/supabase/types';
 import { HikeParticipantsModal } from '@/features/hikes/HikeParticipantsModal';
 import { AdminEmail } from '@/pages/admin/AdminEmail';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { QRScanner } from '@/features/QRScannerModal';
 import { 
   Plus, 
@@ -29,6 +32,7 @@ import {
   Mountain,
   Users,
   Calendar,
+  CalendarPlus,
   MapPin,
   Image as ImageIcon,
   Shield,
@@ -36,7 +40,8 @@ import {
   ShieldAlert,
   X,
   Mail,
-  QrCode
+  QrCode,
+  Loader2
 } from 'lucide-react';
 import { format } from 'date-fns';
 import {
@@ -64,12 +69,14 @@ const difficultyVariant: Record<Difficulty, 'easy' | 'moderate' | 'hard' | 'expe
 
 const roleIcons: Record<AppRole, typeof Shield> = {
   admin: ShieldAlert,
+  moderator: ShieldCheck,
   member: ShieldCheck,
   user: Shield,
 };
 
 const roleColors: Record<AppRole, string> = {
   admin: 'bg-destructive/10 text-destructive border-destructive/20',
+  moderator: 'bg-blue-100 text-blue-700 border-blue-200',
   member: 'bg-green-100 text-green-700 border-green-200',
   user: 'bg-muted text-muted-foreground border-border',
 };
@@ -83,8 +90,13 @@ export default function AdminDashboard() {
   const deleteHikeMutation = useDeleteHike();
   const assignRoleMutation = useAssignRole();
   const removeRoleMutation = useRemoveRole();
+  const { data: plannedDates = [], isLoading: plannedDatesLoading } = usePlannedDates();
+  const addPlannedDateMutation = useAddPlannedDate();
+  const deletePlannedDateMutation = useDeletePlannedDate();
   const [viewParticipantsHike, setViewParticipantsHike] = useState<{id: string, name: string} | null>(null);
   const [scanQRHike, setScanQRHike] = useState<{id: string, name: string, enrollmentCount: number} | null>(null);
+  const [newPlannedDate, setNewPlannedDate] = useState('');
+  const [newPlannedDescription, setNewPlannedDescription] = useState('');
 
   const currentUserProfile = users.find(u => u.user_id === user?.id);
 
@@ -196,6 +208,10 @@ export default function AdminDashboard() {
             <TabsTrigger value="hikes" className="gap-2">
               <Mountain className="h-4 w-4" />
               Hikes
+            </TabsTrigger>
+            <TabsTrigger value="planned-dates" className="gap-2">
+              <CalendarPlus className="h-4 w-4" />
+              Planned Dates
             </TabsTrigger>
             <TabsTrigger value="users" className="gap-2">
               <Users className="h-4 w-4" />
@@ -414,6 +430,146 @@ export default function AdminDashboard() {
                 ))}
               </div>
             )}
+          </TabsContent>
+
+          <TabsContent value="planned-dates">
+            <div className="mx-auto max-w-2xl space-y-6">
+              <div className="flex flex-col gap-2">
+                <h2 className="text-xl font-heading font-semibold">Planned Dates</h2>
+                <p className="text-muted-foreground">
+                  Manage planned hike dates shown to users on the home and participants pages.
+                </p>
+              </div>
+
+              {/* Add new date form */}
+              <Card>
+                <CardContent className="p-4 space-y-3">
+                  <h4 className="text-sm font-medium">Add New Date</h4>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <div className="space-y-1.5">
+                      <Label htmlFor="planned-date">Date</Label>
+                      <Input
+                        id="planned-date"
+                        type="date"
+                        value={newPlannedDate}
+                        onChange={(e) => setNewPlannedDate(e.target.value)}
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label htmlFor="planned-description">Description (optional)</Label>
+                      <Input
+                        id="planned-description"
+                        placeholder="e.g. After retakes"
+                        value={newPlannedDescription}
+                        onChange={(e) => setNewPlannedDescription(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  <Button
+                    onClick={async () => {
+                      if (!newPlannedDate) {
+                        toast({ title: 'Error', description: 'Please select a date.', variant: 'destructive' });
+                        return;
+                      }
+                      try {
+                        await addPlannedDateMutation.mutateAsync({
+                          date: newPlannedDate,
+                          description: newPlannedDescription || undefined,
+                        });
+                        toast({ title: 'Date added', description: 'Planned date has been added.' });
+                        setNewPlannedDate('');
+                        setNewPlannedDescription('');
+                      } catch {
+                        toast({ title: 'Error', description: 'Failed to add planned date.', variant: 'destructive' });
+                      }
+                    }}
+                    disabled={addPlannedDateMutation.isPending || !newPlannedDate}
+                    size="sm"
+                    className="gap-1"
+                  >
+                    {addPlannedDateMutation.isPending ? (
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    ) : (
+                      <Plus className="h-3.5 w-3.5" />
+                    )}
+                    Add Date
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {/* Existing dates list */}
+              {plannedDatesLoading ? (
+                <div className="flex items-center justify-center py-12">
+                  <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+                </div>
+              ) : plannedDates.length === 0 ? (
+                <div className="rounded-xl border border-dashed border-border bg-muted/30 p-12 text-center">
+                  <CalendarPlus className="mx-auto mb-4 h-12 w-12 text-muted-foreground/50" />
+                  <p className="text-muted-foreground">No planned dates yet. Add your first one above!</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {plannedDates.map((pd) => (
+                    <Card key={pd.id}>
+                      <CardContent className="flex items-center justify-between p-4">
+                        <div className="flex items-center gap-3">
+                          <div className="flex h-12 w-12 flex-col items-center justify-center rounded-md bg-primary/10 text-primary">
+                            <span className="text-xs font-medium leading-none">
+                              {format(new Date(pd.date + 'T00:00:00'), 'MMM')}
+                            </span>
+                            <span className="text-base font-bold leading-tight">
+                              {format(new Date(pd.date + 'T00:00:00'), 'dd')}
+                            </span>
+                          </div>
+                          <div>
+                            <p className="font-medium">
+                              {format(new Date(pd.date + 'T00:00:00'), 'EEEE, MMMM d, yyyy')}
+                            </p>
+                            {pd.description && (
+                              <p className="text-sm text-muted-foreground">{pd.description}</p>
+                            )}
+                          </div>
+                        </div>
+
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Remove Planned Date</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Are you sure you want to remove{' '}
+                                {format(new Date(pd.date + 'T00:00:00'), 'MMMM d, yyyy')}? This action cannot be undone.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction onClick={async () => {
+                                try {
+                                  await deletePlannedDateMutation.mutateAsync(pd.id);
+                                  toast({ title: 'Date removed', description: 'Planned date has been removed.' });
+                                } catch {
+                                  toast({ title: 'Error', description: 'Failed to remove planned date.', variant: 'destructive' });
+                                }
+                              }}>
+                                Remove
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </div>
           </TabsContent>
 
           <TabsContent value="emails">

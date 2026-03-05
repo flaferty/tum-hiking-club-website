@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Checkbox } from '@/components/ui/checkbox';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -670,13 +671,11 @@ export default function AddHike() {
                   rows={4}
                 />
               </div>
-                <div className="flex items-center space-x-2 rounded-lg border p-4">
-                <input
-                  type="checkbox"
+              <div className="flex items-start space-x-3 rounded-md border p-4">
+                <Checkbox
                   id="members_only"
-                  className="h-4 w-4 rounded border-gray-300"
                   checked={formData.members_only}
-                  onChange={(e) => setFormData(prev => ({ ...prev, members_only: e.target.checked }))}
+                  onCheckedChange={(checked) => setFormData(prev => ({ ...prev, members_only: checked as boolean }))}
                 />
                 <div className="grid gap-1.5 leading-none">
                   <label
