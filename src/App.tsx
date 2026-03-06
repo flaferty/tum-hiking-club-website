@@ -18,6 +18,7 @@ import EditHike from "./pages/admin/EditHike";
 import NotFound from "./pages/NotFound";
 import Imprint from "./pages/legal/Imprint";
 import Privacy from "./pages/legal/Privacy";
+import FAQ from "./pages/FAQ";
 import { ThemeProvider } from "@/features/theme/ThemeProvider"
 
 const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ const App = () => (
           <ScrollToTop />
             <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/faq" element={<FAQ />} />
               <Route path="/imprint" element={<Imprint />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/organisers" element={<Organisers />} />

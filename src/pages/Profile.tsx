@@ -217,21 +217,21 @@ export default function Profile() {
                       <QrCode className="h-4 w-4" />
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="sm:max-w-md">
+                  <DialogContent className="max-w-[95%] py-6 px-0 items-center">
                     <DialogHeader>
                       <DialogTitle>Your Profile QR Code</DialogTitle>
                     </DialogHeader>
-                    <div className="flex flex-col items-center gap-4 p-6">
-                      <div className="rounded-lg bg-white p-4">
+                    <div className="flex flex-col items-center gap-4 w-full my-2">
+                      <div className="rounded-lg bg-white p-1">
                         <QRCodeSVG 
                           value={user.id} 
-                          size={200}
-                          level="H"
-                          includeMargin={true}
+                          size={320}
+                          level="M"
+                          marginSize={2}
                         />
                       </div>
                       <p className="text-center text-sm text-muted-foreground">
-                        Share this QR code to earn a verify badge (Experimental)
+                        Show this QR code to earn a verified badge
                       </p>
                       <p className="text-center text-xs text-muted-foreground font-mono">
                         ID: {user.id}

@@ -2,16 +2,15 @@ import { Navigation } from "@/components/layout/Navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { MessageCircle, Activity, Instagram } from "lucide-react";
 import QRCodeGenerator from "react-qr-code";
+import PlannedDatesCard from "@/components/PlannedDatesCard";
 
-
-const faqs = [
+/* const faqs = [
   {
     question: "How do I become a club member?",
     answer:
-      "Join any of our open hikes first. At the end of it, you can be added to our hiking club whatsapp group, where we post updates and organize events.",
+      "Join any of our open hikes first. <bold>At</bold> the end of it, you can be added to our hiking club whatsapp group, where we post updates and organize events.",
   },
   {
     question: "Can anyone join a hike?",
@@ -28,14 +27,15 @@ const faqs = [
     answer:
       "You'll have access to pictures that were taken during the hike 1-2 day after it ends by the link in the group. By joining our club, you agree that we can take photos and videos of you, store them, and use them for marketing purposes on our Instagram channel.",
   },
-/*   {
+   {
     question: "How do I join the club group?",
     answer:
       "The club is not an open group. After attending a hike, contact the admins to be added. This ensures all members have hiking experience.",
-  }, */
-];
+  },
+]; */
 
 export default function Participants() {
+
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
@@ -59,6 +59,21 @@ export default function Participants() {
             Hikes are open to everyone! Join one to become a member and start leading your own adventures across
             Germany.
           </p>
+        </div>
+      </section>
+
+      {/* Upcoming Hike Section */}
+      <section className="bg-muted/50 pt-16 pb-8">
+        <div className="container mx-auto px-4">
+          <h2 className="mb-2 text-center font-heading text-2xl font-bold md:text-3xl">
+            Upcoming Hikes
+          </h2>
+          <p className="mb-8 text-center text-muted-foreground">Summer Semester 2026</p>
+          <p className="mb-10 text-center text-lg leading-relaxed text-muted-foreground">
+            We try to organize at least one hike on the <span className="font-semibold text-foreground">first weekend of every month</span> (usually the Sunday).
+          </p>
+
+          <PlannedDatesCard />
         </div>
       </section>
 
@@ -157,29 +172,6 @@ export default function Participants() {
       
       </section>
 
-      {/* FAQ Section */}
-      <section className="bg-muted/50 py-16">
-        <div className="container mx-auto px-4">
-          <h2 className="mb-8 text-center font-heading text-2xl font-bold md:text-3xl">Frequently Asked Questions</h2>
-
-          <div className="mx-auto max-w-3xl">
-            <Accordion type="single" collapsible className="space-y-4">
-              {faqs.map((faq, index) => (
-                <AccordionItem
-                  key={index}
-                  value={`item-${index}`}
-                  className="rounded-lg border border-border bg-card px-4"
-                >
-                  <AccordionTrigger className="text-left font-medium hover:no-underline">
-                    {faq.question}
-                  </AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground">{faq.answer}</AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }

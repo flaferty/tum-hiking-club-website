@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Navigation } from "@/components/layout/Navigation";
 import { HikeCard } from "@/features/hikes/HikeCard";
+import PlannedDatesCard from "@/components/PlannedDatesCard";
 import { HikeDetailModal } from "@/features/hikes/HikeDetailModal";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -23,7 +24,7 @@ type FilterType = "all" | "upcoming" | "completed";
 
 export default function Index() {
   const { isAdmin } = useAuth();
-  const { data: hikes = [], isLoading } = useHikes();
+  const { data: hikes = [], isLoading: isHikeLoading } = useHikes();
   const [filter, setFilter] = useState<FilterType>("all");
   const [selectedHike, setSelectedHike] = useState<Hike | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -44,26 +45,23 @@ export default function Index() {
     setIsModalOpen(true);
   };
 
-   {/* Upcoming Adventures */}
+  {/* Upcoming Adventures */}
    const UpcomingSection = (
-    <section className="container mx-auto px-4 ">
+    <section className="container mx-auto px-4 mb-14">
       <h2 className="mb-6 font-heading text-2xl font-bold md:text-3xl">
         Upcoming Adventures
       </h2>
-
-      {isLoading ? (
-        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full overflow-hidden">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="rounded-xl border bg-card p-4">
-              <Skeleton className="h-48 w-full rounded-lg mb-4" />
-              <Skeleton className="h-6 w-3/4 mb-2" />
-              <Skeleton className="h-4 w-1/2" />
-            </div>
-          ))}
-        </div>
-      ) : upcomingHikes.length > 0 ? (
-        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full overflow-hidden">
-          {upcomingHikes.map((hike, index) => (
+      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full overflow-hidden">
+        {isHikeLoading ? (
+            [1, 2, 3].map((i) => (
+              <div key={i} className="rounded-xl border bg-card p-4">
+                <Skeleton className="h-48 w-full rounded-lg mb-4" />
+                <Skeleton className="h-6 w-3/4 mb-2" />
+                <Skeleton className="h-4 w-1/2" />
+              </div>
+            ))
+        ) : upcomingHikes.length > 0 ? (
+          upcomingHikes.map((hike, index) => (
             <div
               key={hike.id}
               className="animate-slide-up"
@@ -71,19 +69,29 @@ export default function Index() {
             >
               <HikeCard hike={hike} onClick={() => handleHikeSelect(hike)} />
             </div>
-          ))}
-        </div>
-      ) : (
-        <div className="rounded-xl border border-dashed border-border bg-muted/30 p-12 text-center">
-          <p className="text-muted-foreground">No upcoming hikes scheduled.</p>
-        </div>
-      )}
+          ))
+        ) : (
+          <div className="rounded-xl border border-dashed border-border bg-muted/30 md:p-10 px-2 py-6 text-center col-span-full">
+            <p>No information on the upcoming hikes (yet).</p>
+          </div>
+        )}
+      </div>
     </section>
   );
 
+  {/* Planned Dates */}
+  const PlannedDates = (
+    <section className="container mx-auto px-4 mb-14">
+      <h2 className="mb-6 font-heading text-2xl font-bold md:text-3xl">
+        Planned Dates
+      </h2>
+      <PlannedDatesCard />
+    </section>
+  )
+
   {/* Past Adventures - Collapsible */}
   const PastSection = pastHikes.length > 0 && (
-    <section className="container mx-auto px-4 pb-16">
+    <section className="container mx-auto px-4 mb-16">
       <Collapsible open={pastHikesOpen} onOpenChange={setPastHikesOpen}>
         <CollapsibleTrigger asChild>
           <Button
@@ -230,7 +238,7 @@ export default function Index() {
           </div>
         </div>
 
-        {isLoading ? (
+        {isHikeLoading ? (
           <div className="h-[400px] md:h-[500px] rounded-xl bg-muted flex items-center justify-center">
             <MapPin className="h-8 w-8 text-muted-foreground animate-pulse" />
           </div>
@@ -258,17 +266,18 @@ export default function Index() {
       </section>
 
       {filter === "completed" ? (
-        <>
+        <div>
           {PastSection}
           {SectionDivider}
           {UpcomingSection}
-        </>
+        </div>
       ) : (
-        <>
+        <div>
           {UpcomingSection}
+          {PlannedDates}
           {SectionDivider}
           {PastSection}
-        </>
+        </div>
       )}
 
       {/* Hike Detail Modal */}
