@@ -8,7 +8,7 @@ export default function PlannedDatesCard() {
 	const { data: plannedDates = [], isLoading } = usePlannedDates();
 
 	const groupedDates = plannedDates.reduce((acc, item) => {
-		const month = format(new Date(item.date), "MMMM");
+		const month = format(new Date(item.date + "T00:00:00"), "MMMM");
 		if (!acc[month]) {
 			acc[month] = [];
 		}
