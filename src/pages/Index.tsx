@@ -5,7 +5,7 @@ import PlannedDatesCard from "@/components/PlannedDatesCard";
 import { HikeDetailModal } from "@/features/hikes/HikeDetailModal";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Plus, ChevronDown, MapPin, History, CalendarDays, Sparkles } from "lucide-react";
+import { Plus, ChevronDown, MapPin, History } from "lucide-react";
 import {
   Collapsible,
   CollapsibleContent,
