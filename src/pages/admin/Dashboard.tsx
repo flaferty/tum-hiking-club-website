@@ -205,21 +205,21 @@ export default function AdminDashboard() {
         
         <Tabs defaultValue="hikes">
           <TabsList className="mb-6">
-            <TabsTrigger value="hikes" className="gap-2">
+            <TabsTrigger value="hikes" className="group">
               <Mountain className="h-4 w-4" />
-              Hikes
+              <span className="overflow-hidden transition-all duration-300 ease-in-out max-w-0 opacity-0 group-data-[state=active]:max-w-40 group-data-[state=active]:opacity-100 group-data-[state=active]:pl-2 sm:max-w-none sm:opacity-100 sm:pl-2">Hikes</span>
             </TabsTrigger>
-            <TabsTrigger value="planned-dates" className="gap-2">
+            <TabsTrigger value="planned-dates" className="group">
               <CalendarPlus className="h-4 w-4" />
-              Planned Dates
+              <span className="overflow-hidden transition-all duration-300 ease-in-out max-w-0 opacity-0 group-data-[state=active]:max-w-40 group-data-[state=active]:opacity-100 group-data-[state=active]:pl-2 sm:max-w-none sm:opacity-100 sm:pl-2">Planned Dates</span>
             </TabsTrigger>
-            <TabsTrigger value="users" className="gap-2">
+            <TabsTrigger value="users" className="group">
               <Users className="h-4 w-4" />
-              Users
+              <span className="overflow-hidden transition-all duration-300 ease-in-out max-w-0 opacity-0 group-data-[state=active]:max-w-40 group-data-[state=active]:opacity-100 group-data-[state=active]:pl-2 sm:max-w-none sm:opacity-100 sm:pl-2">Users</span>
             </TabsTrigger>
-            <TabsTrigger value="emails" className="gap-2">
+            <TabsTrigger value="emails" className="group">
               <Mail className="h-4 w-4" />
-              Emails
+              <span className="overflow-hidden transition-all duration-300 ease-in-out max-w-0 opacity-0 group-data-[state=active]:max-w-40 group-data-[state=active]:opacity-100 group-data-[state=active]:pl-2 sm:max-w-none sm:opacity-100 sm:pl-2">Emails</span>
             </TabsTrigger>
           </TabsList>
           
@@ -356,7 +356,7 @@ export default function AdminDashboard() {
                 {users.map((u) => (
                   <Card key={u.id} className="overflow-hidden">
                     <CardContent className="flex flex-col gap-4 p-4 md:flex-row md:items-center">
-                      <div className="flex w-full items-center gap-4 md:w-auto"></div>
+                      <div className="flex w-full items-center gap-4 md:w-auto">
                         <Avatar className="h-12 w-12 shrink-0">
                           <AvatarImage src={u.avatar_url || undefined} />
                           <AvatarFallback className="bg-primary/10 text-primary">
@@ -378,6 +378,7 @@ export default function AdminDashboard() {
                             Joined {format(new Date(u.created_at), 'MMM d, yyyy')}
                           </p>
                         </div>
+                      </div>
                       
                       <div className="flex w-full flex-col gap-3 md:w-auto md:flex-row md:items-center md:ml-auto">
                         <div className="flex flex-wrap gap-2">
