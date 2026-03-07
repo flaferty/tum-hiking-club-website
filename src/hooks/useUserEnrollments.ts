@@ -19,7 +19,7 @@ export function useUserEnrollments() {
       // Fetch user's enrollments
       const { data: enrollments, error: enrollError } = await supabase
         .from('hike_enrollments')
-        .select('id, status, enrolled_at, hike_id')
+        .select('status, enrolled_at, hike_id')
         .eq('user_id', user.id);
 
       if (enrollError) throw enrollError;
@@ -45,7 +45,6 @@ export function useUserEnrollments() {
         const status = hikeDate < today ? 'completed' : 'upcoming';
 
         return {
-          id: enrollment.id,
           status: enrollment.status,
           enrolled_at: enrollment.enrolled_at,
           hike: {
