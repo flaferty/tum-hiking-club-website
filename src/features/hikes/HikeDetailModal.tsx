@@ -432,6 +432,7 @@ export function HikeDetailModal({
         </div>
       </DialogContent>
 
+      {/* Disclaimer dialog box */}
       <AlertDialog open={showDisclaimer} onOpenChange={setShowDisclaimer}>
         <AlertDialogContent>
           <AlertDialogHeader>
