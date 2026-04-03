@@ -35,7 +35,9 @@ export default function Index() {
     return hike.status === filter;
   });
 
-  const upcomingHikes = hikes.filter((h) => h.status === "upcoming");
+  const upcomingHikes = hikes
+    .filter((h) => h.status === "upcoming")
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   const pastHikes = hikes.filter((h) => h.status === "completed");
   const upcomingCount = upcomingHikes.length;
   const pastCount = pastHikes.length;
