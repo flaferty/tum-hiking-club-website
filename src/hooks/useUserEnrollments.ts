@@ -70,9 +70,11 @@ export function useUserStats() {
 
   const upcomingHikes = enrollments.filter(
     e => e.status === 'enrolled' && e.hike.status === 'upcoming'
-  );
+  ).sort((a, b) => new Date(a.hike.date).getTime() - new Date(b.hike.date).getTime());
 
-  const waitlistedHikes = enrollments.filter(e => e.status === 'waitlisted');
+  const waitlistedHikes = enrollments.filter(
+    e => e.status === 'waitlisted'
+  ).sort((a, b) => new Date(a.hike.date).getTime() - new Date(b.hike.date).getTime());
 
   const totalDistance = completedHikes.reduce((sum, e) => sum + e.hike.distance, 0);
   const totalElevation = completedHikes.reduce((sum, e) => sum + e.hike.elevation, 0);

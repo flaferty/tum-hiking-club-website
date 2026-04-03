@@ -325,7 +325,9 @@ export function HikeDetailModal({
           <div className="flex flex-col items-center rounded-lg bg-muted/50 p-3">
             <Clock className="mb-1 h-5 w-5 text-primary" />
             <span className="text-xs text-muted-foreground">Duration</span>
-            <span className="text-sm font-medium">{hike.duration}</span>
+            <span className="text-sm font-medium">
+              {hike.duration.toLowerCase().includes('h') ? hike.duration : `${hike.duration}h`}
+            </span>
           </div>
         </div>
 

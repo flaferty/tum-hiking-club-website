@@ -628,11 +628,13 @@ export default function EditHike() {
                     </div>
 
                     <div>
-                      <Label htmlFor="duration">Duration *</Label>
+                      <Label htmlFor="duration">Duration (h) *</Label>
                       <Input
                         id="duration"
                         name="duration"
-                        placeholder="e.g., 6-8 hours"
+                        type="number"
+                        step="0.5"
+                        placeholder="e.g., 6"
                         value={formData.duration}
                         onChange={handleInputChange}
                         required

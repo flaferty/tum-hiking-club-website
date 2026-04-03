@@ -60,7 +60,7 @@ export function WeatherForecast({ lat, lng, date }: WeatherForecastProps) {
       try {
         setLoading(true);
         const response = await fetch(
-          `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto`
+          `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto&forecast_days=16`
         );
         
         if (!response.ok) throw new Error("Failed to fetch weather");
