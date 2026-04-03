@@ -317,18 +317,18 @@ export default function Profile() {
                 <h4 className="mb-3 font-heading font-semibold text-primary">Upcoming</h4>
                 <div className="space-y-2">
                   {upcomingHikes.map(({ hike }) => (
-                    <div key={hike.id} className="flex items-center justify-between rounded-lg border border-border bg-card p-3">
-                      <div className="flex items-center gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                    <div key={hike.id} className="flex items-start justify-between gap-2 rounded-lg border border-border bg-card p-3">
+                      <div className="flex flex-1 items-start gap-3 min-w-0">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
                           <Mountain className="h-5 w-5 text-primary" />
                         </div>
-                        <div className="min-w-0">
+                        <div className="min-w-0 flex-1">
                           <p className="font-medium break-words leading-tight">{hike.name}</p>
                           <p className="text-sm text-muted-foreground mt-1 line-clamp-1">{hike.location_name}</p>
                         </div>
                       </div>
-                      <div className="text-right shrink-0">
-                        <p className="text-sm font-medium">{format(new Date(hike.date), 'dd/MM/yyyy')}</p>
+                      <div className="flex flex-col items-end shrink-0 ml-2">
+                        <p className="text-sm font-medium whitespace-nowrap">{format(new Date(hike.date), 'dd/MM/yyyy')}</p>
                         <Badge variant="upcoming" className="text-xs mt-1">Enrolled</Badge>
                       </div>
                     </div>
@@ -344,17 +344,17 @@ export default function Profile() {
                 <div className="space-y-2">
                   {waitlistedHikes.map(({ hike }) => (
                     <div key={hike.id} className="flex items-start justify-between gap-2 rounded-lg border border-yellow-500/30 bg-yellow-500/5 p-3">
-                      <div className="flex items-start gap-3 min-w-0">
+                      <div className="flex flex-1 items-start gap-3 min-w-0">
                         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-yellow-500/10">
                           <Clock className="h-5 w-5 text-yellow-600" />
                         </div>
-                        <div className="min-w-0">
+                        <div className="min-w-0 flex-1">
                           <p className="font-medium break-words leading-tight">{hike.name}</p>
                           <p className="text-sm text-muted-foreground mt-1 line-clamp-1">{hike.location_name}</p>
                         </div>
                       </div>
-                      <div className="text-right shrink-0">
-                        <p className="text-sm font-medium">{format(new Date(hike.date), 'dd/MM/yyyy')}</p>
+                      <div className="flex flex-col items-end shrink-0 ml-2">
+                        <p className="text-sm font-medium whitespace-nowrap">{format(new Date(hike.date), 'dd/MM/yyyy')}</p>
                         <Badge variant="outline" className="border-yellow-500/50 text-xs text-yellow-600 mt-1">Waitlist</Badge>
                       </div>
                     </div>
@@ -370,17 +370,17 @@ export default function Profile() {
                 <div className="space-y-2">
                   {completedHikes.map(({ status, hike }) => (
                     <div key={hike.id} className="flex items-start justify-between gap-2 rounded-lg border border-green-500/30 bg-green-500/5 p-3">
-                      <div className="flex items-start gap-3 min-w-0">
+                      <div className="flex flex-1 items-start gap-3 min-w-0">
                         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-green-500/10">
                           <Trophy className="h-5 w-5 text-green-600" />
                         </div>
-                        <div className="min-w-0">
-                          <p className="font-medium break-words leading-tight">{hike.name}</p>
+                        <div className="min-w-0 flex-1">
+                          <p className="font-medium break-words leading-tight flex-wrap">{hike.name}</p>
                           <p className="text-sm text-muted-foreground mt-1 line-clamp-1">{hike.distance}km · {hike.elevation}m elevation</p>
                         </div>
                       </div>
-                      <div className="text-right shrink-0">
-                        <p className="text-sm font-medium">{format(new Date(hike.date), 'dd/MM/yyyy')}</p>
+                      <div className="flex flex-col items-end shrink-0 ml-2">
+                        <p className="text-sm font-medium whitespace-nowrap">{format(new Date(hike.date), 'dd/MM/yyyy')}</p>
                         {status === 'verified' && <Badge variant="verified" className="text-xs mt-1">Verified</Badge>
                           || <Badge variant="completed" className="text-xs mt-1">Completed</Badge>} 
                       </div>

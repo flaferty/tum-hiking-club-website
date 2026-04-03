@@ -166,7 +166,7 @@ export function Navigation() {
                     </Button>
                   </Link>
                   <Button 
-                    variant="ghost" 
+                    variant="nav" 
                     className="w-full justify-start gap-2"
                     onClick={() => {
                       setSettingsOpen(true);
