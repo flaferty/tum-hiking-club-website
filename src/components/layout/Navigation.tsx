@@ -1,9 +1,10 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Mountain, MapPin, Users, UserPlus, LayoutDashboard, User, LogOut, Menu, X, HelpCircle } from 'lucide-react';
+import { Mountain, MapPin, Users, UserPlus, LayoutDashboard, User, LogOut, Menu, X, HelpCircle, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/features/auth/AuthContext';
 import { useState } from 'react';
 import { ModeToggle } from "@/components/layout/ModeToggle";
+import { SettingsDialog } from './SettingsDialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,6 +17,7 @@ export function Navigation() {
   const { user, isAdmin, signOut } = useAuth();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -84,6 +86,11 @@ export function Navigation() {
                     <User className="h-4 w-4" />
                     My Profile
                   </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => setSettingsOpen(true)} className="cursor-pointer">
+                  <Settings className="mr-2 h-4 w-4" />
+                  Settings
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={signOut} className="text-red-600 dark:text-red-400 focus:text-red-600 dark:focus:text-red-400 cursor-pointer">
@@ -160,6 +167,17 @@ export function Navigation() {
                   </Link>
                   <Button 
                     variant="ghost" 
+                    className="w-full justify-start gap-2"
+                    onClick={() => {
+                      setSettingsOpen(true);
+                      setMobileMenuOpen(false);
+                    }}
+                  >
+                    <Settings className="h-4 w-4" />
+                    Settings
+                  </Button>
+                  <Button 
+                    variant="ghost" 
                     className="w-full justify-start gap-2 text-destructive hover:text-destructive"
                     onClick={() => {
                       signOut();
@@ -181,6 +199,7 @@ export function Navigation() {
           </nav>
         </div>
       )}
+      <SettingsDialog open={settingsOpen} onOpenChange={setSettingsOpen} />
     </header>
   );
 }
