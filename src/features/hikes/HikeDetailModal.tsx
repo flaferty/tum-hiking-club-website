@@ -222,8 +222,8 @@ export function HikeDetailModal({
     const summary = escapeICS(hike.name);
     const location = escapeICS(hike.location_name || "TBD");
     const description = escapeICS(
-      (hike.description ? hike.description + "\n\n" : "") +
-      `TUM Hiking Club event. Difficulty: ${hike.difficulty}. Distance: ${hike.distance} km. Elevation: ${hike.elevation} m.\nMore at tumhikingclub.com`
+      `TUM Hiking Club event. Difficulty: ${hike.difficulty}. Distance: ${hike.distance} km. Elevation: ${hike.elevation} m.\nMore at tumhikingclub.com\n` +
+      (hike.description ? hike.description + "\n\n" : "")
     );
 
     const icsContent = [
