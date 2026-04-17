@@ -332,7 +332,7 @@ export function HikeDetailModal({
         </div>
 
         {/* Weather Forecast */}
-        {hike.status === 'upcoming' && (
+        {/* {hike.status === 'upcoming' && (
           <div className="mt-2">
             <WeatherForecast 
               lat={hike.location_lat} 
@@ -340,7 +340,7 @@ export function HikeDetailModal({
               date={hike.date} 
             />
           </div>
-        )}
+        )} */}
 
         {/* Location */}
         <div className="flex items-center gap-2 text-muted-foreground">
