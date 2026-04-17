@@ -21,6 +21,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 import {
   Calendar,
+  CalendarPlus,
   MapPin,
   Mountain,
   Clock,
@@ -190,6 +191,71 @@ export function HikeDetailModal({
         "dd/MM/yyyy"
       )}`
     : format(new Date(hike.date), "dd/MM/yyyy");
+
+  const buildICSDate = (date: Date) => {
+    const year = date.getUTCFullYear();
+    const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+    const day = String(date.getUTCDate()).padStart(2, "0");
+    return `${year}${month}${day}`;
+  };
+
+  const escapeICS = (value: string) =>
+    value
+      .replace(/\\/g, "\\\\")
+      .replace(/;/g, "\\;")
+      .replace(/,/g, "\\,")
+      .replace(/\r?\n/g, "\\n");
+
+  const handleAddToCalendar = () => {
+    const startDate = new Date(hike.date);
+    const endSourceDate = hike.end_date ? new Date(hike.end_date) : startDate;
+    const endDateExclusive = new Date(
+      Date.UTC(
+        endSourceDate.getUTCFullYear(),
+        endSourceDate.getUTCMonth(),
+        endSourceDate.getUTCDate() + 1
+      )
+    );
+
+    const dtStamp = new Date().toISOString().replace(/[-:]/g, "").replace(".000", "");
+    const uid = `hike-${hike.id}@tum-hiking-club`;
+    const summary = escapeICS(hike.name);
+    const location = escapeICS(hike.location_name || "TBD");
+    const description = escapeICS(
+      (hike.description ? hike.description + "\n\n" : "") +
+      `TUM Hiking Club event. Difficulty: ${hike.difficulty}. Distance: ${hike.distance} km. Elevation: ${hike.elevation} m.\nMore at tumhikingclub.com`
+    );
+
+    const icsContent = [
+      "BEGIN:VCALENDAR",
+      "VERSION:2.0",
+      "PRODID:-//TUM Hiking Club//Hike Calendar//EN",
+      "CALSCALE:GREGORIAN",
+      "METHOD:PUBLISH",
+      "BEGIN:VEVENT",
+      `UID:${uid}`,
+      `DTSTAMP:${dtStamp}`,
+      `DTSTART;VALUE=DATE:${buildICSDate(startDate)}`,
+      `DTEND;VALUE=DATE:${buildICSDate(endDateExclusive)}`,
+      `SUMMARY:${summary}`,
+      `LOCATION:${location}`,
+      `DESCRIPTION:${description}`,
+      "END:VEVENT",
+      "END:VCALENDAR",
+    ].join("\r\n");
+
+    const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    const slug = hike.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
+    anchor.href = url;
+    anchor.download = `${slug || "hike"}.ics`;
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+    URL.revokeObjectURL(url);
+  };
 
   const handleEnroll = () => {
     if (!user) {
@@ -400,37 +466,44 @@ export function HikeDetailModal({
         </div>
 
         {/* Action button */}
-        <div className="flex gap-3">
-          {hike.status === "upcoming" && (
-            <>
-              {user ? (
-                <Button
-                  className="flex-1"
-                  variant={isEnrolled ? "outline" : "default"}
-                  onClick={handleEnroll}
-                  disabled={isLoading || (!hasAccess && !isEnrolled)}
-                >
-                  {isLoading && (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  )}
-                  {getButtonText()}
-                </Button>
-              ) : (
-                <Button
-                  className="flex-1"
-                  onClick={() => {
-                    navigate("/auth");
-                    onClose();
-                  }}
-                >
-                  Sign in to Enroll
-                </Button>
-              )}
-            </>
-          )}
-          <Button variant="outline" onClick={onClose}>
-            Close
+        <div className="flex flex-col sm:flex-row gap-3">
+          <Button variant="outline" className="w-full sm:w-auto" onClick={handleAddToCalendar}>
+            <CalendarPlus className="mr-2 h-4 w-4" />
+            Add to calendar
           </Button>
+
+          <div className="flex flex-1 gap-3 w-full">
+            {hike.status === "upcoming" && (
+              <>
+                {user ? (
+                  <Button
+                    className="flex-1"
+                    variant={isEnrolled ? "outline" : "default"}
+                    onClick={handleEnroll}
+                    disabled={isLoading || (!hasAccess && !isEnrolled)}
+                  >
+                    {isLoading && (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    )}
+                    {getButtonText()}
+                  </Button>
+                ) : (
+                  <Button
+                    className="flex-1"
+                    onClick={() => {
+                      navigate("/auth");
+                      onClose();
+                    }}
+                  >
+                    Sign in to Enroll
+                  </Button>
+                )}
+              </>
+            )}
+            <Button variant="outline" onClick={onClose} className="sm:w-auto">
+              Close
+            </Button>
+          </div>
         </div>
       </DialogContent>
 

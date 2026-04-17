@@ -108,7 +108,7 @@ VITE_SUPABASE_PUBLISHABLE_KEY="sb_publishable_[your_token]"
 After pulling from a branch, make sure your local databse schema is up to date by running:
 
 ```
-npx supabase reset
+npx supabase db reset
 ```
 
 5. Run the development server:
